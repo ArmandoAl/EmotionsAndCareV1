@@ -1,5 +1,5 @@
 import 'package:emotions_and_care_v1/modules/yard_module/presentation/ui/items_detail_screen.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import '../../../../demo/widgets/demo_svg.dart';
 import '../../../../helpers/paths.dart';
 
 class GoalsRoom extends StatefulWidget {
@@ -98,7 +98,7 @@ class _GoalsRoomState extends State<GoalsRoom> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              SvgPicture.network(
+                              demoSvg(
                                 url ?? '',
                               ),
                               const SizedBox(height: 10),
@@ -189,7 +189,7 @@ class _GoalsRoomState extends State<GoalsRoom> {
                           horizontal: 20,
                         ),
                         child: Center(
-                          child: SvgPicture.network(
+                          child: demoSvg(
                             uiCubit.state.stickers![index].url ?? '',
                           ),
                         ),
@@ -254,7 +254,7 @@ class _GoalsRoomState extends State<GoalsRoom> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              SvgPicture.network(
+                              demoSvg(
                                 uiCubit
                                     .state
                                     .flowers[index]
@@ -344,7 +344,7 @@ Future<void> showItemDetailDialogAchivement(
                 ),
               ),
               const SizedBox(height: 10),
-              SvgPicture.network(
+              demoSvg(
                 achivement.achievement!.imageUrl ?? '',
                 height: MediaQuery.of(context).size.width * 0.4,
                 fit: BoxFit.cover,
@@ -411,7 +411,7 @@ Future<void> showItemDetailDialogSticker(
                     color: Colors.white,
                   )),
               const SizedBox(height: 10),
-              SvgPicture.network(
+              demoSvg(
                 sticker.url ?? '',
                 height: MediaQuery.of(context).size.width * 0.4,
                 fit: BoxFit.cover,
@@ -463,7 +463,7 @@ Future<void> showItemDetailDialogFlower(
                 ),
               ),
               const SizedBox(height: 10),
-              SvgPicture.network(
+              demoSvg(
                 flower.flower.urls![flower.state].url,
                 height: MediaQuery.of(context).size.width * 0.4,
                 fit: BoxFit.cover,

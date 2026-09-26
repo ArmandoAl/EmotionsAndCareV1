@@ -1,3 +1,11 @@
+import 'package:emotions_and_care_v1/demo/demo_config.dart';
+import 'package:emotions_and_care_v1/demo/repositories/demo_cart_repository.dart';
+import 'package:emotions_and_care_v1/demo/repositories/demo_note_repository.dart';
+import 'package:emotions_and_care_v1/demo/repositories/demo_notification_repository.dart';
+import 'package:emotions_and_care_v1/demo/repositories/demo_schedule_repository.dart';
+import 'package:emotions_and_care_v1/demo/repositories/demo_test_repository.dart';
+import 'package:emotions_and_care_v1/demo/repositories/demo_ui_repository.dart';
+import 'package:emotions_and_care_v1/demo/repositories/demo_user_repository.dart';
 import 'package:emotions_and_care_v1/helpers/navigation_bloc.dart';
 import 'package:emotions_and_care_v1/helpers/notifications_cubit.dart';
 import 'package:emotions_and_care_v1/helpers/paths.dart';
@@ -21,55 +29,71 @@ Future<void> setupServiceLocator() async {
   // Otros registros de objetos sincrónicos
   getIt.registerSingleton<NavigationBloc>(NavigationBloc(NavigationItem.home));
 
-  getIt.registerSingleton<UserRepository>(UserRepository());
-  getIt.registerSingleton<UIRepositoryImpl>(UIRepositoryImpl());
+  // En modo demo, cada repositorio se registra contra su interfaz con una
+  // implementación en memoria en vez de la real (que habla con la API de
+  // Azure). El resto de la app (cubits, pantallas) no cambia: siguen
+  // dependiendo de las mismas interfaces de siempre.
+  getIt.registerSingleton<IUserRepository>(
+      kDemoMode ? DemoUserRepository() : UserRepository());
+  getIt.registerSingleton<UIRepository>(
+      kDemoMode ? DemoUIRepository() : UIRepositoryImpl());
 
   // Usa `getIt<StorageRepository>()` sólo después de que se asegure su disponibilidad
   getIt.registerSingleton<UICubit>(UICubit(
     storageRepository: getIt<StorageRepository>(),
-    uiRepoitory: getIt<UIRepositoryImpl>(),
+    uiRepoitory: getIt<UIRepository>(),
   ));
 
   getIt.registerSingleton<BegginCubit>(BegginCubit(
     storageRepository: getIt<StorageRepository>(),
-    userRepoitory: getIt<UserRepository>(),
+    userRepoitory: getIt<IUserRepository>(),
   ));
 
-  getIt.registerSingleton<CartRepository>(CartRepository());
+  getIt.registerSingleton<ICartRepository>(
+      kDemoMode ? DemoCartRepository() : CartRepository());
   getIt.registerSingleton<CommunityCubit>(
-      CommunityCubit(repository: getIt<CartRepository>()));
+      CommunityCubit(repository: getIt<ICartRepository>()));
 
+  // El módulo de emociones ya trabaja con datos fijos en el propio cubit,
+  // por lo que no depende de la API en ningún modo.
   getIt.registerSingleton<EmotionRepository>(EmotionRepository());
   getIt.registerSingleton<EmotionCubit>(EmotionCubit());
 
-  getIt.registerSingleton<NotificationRepository>(NotificationRepository());
+  getIt.registerSingleton<INotificationRepository>(
+      kDemoMode ? DemoNotificationRepository() : NotificationRepository());
   getIt.registerSingleton<HomeCubit>(
-      HomeCubit(repository: getIt<NotificationRepository>()));
+      HomeCubit(repository: getIt<INotificationRepository>()));
 
+  // Los repositorios de especialista no se usan en el flujo de estudiante
+  // que cubre la demo, así que se mantienen sin cambios: nunca se llaman
+  // porque el modo demo siempre entra como paciente.
   getIt.registerSingleton<SpecialistRepository>(SpecialistRepository());
   getIt.registerSingleton<PattientsCubit>(
       PattientsCubit(repository: getIt<SpecialistRepository>()));
 
-  getIt.registerSingleton<NoteRepository>(NoteRepository());
+  getIt.registerSingleton<INoteRepository>(
+      kDemoMode ? DemoNoteRepository() : NoteRepository());
   getIt.registerSingleton<DailyCubit>(
-      DailyCubit(repository: getIt<NoteRepository>()));
+      DailyCubit(repository: getIt<INoteRepository>()));
 
-  getIt.registerSingleton<ScheduleRepository>(ScheduleRepository());
+  getIt.registerSingleton<IScheduleRepository>(
+      kDemoMode ? DemoScheduleRepository() : ScheduleRepository());
   getIt.registerSingleton<ScheduleCubit>(
-      ScheduleCubit(repository: getIt<ScheduleRepository>()));
+      ScheduleCubit(repository: getIt<IScheduleRepository>()));
 
-  getIt.registerSingleton<TestRepository>(TestRepository());
+  getIt.registerSingleton<ITestRepository>(
+      kDemoMode ? DemoTestRepository() : TestRepository());
   getIt.registerSingleton<TestCubit>(TestCubit(
-    repository: getIt<TestRepository>(),
+    repository: getIt<ITestRepository>(),
   ));
 
   //PattientsDatesCubit
   getIt.registerSingleton<PattientsDatesCubit>(PattientsDatesCubit(
-    repository: getIt<ScheduleRepository>(),
+    repository: getIt<IScheduleRepository>(),
   ));
 
   getIt.registerSingleton<PatientsRequestCubit>(PatientsRequestCubit(
-    userRepository: getIt<UserRepository>(),
+    userRepository: getIt<IUserRepository>(),
     specialistRepository: getIt<SpecialistRepository>(),
   ));
 
@@ -80,7 +104,11 @@ Future<void> setupServiceLocator() async {
     patientsRequestCubit: getIt<PatientsRequestCubit>(),
   ));
 
-  getIt<FirebaseNotificationsCubit>().initialize();
+  // En modo demo no hay Firebase inicializado (ver main.dart), así que no se
+  // debe pedir permiso de notificaciones ni tokens de FCM.
+  if (!kDemoMode) {
+    getIt<FirebaseNotificationsCubit>().initialize();
+  }
 
   // Espera a que las instancias asincrónicas estén listas antes de continuar
   await getIt.allReady();

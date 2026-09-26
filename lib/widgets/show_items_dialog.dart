@@ -1,4 +1,4 @@
-import 'package:flutter_svg/flutter_svg.dart';
+import '../demo/widgets/demo_svg.dart';
 import '../helpers/paths.dart';
 
 Future<void> showItemsDialog(
@@ -93,13 +93,13 @@ Future<void> showItemsDialog(
                   }
                 },
                 child: title == "Tus stickers"
-                    ? SvgPicture.network(
+                    ? demoSvg(
                         uiState.stickers![index].url ?? "",
                         placeholderBuilder: (context) =>
                             const CircularProgressIndicator(),
                         fit: BoxFit.fill,
                       )
-                    : SvgPicture.network(
+                    : demoSvg(
                         uiState.flowers[index].flower
                             .urls![uiState.flowers[index].state].url,
                         placeholderBuilder: (context) =>
@@ -219,7 +219,7 @@ Future<void> showCustomDialog(
                                               0.25,
                                       margin: const EdgeInsets.symmetric(
                                           vertical: 10),
-                                      child: SvgPicture.network(
+                                      child: demoSvg(
                                         notificationModel?.url ?? "",
                                         placeholderBuilder: (context) =>
                                             const CircularProgressIndicator(),

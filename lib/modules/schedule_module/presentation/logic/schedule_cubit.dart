@@ -1,7 +1,7 @@
 import '../../../../helpers/paths.dart';
 
 class ScheduleCubit extends Cubit<ScheduleState> {
-  final ScheduleRepository repository;
+  final IScheduleRepository repository;
   ScheduleCubit({required this.repository}) : super(const ScheduleState());
   //Add date to the list
   Future<DateWithAchivement> addDate(

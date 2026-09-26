@@ -1,7 +1,7 @@
 import '../../../../helpers/paths.dart';
 
 class HomeCubit extends Cubit<HomeState> {
-  final NotificationRepository repository;
+  final INotificationRepository repository;
 
   HomeCubit({required this.repository}) : super(const HomeState());
 

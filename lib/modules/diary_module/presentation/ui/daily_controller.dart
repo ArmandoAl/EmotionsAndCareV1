@@ -1,4 +1,4 @@
-import 'package:flutter_svg/svg.dart';
+import '../../../../demo/widgets/demo_svg.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import '../../../../helpers/paths.dart';
@@ -232,7 +232,7 @@ Future<void> showStickerDialog(
                           fontWeight: FontWeight.bold)),
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-                SvgPicture.network(
+                demoSvg(
                   achivement.imageUrl!,
                   width: MediaQuery.of(context).size.width * 0.3,
                   fit: BoxFit.cover,
