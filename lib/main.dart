@@ -1,18 +1,35 @@
+import 'dart:async';
+
 import 'package:emotions_and_care_v1/firebase_options.dart';
 import 'package:emotions_and_care_v1/helpers/notifications_cubit.dart';
 import 'package:emotions_and_care_v1/modules/patients_request/presentation/logic/patient_request_cubit.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'demo/demo_config.dart';
+import 'demo/widgets/demo_banner.dart';
 import 'helpers/navigation_bloc.dart';
 import 'helpers/paths.dart';
 import 'modules/auth_module/presentation/ui/beggin_process_controller.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  await setupServiceLocator();
-  runApp(const MyApp());
+  FlutterError.onError = (details) {
+    // ignore: avoid_print
+    print('FLUTTER_ERROR: ${details.exceptionAsString()}\n${details.stack}');
+  };
+  runZonedGuarded(() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    // En modo demo no se inicializa Firebase: la demo no debe depender de
+    // notificaciones push ni de ningún servicio del backend real.
+    if (!kDemoMode) {
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+    }
+    await setupServiceLocator();
+    runApp(const MyApp());
+  }, (error, stack) {
+    // ignore: avoid_print
+    print('ZONE_ERROR: $error\n$stack');
+  });
 }
 
 class MyApp extends StatelessWidget {
@@ -90,10 +107,10 @@ class _AppState extends State<App> {
       return MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Emotions and Care',
-          theme: ThemeData(
+          theme: _maybeDemoTheme(ThemeData(
             primarySwatch: Colors.blue,
-          ),
-          home: const Scaffold(
+          )),
+          home: _maybeWithDemoBanner(const Scaffold(
             backgroundColor: Colors.white,
             body: SizedBox(
               width: double.infinity,
@@ -109,14 +126,14 @@ class _AppState extends State<App> {
                 ),
               ),
             ),
-          ));
+          )));
     }
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Emotions and Care',
-      theme: uiCubit.state.themes[uiCubit.state.selectedTheme],
-      home: BlocBuilder<BegginCubit, BegginState>(
+      theme: _maybeDemoTheme(uiCubit.state.themes[uiCubit.state.selectedTheme]),
+      home: _maybeWithDemoBanner(BlocBuilder<BegginCubit, BegginState>(
         bloc: getIt<BegginCubit>(),
         builder: (context, state) {
           return AnimatedSwitcher(
@@ -147,7 +164,24 @@ class _AppState extends State<App> {
 
               );
         },
-      ),
+      )),
+    );
+  }
+
+  Widget _maybeWithDemoBanner(Widget child) {
+    return kDemoMode ? DemoBanner(child: child) : child;
+  }
+
+  /// En modo demo, fuerza que todo el texto use la fuente ya incluida en el
+  /// bundle ("Gilroy") en vez del "Roboto" por defecto de Material, que
+  /// Flutter Web intenta descargar en tiempo de ejecución desde
+  /// fonts.gstatic.com. Así el arranque de la demo no depende de esa red
+  /// externa. No se toca en producción.
+  ThemeData _maybeDemoTheme(ThemeData theme) {
+    if (!kDemoMode) return theme;
+    return theme.copyWith(
+      textTheme: theme.textTheme.apply(fontFamily: 'Gilroy'),
+      primaryTextTheme: theme.primaryTextTheme.apply(fontFamily: 'Gilroy'),
     );
   }
 }

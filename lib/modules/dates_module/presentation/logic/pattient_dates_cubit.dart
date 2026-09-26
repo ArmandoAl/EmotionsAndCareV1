@@ -1,9 +1,9 @@
 import '../../../../helpers/paths.dart';
 
 class PattientsDatesCubit extends Cubit<PattientsDatesState> {
-  final ScheduleRepository _repository;
+  final IScheduleRepository _repository;
 
-  PattientsDatesCubit({required ScheduleRepository repository})
+  PattientsDatesCubit({required IScheduleRepository repository})
       : _repository = repository,
         super(const PattientsDatesState());
 

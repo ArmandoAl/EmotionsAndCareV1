@@ -1,4 +1,4 @@
-import 'package:flutter_svg/flutter_svg.dart';
+import '../../../../demo/widgets/demo_svg.dart';
 import '../../../../helpers/paths.dart';
 
 class ItemsDetailScreen extends StatefulWidget {
@@ -73,7 +73,7 @@ class ItemCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SvgPicture.network(
+            demoSvg(
               imagePath,
               width: 100,
               height: 100,

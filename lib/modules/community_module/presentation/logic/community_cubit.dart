@@ -1,7 +1,7 @@
 import '../../../../helpers/paths.dart';
 
 class CommunityCubit extends Cubit<CommunityState> {
-  final CartRepository repository;
+  final ICartRepository repository;
 
   CommunityCubit({
     required this.repository,

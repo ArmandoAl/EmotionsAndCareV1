@@ -1,4 +1,4 @@
-import 'package:flutter_svg/flutter_svg.dart';
+import '../demo/widgets/demo_svg.dart';
 
 import '../helpers/paths.dart';
 
@@ -146,7 +146,7 @@ Widget responseWidget(
             stickerModel != null
                 ? IconButton(
                     onPressed: onStickerPressed,
-                    icon: SvgPicture.network(
+                    icon: demoSvg(
                       stickerModel.url ?? "",
                       height: MediaQuery.of(context).size.height * 0.05,
                       width: MediaQuery.of(context).size.width * 0.05,

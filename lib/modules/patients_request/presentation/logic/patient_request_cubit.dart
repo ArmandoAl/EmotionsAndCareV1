@@ -2,7 +2,7 @@ import 'package:emotions_and_care_v1/helpers/paths.dart';
 import 'package:equatable/equatable.dart';
 
 class PatientsRequestCubit extends Cubit<PatientsRequestsState> {
-  final UserRepository userRepository;
+  final IUserRepository userRepository;
   final SpecialistRepository specialistRepository;
 
   PatientsRequestCubit({

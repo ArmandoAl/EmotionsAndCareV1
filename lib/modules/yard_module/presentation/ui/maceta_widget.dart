@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter_svg/flutter_svg.dart';
+import '../../../../demo/widgets/demo_svg.dart';
 import '../../../../helpers/paths.dart';
 import '../../../auth_module/domain/progress.dart';
 
@@ -201,7 +201,7 @@ class _PotWidgetState extends State<PotWidget> with TickerProviderStateMixin {
                                 changeHeightTap();
                               }
                             },
-                            child: SvgPicture.network(
+                            child: demoSvg(
                               widget.state.currentFlower!.flower
                                   .urls![widget.state.currentFlower!.state].url,
                               width: plantPotData['plantSize'],
@@ -245,11 +245,10 @@ class _PotWidgetState extends State<PotWidget> with TickerProviderStateMixin {
                                   child: AnimatedBuilder(
                                     animation: _animationController!,
                                     builder: (context, child) {
-                                      return SvgPicture.network(
+                                      return demoSvg(
                                         Assets.potSvgAssets,
                                         height: plantPotData['potSize'],
                                         fit: BoxFit.fill,
-                                        // ignore: deprecated_member_use
                                         color: _animation!.value,
                                       );
                                     },
@@ -268,7 +267,7 @@ class _PotWidgetState extends State<PotWidget> with TickerProviderStateMixin {
                                       changeHeightTap();
                                     }
                                   },
-                                  child: SvgPicture.network(
+                                  child: demoSvg(
                                     Assets.potSvgAssets,
                                     height: plantPotData['potSize'],
                                     fit: BoxFit.fill,

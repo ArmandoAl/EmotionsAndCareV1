@@ -5,7 +5,7 @@ import '../../helpers/paths.dart';
 
 class UICubit extends Cubit<UIState> {
   final StorageRepository storageRepository;
-  final UIRepositoryImpl uiRepoitory;
+  final UIRepository uiRepoitory;
 
   UICubit({
     required this.storageRepository,

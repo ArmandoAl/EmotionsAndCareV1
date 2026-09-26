@@ -1,11 +1,13 @@
 import 'dart:convert';
+import '../../../../demo/demo_config.dart';
+import '../../../../demo/demo_data_store.dart';
 import '../../../../helpers/paths.dart';
 
 enum RegisterSpecialistFlow { registerSuccess, licenseValidated }
 
 class BegginCubit extends Cubit<BegginState> {
   final StorageRepository storageRepository;
-  final UserRepository userRepoitory;
+  final IUserRepository userRepoitory;
 
   BegginCubit({
     required this.storageRepository,
@@ -210,6 +212,19 @@ class BegginCubit extends Cubit<BegginState> {
 
   Future<void> getUser() async {
     emit(state.copyWith(status: BegginStatus.loading));
+
+    if (kDemoMode) {
+      // Modo demo: entra directo como un estudiante de ejemplo, sin login,
+      // sin leer almacenamiento local y sin llamar a ningún backend.
+      emit(state.copyWith(
+        status: BegginStatus.success,
+        patientModel: DemoDataStore.patient,
+        isPatient: true,
+        user: true,
+        registerPatientFlow: 'registerSuccess',
+      ));
+      return;
+    }
 
     final userData = await storageRepository.getUser();
     if (userData == null) {

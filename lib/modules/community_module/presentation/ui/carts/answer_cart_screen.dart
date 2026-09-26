@@ -1,4 +1,4 @@
-import 'package:flutter_svg/svg.dart';
+import '../../../../../demo/widgets/demo_svg.dart';
 
 import '../../../../../helpers/paths.dart';
 
@@ -335,7 +335,7 @@ Future<void> showStickersForCartDialog(
                       Navigator.of(context).pop();
                     }
                   },
-                  child: SvgPicture.network(
+                  child: demoSvg(
                     uiState.stickers![index].url ?? "",
                     placeholderBuilder: (context) =>
                         const CircularProgressIndicator(),

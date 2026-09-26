@@ -1,4 +1,4 @@
-import 'package:flutter_svg/flutter_svg.dart';
+import '../demo/widgets/demo_svg.dart';
 import '../helpers/paths.dart';
 
 class StickerWidget extends StatefulWidget {
@@ -64,7 +64,7 @@ class _StickerWidgetState extends State<StickerWidget>
     final double size = MediaQuery.of(context).size.width * 0.175;
 
     Widget content = widget.sticker != null
-        ? SvgPicture.network(
+        ? demoSvg(
             widget.sticker!.url!,
             fit: BoxFit.contain,
           )
