@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../config/assets/assets.dart';
+import '../../../../config/theme/app_spacing.dart';
+import '../../../../widgets/design_system/app_button.dart';
 
 class CommunityMenuScreen extends StatefulWidget {
   final void Function() onCartsTap;
@@ -58,18 +60,22 @@ Future<void> showCommingSoonDialog(BuildContext context) async {
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: const Text('Próximamente'),
-        content: const SingleChildScrollView(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppRadius.lg)),
+        title: Text('Próximamente',
+            style: Theme.of(context).textTheme.titleLarge),
+        content: SingleChildScrollView(
           child: ListBody(
             children: <Widget>[
               Text(
-                  'Esta funcionalidad estará disponible en futuras actualizaciones.'),
+                  'Esta funcionalidad estará disponible en futuras actualizaciones.',
+                  style: Theme.of(context).textTheme.bodyMedium),
             ],
           ),
         ),
         actions: <Widget>[
-          TextButton(
-            child: const Text('Aceptar'),
+          AppButton.text(
+            label: 'Aceptar',
             onPressed: () {
               Navigator.of(context).pop();
             },

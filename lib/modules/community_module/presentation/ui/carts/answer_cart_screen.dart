@@ -202,97 +202,73 @@ class _AnswerCartScreenState extends State<AnswerCartScreen> {
                         .isEmpty &&
                     widget.cart.respuestas.isNotEmpty
                 ? Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       IconButton(
                         onPressed: moveToPreviousCard,
-                        icon: const Icon(Icons.arrow_back_ios, size: 30),
-                        color: Theme.of(context).colorScheme.onSecondary,
+                        icon: const Icon(Icons.arrow_back_ios_rounded, size: 22),
+                        color: AppColors.shadowWarm,
                       ),
                       Text(
                         "Navegar",
-                        style: TextStyle(
-                          fontSize: MediaQuery.of(context).size.height * 0.025,
-                          fontWeight: FontWeight.bold,
-                          decoration: TextDecoration.none,
-                        ),
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium
+                            ?.copyWith(color: AppColors.shadowWarm),
                       ),
                       IconButton(
                         onPressed: moveToNextCard,
-                        icon: const Icon(Icons.arrow_forward_ios, size: 30),
-                        color: Theme.of(context).colorScheme.onSecondary,
+                        icon: const Icon(Icons.arrow_forward_ios_rounded, size: 22),
+                        color: AppColors.shadowWarm,
                       ),
                     ],
                   )
                 : const SizedBox(),
             widget.isFromBuzon == false
-                ? InkWell(
-                    onTap: () async {
-                      if (isloading) return;
+                ? Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
+                    child: AppButton(
+                      label: 'Enviar',
+                      isLoading: isloading,
+                      expand: true,
+                      onPressed: () async {
+                        if (isloading) return;
 
-                      if (controller.text.isEmpty) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text(
-                                'El contenido de la carta no puede estar vacío'),
-                          ),
+                        if (controller.text.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                  'El contenido de la carta no puede estar vacío'),
+                            ),
+                          );
+                          return;
+                        }
+
+                        setState(() {
+                          isloading = true;
+                        });
+
+                        final cartResponse = CartResponse(
+                          id: null,
+                          contenido: controller.text,
+                          idReceptor: widget.userId,
+                          letraReceptor: widget.letraEmisor[0],
+                          leida: false,
+                          idSticker: sticker?.id,
                         );
-                        return;
-                      }
 
-                      setState(() {
-                        isloading = true;
-                      });
+                        await widget.onSend(cartResponse);
 
-                      final cartResponse = CartResponse(
-                        id: null,
-                        contenido: controller.text,
-                        idReceptor: widget.userId,
-                        letraReceptor: widget.letraEmisor[0],
-                        leida: false,
-                        idSticker: sticker?.id,
-                      );
+                        setState(() {
+                          isloading = false;
+                        });
 
-                      await widget.onSend(cartResponse);
-
-                      setState(() {
-                        isloading = false;
-                      });
-
-                      if (context.mounted) Navigator.pop(context);
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.primary,
-                        borderRadius: BorderRadius.circular(30),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Colors.black12,
-                            blurRadius: 10,
-                            offset: Offset(0, 5),
-                          ),
-                        ],
-                      ),
-                      margin: EdgeInsets.symmetric(
-                          horizontal: MediaQuery.of(context).size.width * 0.06),
-                      child: Center(
-                        child: isloading
-                            ? const CircularProgressIndicator(
-                                color: Colors.white,
-                              )
-                            : Text(
-                                "Enviar",
-                                style: TextStyle(
-                                  fontSize: MediaQuery.of(context).size.height *
-                                      0.025,
-                                  fontWeight: FontWeight.bold,
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                              ),
-                      ),
+                        if (context.mounted) Navigator.pop(context);
+                      },
                     ),
                   )
-                : Container(),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.005),
+                : const SizedBox.shrink(),
+            const SizedBox(height: AppSpacing.lg),
           ],
         ),
       ),
@@ -311,8 +287,13 @@ Future<void> showStickersForCartDialog(
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        backgroundColor: Colors.white,
-        title: const Text("Stickers", style: TextStyle(color: Colors.black)),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppRadius.lg)),
+        title: Text("Stickers",
+            style: Theme.of(context)
+                .textTheme
+                .titleLarge
+                ?.copyWith(color: AppColors.shadowWarm)),
         content: SizedBox(
           width: MediaQuery.of(context).size.width * 0.7,
           height: MediaQuery.of(context).size.height * 0.4,
@@ -320,8 +301,8 @@ Future<void> showStickersForCartDialog(
             scrollDirection: Axis.horizontal,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
+              crossAxisSpacing: AppSpacing.sm,
+              mainAxisSpacing: AppSpacing.sm,
             ),
             itemCount: uiState.stickers!.length,
             itemBuilder: (context, index) {
@@ -337,8 +318,7 @@ Future<void> showStickersForCartDialog(
                   },
                   child: demoSvg(
                     uiState.stickers![index].url ?? "",
-                    placeholderBuilder: (context) =>
-                        const CircularProgressIndicator(),
+                    placeholderBuilder: (context) => const AppLoadingIndicator(),
                     fit: BoxFit.fill,
                   ));
             },
@@ -348,13 +328,13 @@ Future<void> showStickersForCartDialog(
           //solo si hay un sitcker en esta posicion
 
           if (isEmply == false)
-            TextButton(
+            AppButton.text(
+              label: "Quitar",
               onPressed: () {
                 onStickerSelected(null);
 
                 Navigator.of(context).pop();
               },
-              child: const Text("Quitar", style: TextStyle()),
             ),
         ],
       );

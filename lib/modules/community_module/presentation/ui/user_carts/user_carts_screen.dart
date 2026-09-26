@@ -27,113 +27,107 @@ class _UserCartsScreenState extends State<UserCartsScreen> {
         children: [
           Text("Buzón",
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: MediaQuery.of(context).size.height * 0.025,
-                fontWeight: FontWeight.bold,
-                decoration: TextDecoration.none,
-              )),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-          SizedBox(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                InkWell(
-                  onTap: () {
-                    widget.updateIndex(0);
-                  },
-                  child: Column(
-                    children: [
-                      Text(
-                        "Mis cartas",
-                        style: TextStyle(
-                          fontSize: MediaQuery.of(context).size.height * 0.025,
-                          fontWeight: FontWeight.bold,
-                          color: widget.index == 0
-                              ? Theme.of(context).colorScheme.secondary
-                              : Colors.grey.withOpacity(0.5),
-                        ),
-                      ),
-                      //pon un punto rojo si el index es 0
-                      widget.index == 0
-                          ? Container(
-                              width: MediaQuery.of(context).size.width * 0.03,
-                              height: MediaQuery.of(context).size.width * 0.03,
-                              decoration: const BoxDecoration(
-                                color: Colors.black,
-                                shape: BoxShape.circle,
-                              ),
-                            )
-                          : const SizedBox(),
-                    ],
-                  ),
-                ),
-                InkWell(
-                  onTap: () {
-                    widget.updateIndex(1);
-                  },
-                  child: Column(
-                    children: [
-                      Text(
-                        "Enviadas",
-                        style: TextStyle(
-                          fontSize: MediaQuery.of(context).size.height * 0.025,
-                          fontWeight: FontWeight.bold,
-                          color: widget.index == 1
-                              ? Theme.of(context).colorScheme.secondary
-                              : Colors.grey.withOpacity(0.5),
-                        ),
-                      ),
-                      //pon un punto rojo si el index es 1
-                      widget.index == 1
-                          ? Container(
-                              width: MediaQuery.of(context).size.width * 0.03,
-                              height: MediaQuery.of(context).size.width * 0.03,
-                              decoration: const BoxDecoration(
-                                color: Colors.black,
-                                shape: BoxShape.circle,
-                              ),
-                            )
-                          : const SizedBox(),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+              style: Theme.of(context)
+                  .textTheme
+                  .headlineSmall
+                  ?.copyWith(color: AppColors.shadowWarm)),
+          const SizedBox(height: AppSpacing.sm),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              _buzonTab(context,
+                  label: "Mis cartas",
+                  selected: widget.index == 0,
+                  onTap: () => widget.updateIndex(0)),
+              _buzonTab(context,
+                  label: "Enviadas",
+                  selected: widget.index == 1,
+                  onTap: () => widget.updateIndex(1)),
+            ],
           ),
           const Divider(),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+          const SizedBox(height: AppSpacing.xs),
           Expanded(
-            child: ListView.builder(
-              scrollDirection: Axis.vertical,
-              itemCount: widget.carts.length,
-              itemBuilder: (context, index) {
-                return cartWidget(
-                  context,
-                  widget.carts[index],
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => AnswerCartScreen(
-                          cart: widget.carts[index],
-                          userId: widget.userId,
-                          letraEmisor: widget.carts[index].letraEmisor,
-                          isFromBuzon: true,
-                          itsFromAnotherUser: widget.index == 1,
-                          onSend: () {
-                            return;
-                          },
-                        ),
-                      ),
-                    );
-                  },
-                );
-              },
-            ),
+            child: widget.carts.isEmpty
+                ? AppEmptyState(
+                    icon: Icons.mail_outline_rounded,
+                    title: widget.index == 1
+                        ? 'Aún no has enviado cartas'
+                        : 'Tu buzón está vacío',
+                    message: widget.index == 1
+                        ? 'Las cartas que envíes a la comunidad aparecerán aquí.'
+                        : 'Cuando recibas cartas de la comunidad, aparecerán aquí.',
+                  )
+                : ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    itemCount: widget.carts.length,
+                    itemBuilder: (context, index) {
+                      return cartWidget(
+                        context,
+                        widget.carts[index],
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => AnswerCartScreen(
+                                cart: widget.carts[index],
+                                userId: widget.userId,
+                                letraEmisor: widget.carts[index].letraEmisor,
+                                isFromBuzon: true,
+                                itsFromAnotherUser: widget.index == 1,
+                                onSend: () {
+                                  return;
+                                },
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
           )
         ],
       ),
     );
   }
+}
+
+Widget _buzonTab(
+  BuildContext context, {
+  required String label,
+  required bool selected,
+  required VoidCallback onTap,
+}) {
+  final ColorScheme scheme = Theme.of(context).colorScheme;
+  return InkWell(
+    onTap: onTap,
+    borderRadius: BorderRadius.circular(AppRadius.sm),
+    child: Padding(
+      padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.sm, vertical: AppSpacing.xs),
+      child: Column(
+        children: [
+          Text(
+            label,
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  color: selected
+                      ? scheme.secondary
+                      : AppColors.shadowWarm.withOpacity(0.45),
+                ),
+          ),
+          const SizedBox(height: AppSpacing.xs),
+          if (selected)
+            Container(
+              width: 6,
+              height: 6,
+              decoration: BoxDecoration(
+                color: scheme.secondary,
+                shape: BoxShape.circle,
+              ),
+            ),
+        ],
+      ),
+    ),
+  );
 }
 
 Widget responseWidgetContainer(
