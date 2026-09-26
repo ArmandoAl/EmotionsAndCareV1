@@ -10,6 +10,20 @@ export 'package:emotions_and_care_v1/modules/dates_module/presentation/ui/pattie
 
 export 'package:emotions_and_care_v1/helpers/service_locator.dart';
 
+// Sistema de diseño ("Jardín editorial")
+export 'package:emotions_and_care_v1/config/theme/app_colors.dart';
+export 'package:emotions_and_care_v1/config/theme/app_shadows.dart';
+export 'package:emotions_and_care_v1/config/theme/app_spacing.dart';
+export 'package:emotions_and_care_v1/config/theme/app_theme.dart';
+export 'package:emotions_and_care_v1/config/theme/app_typography.dart';
+export 'package:emotions_and_care_v1/widgets/design_system/app_button.dart';
+export 'package:emotions_and_care_v1/widgets/design_system/app_card.dart';
+export 'package:emotions_and_care_v1/widgets/design_system/app_confirm_dialog.dart';
+export 'package:emotions_and_care_v1/widgets/design_system/app_empty_state.dart';
+export 'package:emotions_and_care_v1/widgets/design_system/app_error_state.dart';
+export 'package:emotions_and_care_v1/widgets/design_system/app_loading_indicator.dart';
+export 'package:emotions_and_care_v1/widgets/design_system/app_section_header.dart';
+
 export 'package:emotions_and_care_v1/modules/schedule_module/presentation/ui/search_specialist/search_specialist_controller.dart';
 
 export 'package:emotions_and_care_v1/modules/schedule_module/presentation/ui/new_date_screen.dart';

@@ -41,28 +41,33 @@ class _DrawerWidgetState extends State<DrawerWidget>
   int? dinamicIndex;
 
   final List<_NavigationItem> _itemList = [
-    _NavigationItem(NavigationItem.home, 'Jardín', Icons.home),
+    _NavigationItem(NavigationItem.home, 'Jardín', Icons.eco_rounded),
     _NavigationItem(
-        NavigationItem.test, 'Cuestionarios', Icons.question_answer),
-    _NavigationItem(NavigationItem.dairy, 'Diario', Icons.mode_outlined),
-    _NavigationItem(NavigationItem.community, 'Comunidad', Icons.people),
-    _NavigationItem(NavigationItem.schedule, 'Agenda', Icons.book_sharp),
-    _NavigationItem(NavigationItem.goals, 'Colección', Icons.auto_awesome),
-    _NavigationItem(NavigationItem.settings, 'Configuración', Icons.settings),
+        NavigationItem.test, 'Cuestionarios', Icons.assignment_rounded),
+    _NavigationItem(NavigationItem.dairy, 'Diario', Icons.menu_book_rounded),
+    _NavigationItem(
+        NavigationItem.community, 'Comunidad', Icons.diversity_3_rounded),
+    _NavigationItem(NavigationItem.schedule, 'Agenda', Icons.event_rounded),
+    _NavigationItem(
+        NavigationItem.goals, 'Colección', Icons.auto_awesome_rounded),
+    _NavigationItem(
+        NavigationItem.settings, 'Configuración', Icons.settings_rounded),
   ];
 
   @override
   void initState() {
     super.initState();
+    final bool disableAnimations =
+        WidgetsBinding.instance.platformDispatcher.accessibilityFeatures.disableAnimations;
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 800),
-    )..repeat(reverse: true);
-
-    _animation = ColorTween(
-      begin: const Color.fromARGB(255, 255, 255, 255),
-      end: const Color.fromARGB(255, 251, 255, 0),
-    ).animate(_animationController);
+      duration: const Duration(milliseconds: 900),
+    );
+    if (!disableAnimations) {
+      _animationController.repeat(reverse: true);
+    } else {
+      _animationController.value = 1;
+    }
   }
 
   @override
@@ -74,6 +79,13 @@ class _DrawerWidgetState extends State<DrawerWidget>
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+
+    _animation = ColorTween(
+      begin: scheme.secondary,
+      end: scheme.primary,
+    ).animate(_animationController);
+
     final registerFlow =
         context.watch<BegginCubit>().state.registerPatientFlow ??
             "registerSuccess";
@@ -81,105 +93,111 @@ class _DrawerWidgetState extends State<DrawerWidget>
     dinamicIndex = drawerDynaicIndexNumbers[registerFlow]!;
 
     return Drawer(
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topRight: Radius.circular(15),
-          bottomRight: Radius.circular(15),
-        ),
-      ),
-      width: MediaQuery.of(context).size.width * 0.55,
-      child: AnimatedContainer(
-        padding: EdgeInsets.only(
-          left: MediaQuery.of(context).size.width * 0.008,
-        ),
-        duration: const Duration(milliseconds: 250),
+      width: MediaQuery.of(context).size.width * 0.78,
+      child: SafeArea(
         child: Column(
           children: [
-            Expanded(
-              child: Scrollbar(
-                controller: _scrollController,
-                child: ListView(
-                  children: [
-                    ..._itemList.map((item) {
-                      return BlocBuilder<NavigationBloc, NavigationState>(
-                        builder: (context, state) {
-                          return Padding(
-                            padding: const EdgeInsets.only(top: 15, bottom: 15),
-                            child: _menuItem(
-                              context: context,
-                              title: item.title,
-                              icon: item.icon,
-                              index: item.item.index,
-                              currentIndex: widget.currentIndex,
-                              changeIndex: widget.changeIndex,
-                              dynamicIndex: dinamicIndex,
-                              animationController: _animationController,
-                              animation: _animation,
-                              onTap: () {
-                                if (item.item.index != widget.currentIndex) {
-                                  BlocProvider.of<NavigationBloc>(context).add(
-                                    NavigateTo(item.item),
-                                  );
-
-                                  Navigator.of(context).pop();
-                                } else {
-                                  Navigator.of(context).pop();
-                                }
-                              },
-                            ),
-                          );
-                        },
-                      );
-                    })
-                  ],
-                ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                  AppSpacing.lg, AppSpacing.lg, AppSpacing.lg, AppSpacing.sm),
+              child: Row(
+                children: [
+                  Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: scheme.primaryContainer,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(Icons.local_florist_rounded, color: scheme.primary),
+                  ),
+                  const SizedBox(width: AppSpacing.md),
+                  Expanded(
+                    child: Text('Emotions & Care',
+                        style: Theme.of(context).textTheme.titleMedium),
+                  ),
+                ],
               ),
             ),
-            Row(
-              children: [
-                IconButton(
-                    onPressed: () async {
-                      Navigator.of(context).pop();
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+              child: Divider(height: AppSpacing.lg),
+            ),
+            Expanded(
+              child: ListView(
+                controller: _scrollController,
+                padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
+                children: [
+                  ..._itemList.map((item) {
+                    return BlocBuilder<NavigationBloc, NavigationState>(
+                      builder: (context, state) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: AppSpacing.sm, vertical: AppSpacing.xs),
+                          child: _menuItem(
+                            context: context,
+                            title: item.title,
+                            icon: item.icon,
+                            index: item.item.index,
+                            currentIndex: widget.currentIndex,
+                            dynamicIndex: dinamicIndex,
+                            animationController: _animationController,
+                            animation: _animation,
+                            onTap: () {
+                              if (item.item.index != widget.currentIndex) {
+                                BlocProvider.of<NavigationBloc>(context).add(
+                                  NavigateTo(item.item),
+                                );
+                              }
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        );
+                      },
+                    );
+                  })
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(AppSpacing.md),
+              child: OutlinedButton.icon(
+                onPressed: () async {
+                  Navigator.of(context).pop();
 
-                      await showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: const Text('Emergencia'),
-                            content: const Text(
-                                '¿Quieres llamar a la línea de emergencia?'),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('Cancelar'),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  const String phoneNumber =
-                                      '800-911-2000'; // Número de emergencia
-                                  const String url =
-                                      'tel:$phoneNumber'; // URL para llamar
-                                  // Llama a la función launchUrlString
-                                  // para abrir la aplicación de teléfono
-                                  // y marcar el número
-                                  launchUrlString(url);
-                                },
-                                child: const Text('Llamar'),
-                              ),
-                            ],
-                          );
-                        },
+                  await showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: const Text('Emergencia'),
+                        content: const Text(
+                            '¿Quieres llamar a la línea de emergencia?'),
+                        actions: [
+                          AppButton.text(
+                            label: 'Cancelar',
+                            onPressed: () => Navigator.of(context).pop(),
+                          ),
+                          AppButton.destructive(
+                            label: 'Llamar',
+                            onPressed: () {
+                              const String phoneNumber = '800-911-2000';
+                              const String url = 'tel:$phoneNumber';
+                              launchUrlString(url);
+                            },
+                          ),
+                        ],
                       );
                     },
-                    icon: Icon(Icons.help,
-                        size: MediaQuery.of(context).size.width * 0.1)),
-                const Spacer(),
-              ],
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.05,
+                  );
+                },
+                icon: Icon(Icons.support_agent_rounded, color: scheme.error),
+                label: Text('Línea de emergencia',
+                    style: TextStyle(color: scheme.error)),
+                style: OutlinedButton.styleFrom(
+                  side: BorderSide(color: scheme.error.withOpacity(0.4)),
+                  foregroundColor: scheme.error,
+                ),
+              ),
             ),
           ],
         ),
@@ -194,62 +212,63 @@ Widget _menuItem({
   required IconData icon,
   required int index,
   required int currentIndex,
-  required Function(int) changeIndex,
   required int? dynamicIndex,
   required AnimationController animationController,
   required Animation animation,
-  required Function onTap,
+  required VoidCallback onTap,
 }) {
-  bool isSelected = index == currentIndex;
+  final scheme = Theme.of(context).colorScheme;
+  final bool isSelected = index == currentIndex;
+  final bool isHighlighted = dynamicIndex! >= 0 && dynamicIndex == index;
 
-  if (dynamicIndex! >= 0 && dynamicIndex == index) {
-    //animatedTextListTitle
-    return AnimatedBuilder(
-        animation: animationController,
-        builder: (context, child) {
-          return ListTile(
-            title: Text(
-              title,
-              style: TextStyle(
-                fontSize: MediaQuery.of(context).size.width * 0.04,
-                color: animation.value,
+  Widget tile({Color? iconColor, Color? textColor}) {
+    return Material(
+      color: isSelected ? scheme.primaryContainer : Colors.transparent,
+      borderRadius: BorderRadius.circular(AppRadius.md),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(AppRadius.md),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.md, vertical: AppSpacing.md),
+          child: Row(
+            children: [
+              Icon(icon, color: iconColor ?? (isSelected ? scheme.primary : scheme.onSurface), size: 22),
+              const SizedBox(width: AppSpacing.md),
+              Text(
+                title,
+                style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      color: textColor ?? (isSelected ? scheme.primary : scheme.onSurface),
+                      fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                    ),
               ),
-            ),
-            leading: Icon(
-              size: MediaQuery.of(context).size.width * 0.05,
-              icon,
-              color: animation.value,
-            ),
-            onTap: () {
-              onTap();
-            },
-            selected: isSelected,
-          );
-        });
-  } else {
-    return ListTile(
-      enabled: dynamicIndex >= 0 ? false : true,
-      title: Text(
-        title,
-        style: TextStyle(
-          fontSize: MediaQuery.of(context).size.width * 0.04,
+            ],
+          ),
         ),
       ),
-      leading: Icon(
-        size: MediaQuery.of(context).size.width * 0.05,
-        icon,
-      ),
-      onTap: () {
-        onTap();
-      },
-      selected: isSelected,
     );
   }
+
+  if (isHighlighted) {
+    return AnimatedBuilder(
+      animation: animationController,
+      builder: (context, child) {
+        final Color color = animation.value ?? scheme.primary;
+        return tile(iconColor: color, textColor: color);
+      },
+    );
+  }
+
+  return IgnorePointer(
+    ignoring: dynamicIndex >= 0,
+    child: Opacity(
+      opacity: dynamicIndex >= 0 ? 0.4 : 1,
+      child: tile(),
+    ),
+  );
 }
 
 Future<void> launchUrlString(String url) async {
-  // Implement the function to launch the URL
-  // This is a placeholder implementation
   if (await canLaunchUrl(Uri.parse(url))) {
     launchUrl(Uri.parse(url));
   } else {

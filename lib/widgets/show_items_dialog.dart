@@ -13,8 +13,7 @@ Future<void> showItemsDialog(
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        backgroundColor: Colors.white,
-        title: Text(title, style: const TextStyle(color: Colors.black)),
+        title: Text(title),
         content: SizedBox(
           width: MediaQuery.of(context).size.width * 0.7,
           height: MediaQuery.of(context).size.height * 0.4,
@@ -189,11 +188,9 @@ Future<void> showCustomDialog(
                         notificationModel?.title ?? "",
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: MediaQuery.of(context).size.width * 0.05,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                              color: AppColors.shadowWarm,
+                            ),
                       ),
                     ),
                     Expanded(
@@ -204,12 +201,10 @@ Future<void> showCustomDialog(
                             children: [
                               Text(
                                 notificationModel?.description ?? "",
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize:
-                                      MediaQuery.of(context).size.width * 0.045,
-                                ),
+                                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                      color: AppColors.shadowWarm,
+                                      fontWeight: FontWeight.w500,
+                                    ),
                               ),
                               notificationModel?.type ==
                                       NotificationType.sticker
@@ -237,8 +232,7 @@ Future<void> showCustomDialog(
                         ? Row(
                             children: [
                               const Spacer(),
-                              const Text("Completado: ",
-                                  style: TextStyle(color: Colors.black)),
+                              const Text("Completado: "),
                               Checkbox(
                                   value: notificationModel?.completed,
                                   onChanged: (value) {
@@ -282,13 +276,12 @@ Future<void> showCustomDialog(
 
                                   Navigator.of(context).pop();
                                 },
-                                child: const Padding(
-                                  padding: EdgeInsets.only(left: 15.0),
-                                  child: Text("Mas tarde",
-                                      style: TextStyle(
-                                          color: Colors.brown,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold)),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 15.0),
+                                  child: Text("Más tarde",
+                                      style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                                            color: AppColors.daySecondary,
+                                          )),
                                 ),
                               )
                             ],
@@ -308,15 +301,7 @@ Future<void> showCustomDialog(
 
                                   Navigator.of(context).pop();
                                 },
-                                style: ElevatedButton.styleFrom(),
-                                child: const Text(
-                                  "Recoger sticker",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
+                                child: const Text("Recoger sticker"),
                               ),
                             ],
                           )
@@ -356,17 +341,7 @@ Future<void> showCustomDialog(
 
                                     Navigator.of(context).pop();
                                   },
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.blue,
-                                  ),
-                                  child: const Text(
-                                    "Crecer mi planta",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
+                                  child: const Text("Crecer mi planta"),
                                 ),
                               );
                             },
@@ -398,9 +373,10 @@ Future<void> showMessageDialog(
     builder: (context) {
       return AlertDialog(
         title: Text(title),
-        content: Text(message.replaceAll("|", "\n"),
-            style:
-                TextStyle(fontSize: MediaQuery.of(context).size.width * 0.05)),
+        content: Text(
+          message.replaceAll("|", "\n"),
+          style: Theme.of(context).textTheme.bodyLarge,
+        ),
         actions: actions ??
             [
               TextButton(
@@ -425,9 +401,9 @@ Future<void> showLoadingdialog(String message, BuildContext context,
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const CircularProgressIndicator(),
-            const SizedBox(height: 10),
-            Text(message),
+            const AppLoadingIndicator(),
+            const SizedBox(height: AppSpacing.sm),
+            Text(message, style: Theme.of(context).textTheme.bodyMedium),
           ],
         ),
       );

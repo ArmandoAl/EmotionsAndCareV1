@@ -63,46 +63,53 @@ class _NewNoteScreenState extends State<NewNoteScreen> {
               title: const Text('Nueva nota'),
               actions: [
                 Switch(
-                  activeColor: const Color(0xff2CB5E0),
                   value: state.visible,
-                  thumbIcon: WidgetStateProperty.all(
-                    Icon(
-                      state.visible ? Icons.lock : Icons.lock_open,
-                      color: state.visible ? Colors.black : Colors.white,
+                  thumbIcon: WidgetStateProperty.resolveWith(
+                    (states) => Icon(
+                      state.visible ? Icons.lock_rounded : Icons.lock_open_rounded,
                     ),
                   ),
-
                   onChanged: (visible) {
                     widget.onVisible(visible);
                   },
-                  //put an icon here
                 ),
                 IconButton(
                     onPressed: () {
                       showDialog(
                         context: context,
                         builder: (context) => AlertDialog(
-                          title: const Text('Proteger nota'),
-                          content: const Text(
-                              'Puedes activar o desactivar la opción para que tu especialista vinculado vea esta nota de tu diario. Ten en cuenta que una vez que hayas elegido esta opción, no podrás modificarla .'),
+                          shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.circular(AppRadius.lg)),
+                          title: Text('Proteger nota',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge
+                                  ?.copyWith(color: AppColors.shadowWarm)),
+                          content: Text(
+                              'Puedes activar o desactivar la opción para que tu especialista vinculado vea esta nota de tu diario. Ten en cuenta que una vez que hayas elegido esta opción, no podrás modificarla .',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(color: AppColors.shadowWarm)),
                           actions: [
-                            TextButton(
+                            AppButton.text(
+                              label: 'Cancelar',
                               onPressed: () {
                                 Navigator.pop(context);
                               },
-                              child: const Text('Cancelar'),
                             ),
-                            TextButton(
+                            AppButton.text(
+                              label: 'Salir',
                               onPressed: () {
                                 Navigator.pop(context);
                               },
-                              child: const Text('Salir'),
                             ),
                           ],
                         ),
                       );
                     },
-                    icon: const Icon(Icons.info)),
+                    icon: const Icon(Icons.info_outline_rounded)),
               ],
             ),
             body: Container(
@@ -161,13 +168,13 @@ class _NewNoteScreenState extends State<NewNoteScreen> {
             ),
             floatingActionButton: FloatingActionButton(
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50)),
-              elevation: 10,
+                  borderRadius: BorderRadius.circular(AppRadius.pill)),
+              elevation: 4,
               backgroundColor: titleController.text.isNotEmpty &&
                       contentController.text.isNotEmpty &&
                       _selectedIcon != null
-                  ? const Color(0xff2CB5E0)
-                  : Colors.grey,
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).colorScheme.surfaceContainerHighest,
               onPressed: () async {
                 if (loading) return;
 
@@ -209,12 +216,17 @@ class _NewNoteScreenState extends State<NewNoteScreen> {
                 if (context.mounted) Navigator.pop(context);
               },
               child: loading
-                  ? const CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  ? AppLoadingIndicator(
+                      color: Theme.of(context).colorScheme.onPrimary,
+                      size: 22,
                     )
-                  : const Icon(
-                      Icons.check,
-                      color: Colors.white,
+                  : Icon(
+                      Icons.check_rounded,
+                      color: titleController.text.isNotEmpty &&
+                              contentController.text.isNotEmpty &&
+                              _selectedIcon != null
+                          ? Theme.of(context).colorScheme.onPrimary
+                          : Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
             ));
       },
@@ -230,11 +242,13 @@ void showEmotionsDialog({
     context: context,
     builder: (context) {
       return AlertDialog(
-        title: const Text('Selecciona una emoción',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            )),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppRadius.lg)),
+        title: Text('Selecciona una emoción',
+            style: Theme.of(context)
+                .textTheme
+                .titleLarge
+                ?.copyWith(color: AppColors.shadowWarm)),
         content: SizedBox(
             height: MediaQuery.of(context).size.height * 0.5,
             width: MediaQuery.of(context).size.width * 0.8,
@@ -243,7 +257,7 @@ void showEmotionsDialog({
               builder: (context, state) {
                 if (state.status == EmotionStatus.loading) {
                   return const Center(
-                    child: CircularProgressIndicator(),
+                    child: AppLoadingIndicator(),
                   );
                 } else if (state.status == EmotionStatus.loaded) {
                   return Scrollbar(
@@ -267,15 +281,12 @@ void showEmotionsDialog({
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(emotion.icon!,
-                                  style: TextStyle(
-                                      fontSize: 30,
-                                      foreground: Paint()
-                                        ..style = PaintingStyle.fill
-                                        ..color = Colors.black)),
+                                  style: const TextStyle(fontSize: 30)),
                               Text(emotion.name,
-                                  style: const TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w500)),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleMedium
+                                      ?.copyWith(color: AppColors.shadowWarm)),
                             ],
                           ),
                         );

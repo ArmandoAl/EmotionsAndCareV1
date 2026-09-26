@@ -44,19 +44,13 @@ class _DailyScreenState extends State<DailyScreen> {
               child: Container(
                 decoration: BoxDecoration(
                   color: emotionColors[item.emotion.name]!.withOpacity(0.75),
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Colors.black12,
-                      blurRadius: 5,
-                      offset: Offset(0, 5),
-                    ),
-                  ],
+                  borderRadius: BorderRadius.circular(AppRadius.md),
+                  boxShadow: AppShadows.card,
                 ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.md, vertical: AppSpacing.sm),
                 margin: const EdgeInsets.symmetric(
-                    horizontal: 10.0, vertical: 10.0),
+                    horizontal: AppSpacing.sm, vertical: AppSpacing.sm),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -66,35 +60,28 @@ class _DailyScreenState extends State<DailyScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(item.title,
-                                style: TextStyle(
-                                    fontSize:
-                                        MediaQuery.of(context).size.width *
-                                            0.04,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold)),
+                                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                      color: AppColors.shadowWarm,
+                                    )),
                             Text(
                               "${item.createdAt.day}/${item.createdAt.month}/${item.createdAt.year}",
-                              style: TextStyle(
-                                  color: Colors.grey[800], fontSize: 12),
+                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: AppColors.shadowWarm.withOpacity(0.7),
+                                  ),
                             ),
                           ],
                         ),
                         const Spacer(),
-                        Text(item.emotion.icon!,
-                            style: const TextStyle(
-                              fontSize: 30,
-                              color: Colors.black,
-                            )),
+                        Text(item.emotion.icon!, style: const TextStyle(fontSize: 30)),
                       ],
                     ),
-                    const SizedBox(
-                      height: 3,
-                    ),
+                    const SizedBox(height: AppSpacing.xs),
                     Text(item.content,
                         maxLines: 8,
                         overflow: TextOverflow.ellipsis,
-                        style:
-                            const TextStyle(color: Colors.black, fontSize: 15)),
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: AppColors.shadowWarm,
+                            )),
                   ],
                 ),
               ),
@@ -107,29 +94,15 @@ class _DailyScreenState extends State<DailyScreen> {
 }
 
 void _showRemoveNoteDialog(
-    BuildContext context, NoteModel note, Function(NoteModel note) onRemove) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text('Eliminar nota'),
-        content: const Text('¿Estás seguro de que quieres eliminar esta nota?'),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Text('Cancelar'),
-          ),
-          TextButton(
-            onPressed: () {
-              onRemove(note);
-              Navigator.of(context).pop();
-            },
-            child: const Text('Eliminar'),
-          ),
-        ],
-      );
-    },
+    BuildContext context, NoteModel note, Function(NoteModel note) onRemove) async {
+  final bool confirmed = await showAppConfirmDialog(
+    context,
+    title: 'Eliminar nota',
+    message: '¿Estás seguro de que quieres eliminar esta nota?',
+    confirmLabel: 'Eliminar',
+    isDestructive: true,
   );
+  if (confirmed) {
+    onRemove(note);
+  }
 }

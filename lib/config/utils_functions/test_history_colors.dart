@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
+// Paleta armonizada con lib/config/theme/app_colors.dart ("Jardín editorial").
 const testHistoryColors = {
-  'Depresión muy grave': Color(0xFFEF5350),
-  'Depresión grave': Color(0xFFE57373),
-  'Depresión moderada': Color(0xFFFFD54F),
-  'Depresión severa': Color(0xFFFFB74D),
-  'Depresión leve': Color(0xFF81C784),
-  'Depresión mínima': Color(0xFF4DB6AC),
+  'Depresión muy grave': Color(0xFFB3432E),
+  'Depresión grave': Color(0xFFC1543A),
+  'Depresión severa': Color(0xFFC97B32),
+  'Depresión moderada': Color(0xFFC9A227),
+  'Depresión leve': Color(0xFF6E9B5E),
+  'Depresión mínima': Color(0xFF3B8859),
 };
 
 const dynamicResulTest = {

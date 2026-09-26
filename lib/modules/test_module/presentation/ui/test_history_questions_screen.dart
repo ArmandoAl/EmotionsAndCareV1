@@ -20,24 +20,21 @@ class _TestHistoryQuestionsScreenState
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        padding: EdgeInsets.symmetric(
-            horizontal: MediaQuery.of(context).size.width * 0.05),
+        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
         child: Column(
           children: [
             Text(widget.test.resultado,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: MediaQuery.of(context).size.width * 0.05,
-                )),
-            const SizedBox(
-              height: 5,
-            ),
+                style: Theme.of(context)
+                    .textTheme
+                    .headlineSmall
+                    ?.copyWith(color: AppColors.shadowWarm)),
+            const SizedBox(height: AppSpacing.xs),
             Text(
               "${widget.test.date.day}/${widget.test.date.month}/${widget.test.date.year} ${widget.test.date.hour}:${widget.test.date.minute}",
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: MediaQuery.of(context).size.width * 0.03,
-              ),
+              style: Theme.of(context)
+                  .textTheme
+                  .bodySmall
+                  ?.copyWith(color: AppColors.shadowWarm.withOpacity(0.7)),
             ),
             Expanded(
               child: ListView.builder(
@@ -47,7 +44,7 @@ class _TestHistoryQuestionsScreenState
                     children: [
                       testHistoryQuestion(context,
                           widget.test.testQuestionWithAnswerList[index], index),
-                      const SizedBox(height: 15),
+                      const SizedBox(height: AppSpacing.sm),
                     ],
                   );
                 },
@@ -62,48 +59,41 @@ class _TestHistoryQuestionsScreenState
 
 Widget testHistoryQuestion(
     BuildContext context, TestQuestionWithAnswer question, int index) {
-  final uiProvider = getIt<UICubit>();
+  final ColorScheme scheme = Theme.of(context).colorScheme;
   return Container(
     width: double.infinity,
-    padding: const EdgeInsets.all(10),
+    padding: const EdgeInsets.all(AppSpacing.sm),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text("Pregunta ${index + 1}",
-            style: TextStyle(
-              fontSize: MediaQuery.of(context).size.width * 0.025,
-            )),
-        const SizedBox(height: 5),
+            style: Theme.of(context)
+                .textTheme
+                .labelSmall
+                ?.copyWith(color: AppColors.shadowWarm.withOpacity(0.6))),
+        const SizedBox(height: AppSpacing.xs),
         Text(
           question.question,
-          style: TextStyle(
-            fontSize: MediaQuery.of(context).size.width * 0.05,
-            fontWeight: FontWeight.bold,
-          ),
+          style: Theme.of(context)
+              .textTheme
+              .titleMedium
+              ?.copyWith(color: AppColors.shadowWarm),
         ),
+        const SizedBox(height: AppSpacing.sm),
         Container(
           width: double.infinity,
           decoration: BoxDecoration(
-            color: const Color(0xffEEC24F),
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 5,
-                offset: Offset(0, 5),
-              ),
-            ],
+            color: scheme.primaryContainer,
+            borderRadius: BorderRadius.circular(AppRadius.md),
+            boxShadow: AppShadows.soft,
           ),
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.all(AppSpacing.sm),
           child: Text(
             question.answer,
-            style: TextStyle(
-              fontSize: MediaQuery.of(context).size.width * 0.04,
-              color: uiProvider.state.themes[uiProvider.state.selectedTheme] ==
-                      uiProvider.state.themes[1]
-                  ? Colors.black
-                  : Colors.white,
-            ),
+            style: Theme.of(context)
+                .textTheme
+                .bodyLarge
+                ?.copyWith(color: scheme.onPrimaryContainer),
           ),
         ),
       ],

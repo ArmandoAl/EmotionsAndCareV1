@@ -16,7 +16,7 @@ class HeaderWidget extends StatefulWidget implements PreferredSizeWidget {
   State<HeaderWidget> createState() => _HeaderWidgetState();
 
   @override
-  Size get preferredSize => const Size.fromHeight(55);
+  Size get preferredSize => const Size.fromHeight(60);
 }
 
 class _HeaderWidgetState extends State<HeaderWidget>
@@ -64,11 +64,17 @@ class _HeaderWidgetState extends State<HeaderWidget>
     _buttonController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 1),
-    )..repeat(reverse: true);
+    );
+    if (MediaQuery.maybeOf(context)?.disableAnimations ?? false) {
+      _buttonController!.value = 1;
+    } else {
+      _buttonController!.repeat(reverse: true);
+    }
 
+    final scheme = Theme.of(context).colorScheme;
     _buttonAnimation = ColorTween(
-      begin: const Color.fromARGB(255, 89, 8, 230),
-      end: const Color.fromARGB(255, 251, 255, 0),
+      begin: scheme.secondary,
+      end: scheme.primary,
     ).animate(_buttonController!);
   }
 
@@ -88,56 +94,42 @@ class _HeaderWidgetState extends State<HeaderWidget>
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return AppBar(
-      shadowColor: Colors.black,
-      shape: widget.isForReturn
-          ? const RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(20),
-                bottomRight: Radius.circular(20),
-              ),
-            )
-          : const RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(0),
-                bottomRight: Radius.circular(0),
-              ),
-            ),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(AppRadius.sm),
+          bottomRight: Radius.circular(AppRadius.sm),
+        ),
+      ),
       title: Text(widget.title),
       centerTitle: true,
-      leading: Container(
-        margin: const EdgeInsets.only(left: 10),
-        child: widget.isForReturn
-            ? IconButton(
-                icon: const Icon(Icons.arrow_back_rounded,
-                    color: Colors.black, size: 30),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              )
-            : animatedMenu
-                ? AnimatedBuilder(
-                    animation: _buttonController!,
-                    builder: (context, child) {
-                      return IconButton(
-                        icon: Icon(Icons.menu,
-                            color: _buttonAnimation!.value ?? Colors.black,
-                            size: MediaQuery.of(context).size.width * 0.08),
-                        onPressed: () {
-                          Scaffold.of(context).openDrawer();
-                        },
-                      );
-                    },
-                  )
-                : IconButton(
-                    icon: Icon(Icons.menu,
-                        color: const Color(0xff064ACB),
-                        size: MediaQuery.of(context).size.width * 0.08),
-                    onPressed: () {
-                      Scaffold.of(context).openDrawer();
-                    },
-                  ),
-      ),
+      leading: widget.isForReturn
+          ? IconButton(
+              icon: Icon(Icons.arrow_back_rounded, color: scheme.onSurface, size: 26),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            )
+          : animatedMenu
+              ? AnimatedBuilder(
+                  animation: _buttonController!,
+                  builder: (context, child) {
+                    return IconButton(
+                      icon: Icon(Icons.menu_rounded,
+                          color: _buttonAnimation!.value ?? scheme.onSurface, size: 26),
+                      onPressed: () {
+                        Scaffold.of(context).openDrawer();
+                      },
+                    );
+                  },
+                )
+              : IconButton(
+                  icon: Icon(Icons.menu_rounded, color: scheme.primary, size: 26),
+                  onPressed: () {
+                    Scaffold.of(context).openDrawer();
+                  },
+                ),
       actions: widget.actions,
     );
   }

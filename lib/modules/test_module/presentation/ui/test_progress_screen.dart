@@ -32,7 +32,7 @@ class _TestProgressScreenState extends State<TestProgressScreen> {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(AppSpacing.lg),
         child: Column(
           children: [
             Text(
@@ -40,11 +40,12 @@ class _TestProgressScreenState extends State<TestProgressScreen> {
                   ? "Estos son los resultados de los últimos cuestionarios que has respondido"
                   : "Estos son los cuestionarios que ha realizado el paciente ${widget.patientModel.name}",
               textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 20),
+              style: Theme.of(context)
+                  .textTheme
+                  .titleMedium
+                  ?.copyWith(color: AppColors.shadowWarm),
             ),
-            const SizedBox(
-              height: 20,
-            ),
+            const SizedBox(height: AppSpacing.lg),
             ListView.builder(
               shrinkWrap: true,
               itemCount: widget.historyTestList.length,
@@ -56,22 +57,15 @@ class _TestProgressScreenState extends State<TestProgressScreen> {
                       widget.historyTestList[index],
                       widget.onFisrtItemTap,
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
+                    const SizedBox(height: AppSpacing.xs),
                     Row(
                       children: [
                         const Spacer(),
-                        ElevatedButton(
+                        AppButton.secondary(
+                          label: "Ver historial",
                           onPressed: () {
                             widget.onTap(widget.historyTestList[index]);
                           },
-                          child: const Text(
-                            "Ver historial",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
-                          ),
                         )
                       ],
                     )

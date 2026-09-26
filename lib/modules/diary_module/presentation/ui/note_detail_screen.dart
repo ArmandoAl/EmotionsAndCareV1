@@ -6,60 +6,64 @@ class NoteDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Color tint = emotionColors[note.emotion.name]!.withOpacity(0.12);
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: emotionColors[note.emotion.name]!.withOpacity(0.1),
+        backgroundColor: tint,
         title: Text(
             'Fecha: ${note.createdAt.day}/${note.createdAt.month}/${note.createdAt.year}'),
       ),
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: BoxDecoration(
-          color: emotionColors[note.emotion.name]!.withOpacity(0.1),
-        ),
-        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(color: tint),
+        padding: const EdgeInsets.all(AppSpacing.lg),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      note.title,
-                      style: const TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
+                Expanded(
+                  child: Text(
+                    note.title,
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                          color: AppColors.shadowWarm,
+                        ),
+                  ),
                 ),
-                const Spacer(),
-                Text(note.emotion.icon!,
-                    style: const TextStyle(
-                      fontSize: 30,
-                    )),
+                const SizedBox(width: AppSpacing.sm),
+                Text(note.emotion.icon!, style: const TextStyle(fontSize: 30)),
               ],
             ),
             const Divider(),
-            const SizedBox(height: 10),
+            const SizedBox(height: AppSpacing.sm),
             Expanded(
-              child: Text(
-                note.content,
-                style: const TextStyle(
-                  fontSize: 20,
+              child: SingleChildScrollView(
+                child: Text(
+                  note.content,
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: AppColors.shadowWarm,
+                      ),
                 ),
               ),
             ),
             Row(
               children: [
-                const Spacer(),
-                Text("Visible para especialista: ${note.visible ? 'Sí' : 'No'}")
+                Icon(
+                  note.visible ? Icons.visibility_rounded : Icons.visibility_off_rounded,
+                  size: 18,
+                  color: AppColors.shadowWarm.withOpacity(0.7),
+                ),
+                const SizedBox(width: AppSpacing.xs),
+                Text(
+                  "Visible para especialista: ${note.visible ? 'Sí' : 'No'}",
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: AppColors.shadowWarm.withOpacity(0.7),
+                      ),
+                ),
               ],
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: AppSpacing.md),
           ],
         ),
       ),

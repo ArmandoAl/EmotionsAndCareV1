@@ -4,17 +4,17 @@ import '../modules/test_module/presentation/utils/test_module_strings.dart';
 Widget intructionsWidget(
     BuildContext context, TestModel test, PageController pageController) {
   return Padding(
-    padding: EdgeInsets.symmetric(
-      horizontal: MediaQuery.of(context).size.width * 0.07,
-      vertical: MediaQuery.of(context).size.height * 0.01,
+    padding: const EdgeInsets.symmetric(
+      horizontal: AppSpacing.xl,
+      vertical: AppSpacing.sm,
     ),
     child: ListView(
       children: [
-        SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+        const SizedBox(height: AppSpacing.lg),
         Row(
           children: [
             IconButton(
-              icon: const Icon(Icons.arrow_back, size: 30),
+              icon: const Icon(Icons.arrow_back_rounded, size: 26),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -22,48 +22,31 @@ Widget intructionsWidget(
             const Spacer(),
           ],
         ),
-        SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+        const SizedBox(height: AppSpacing.sm),
         Text(test.name,
-            style: TextStyle(
-                fontSize: MediaQuery.of(context).size.width * 0.07,
-                fontWeight: FontWeight.bold,
-                decoration: TextDecoration.none)),
-        const SizedBox(
-          height: 20,
-        ),
+            style: Theme.of(context)
+                .textTheme
+                .headlineSmall
+                ?.copyWith(color: AppColors.shadowWarm)),
+        const SizedBox(height: AppSpacing.lg),
         Text(test.instructions,
-            //justify
             textAlign: TextAlign.justify,
-            style: TextStyle(
-                fontSize: MediaQuery.of(context).size.width * 0.055,
-                fontWeight: FontWeight.normal,
-                decoration: TextDecoration.none)),
-        const SizedBox(
-          height: 20,
+            style: Theme.of(context)
+                .textTheme
+                .bodyLarge
+                ?.copyWith(color: AppColors.shadowWarm)),
+        const SizedBox(height: AppSpacing.xl),
+        AppButton(
+          label: 'Empezar cuestionario',
+          expand: true,
+          onPressed: () {
+            //change page
+            pageController.nextPage(
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeIn);
+          },
         ),
-        ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Theme.of(context).colorScheme.primary,
-              padding: EdgeInsets.symmetric(
-                  horizontal: MediaQuery.of(context).size.width * 0.1,
-                  vertical: MediaQuery.of(context).size.height * 0.015),
-              textStyle: const TextStyle(fontSize: 30),
-            ),
-            onPressed: () {
-              //change page
-              pageController.nextPage(
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeIn);
-            },
-            child: Text(
-              'Empezar cuesionario',
-              style: TextStyle(
-                  fontSize: MediaQuery.of(context).size.width * 0.05,
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).colorScheme.onPrimary,
-                  decoration: TextDecoration.none),
-            )),
-        SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+        const SizedBox(height: AppSpacing.xxl),
       ],
     ),
   );
@@ -82,64 +65,65 @@ Widget testResultWidget(
     children: [
       Container(
         width: double.infinity,
-        height: MediaQuery.of(context).size.height * 0.3,
+        height: MediaQuery.of(context).size.height * 0.28,
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.secondary,
+          color: Theme.of(context).colorScheme.primaryContainer,
         ),
         child: Icon(
-          Icons.check_circle,
+          Icons.check_circle_rounded,
           size: MediaQuery.of(context).size.width * 0.2,
+          color: Theme.of(context).colorScheme.primary,
         ),
       ),
       Expanded(
           child: SizedBox(
         width: double.infinity,
         child: Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: MediaQuery.of(context).size.width * 0.07,
-            vertical: MediaQuery.of(context).size.height * 0.01,
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.xl,
+            vertical: AppSpacing.sm,
           ),
           child: SingleChildScrollView(
             child: Column(
               children: [
-                SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                const SizedBox(height: AppSpacing.xxl),
                 Text(testResult1String,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.width * 0.045,
-                        fontWeight: FontWeight.normal,
-                        decoration: TextDecoration.none)),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyLarge
+                        ?.copyWith(color: AppColors.shadowWarm)),
+                const SizedBox(height: AppSpacing.sm),
                 Text(result!,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.width * 0.09,
-                        fontWeight: FontWeight.bold,
-                        decoration: TextDecoration.none)),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+                    style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                          color: AppColors.shadowWarm,
+                        )),
+                const SizedBox(height: AppSpacing.lg),
                 Text(dynamicResulTest[result] ?? "",
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.width * 0.035,
-                        fontWeight: FontWeight.bold,
-                        decoration: TextDecoration.none)),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium
+                        ?.copyWith(color: AppColors.shadowWarm)),
+                const SizedBox(height: AppSpacing.lg),
                 Text(testResult2String,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.width * 0.03,
-                        color: Colors.grey[600],
-                        fontWeight: FontWeight.bold,
-                        decoration: TextDecoration.none)),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.1),
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodySmall
+                        ?.copyWith(color: AppColors.shadowWarm.withOpacity(0.7))),
+                const SizedBox(height: AppSpacing.xxxl),
               ],
             ),
           ),
         ),
       )),
-      ElevatedButton(
-          style: ElevatedButton.styleFrom(
-              backgroundColor: Theme.of(context).colorScheme.primary),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
+        child: AppButton(
+          label: 'Continuar',
+          expand: true,
           onPressed: () async {
             if (goal != null) {
               await showStickerDialog(context, goal);
@@ -152,13 +136,9 @@ Widget testResultWidget(
 
             if (context.mounted) Navigator.of(context).pop();
           },
-          child: Text('Continuar',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: MediaQuery.of(context).size.width * 0.05,
-                  fontWeight: FontWeight.bold,
-                  decoration: TextDecoration.none))),
-      SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+        ),
+      ),
+      const SizedBox(height: AppSpacing.xxl),
     ],
   );
 }

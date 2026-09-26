@@ -7,46 +7,31 @@ Widget containerNoteContentWidget(BuildContext context, NoteModel? note) {
     return ListView(
       children: [
         Text("Simbología",
-            style: TextStyle(
-                color: Colors.white,
-                fontSize: MediaQuery.of(context).size.width * 0.08,
-                fontWeight: FontWeight.bold)),
-        SizedBox(
-          height: MediaQuery.of(context).size.height * 0.05,
-        ),
+            style: Theme.of(context)
+                .textTheme
+                .titleLarge
+                ?.copyWith(color: AppColors.shadowWarm)),
+        const SizedBox(height: AppSpacing.lg),
         Wrap(
           alignment: WrapAlignment.center,
-          runSpacing: MediaQuery.of(context).size.width * 0.03,
+          spacing: AppSpacing.sm,
+          runSpacing: AppSpacing.sm,
           children: emotionColors.keys.map((e) {
             return Container(
-              margin: const EdgeInsets.symmetric(
-                horizontal: 5.0,
-                vertical: 5.0,
-              ),
-              padding: const EdgeInsets.all(5.0),
-              height: MediaQuery.of(context).size.width * 0.135,
-              width: MediaQuery.of(context).size.width * 0.35,
+              padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.md, vertical: AppSpacing.sm),
               decoration: BoxDecoration(
-                color: emotionColors[e],
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(10.0),
-                ),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 5.0,
-                    offset: Offset(0, 5),
-                  ),
-                ],
+                color: emotionColors[e]!.withOpacity(0.85),
+                borderRadius: BorderRadius.circular(AppRadius.md),
+                boxShadow: AppShadows.soft,
               ),
               child: Center(
                 child: Text(
                   e,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: MediaQuery.of(context).size.width * 0.04,
-                  ),
+                  style: Theme.of(context)
+                      .textTheme
+                      .labelLarge
+                      ?.copyWith(color: AppColors.shadowWarm),
                 ),
               ),
             );
@@ -59,66 +44,41 @@ Widget containerNoteContentWidget(BuildContext context, NoteModel? note) {
       children: [
         Row(
           children: [
-            Text(note.emotion.icon!,
-                style: TextStyle(
-                  fontSize: MediaQuery.of(context).size.width * 0.1,
-                )),
+            Text(note.emotion.icon!, style: const TextStyle(fontSize: 34)),
             const Spacer(),
             Text(
               "${note.createdAt.day}/${note.createdAt.month}/${note.createdAt.year}",
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(context)
+                  .textTheme
+                  .titleMedium
+                  ?.copyWith(color: AppColors.shadowWarm),
             ),
           ],
         ),
-        SizedBox(
-          height: MediaQuery.of(context).size.height * 0.04,
-        ),
-        Row(
-          children: [
-            Text("Titulo:",
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: MediaQuery.of(context).size.width * 0.05,
-                    fontWeight: FontWeight.bold)),
-            const Spacer(),
-          ],
-        ),
-        Row(
-          children: [
-            Flexible(
-              child: Text(note.title,
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: MediaQuery.of(context).size.width * 0.03)),
-            ),
-          ],
-        ),
-        SizedBox(
-          height: MediaQuery.of(context).size.height * 0.04,
-        ),
-        Row(
-          children: [
-            Text("Contenido:",
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: MediaQuery.of(context).size.width * 0.05,
-                    fontWeight: FontWeight.bold)),
-            const Spacer(),
-          ],
-        ),
-        Row(
-          children: [
-            Flexible(
-                child: Text(note.content,
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: MediaQuery.of(context).size.width * 0.03))),
-          ],
-        ),
+        const SizedBox(height: AppSpacing.xl),
+        Text("Título",
+            style: Theme.of(context)
+                .textTheme
+                .labelLarge
+                ?.copyWith(color: AppColors.shadowWarm)),
+        const SizedBox(height: AppSpacing.xs),
+        Text(note.title,
+            style: Theme.of(context)
+                .textTheme
+                .bodyLarge
+                ?.copyWith(color: AppColors.shadowWarm)),
+        const SizedBox(height: AppSpacing.xl),
+        Text("Contenido",
+            style: Theme.of(context)
+                .textTheme
+                .labelLarge
+                ?.copyWith(color: AppColors.shadowWarm)),
+        const SizedBox(height: AppSpacing.xs),
+        Text(note.content,
+            style: Theme.of(context)
+                .textTheme
+                .bodyLarge
+                ?.copyWith(color: AppColors.shadowWarm)),
       ],
     );
   }
@@ -147,9 +107,10 @@ Widget noteItem(
           bottom: 10,
           left: 15,
           child: Container(
-            padding: const EdgeInsets.all(3.0),
+            padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.xs, vertical: 2),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.5),
+              color: AppColors.daySurface.withOpacity(0.7),
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(10.0),
                 bottomRight: Radius.circular(10.0),
@@ -157,11 +118,10 @@ Widget noteItem(
             ),
             child: Text(
               "${note.createdAt.day}/${note.createdAt.month}",
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: 12,
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(context)
+                  .textTheme
+                  .labelSmall
+                  ?.copyWith(color: AppColors.shadowWarm),
             ),
           ),
         )
@@ -209,35 +169,35 @@ Widget emotionsForWeekWidgetForStaticts(
   return Container(
     width: MediaQuery.of(context).size.width * 0.9,
     height: MediaQuery.of(context).size.height * 0.3,
-    margin: const EdgeInsets.symmetric(horizontal: 10.0),
-    padding: const EdgeInsets.all(10.0),
+    margin: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
+    padding: const EdgeInsets.all(AppSpacing.sm),
     decoration: BoxDecoration(
-      color: const Color.fromARGB(183, 246, 246, 246),
-      borderRadius: BorderRadius.circular(20),
+      color: AppColors.daySurface,
+      borderRadius: BorderRadius.circular(AppRadius.lg),
+      boxShadow: AppShadows.soft,
     ),
     child: Column(
       children: [
-        SizedBox(
-          height: MediaQuery.of(context).size.height * 0.01,
-        ),
+        const SizedBox(height: AppSpacing.xs),
         Text(
           semana,
-          style: const TextStyle(fontSize: 20, color: Colors.black),
+          style: Theme.of(context)
+              .textTheme
+              .titleMedium
+              ?.copyWith(color: AppColors.shadowWarm),
         ),
-        SizedBox(
-          height: MediaQuery.of(context).size.height * 0.01,
-        ),
+        const SizedBox(height: AppSpacing.xs),
         Expanded(
             child: PieChart(
           PieChartData(
             sections: percentMap.keys
                 .map((e) => PieChartSectionData(
                       value: percentMap[e]!,
-                      color: emotionColors[e]!.withOpacity(0.7),
+                      color: emotionColors[e]!.withOpacity(0.85),
                       //put the emotion icon in the center of the pie chart
                       title: emotionIcons[e],
                       titleStyle: TextStyle(
-                        color: Colors.black,
+                        color: AppColors.shadowWarm,
                         fontSize: MediaQuery.of(context).size.width * 0.05,
                       ),
                       radius: MediaQuery.of(context).size.width * 0.1,
@@ -258,15 +218,16 @@ Widget percentWidget(BuildContext context, double percent, Color color) {
       height: percentHeight,
       decoration: BoxDecoration(
         color: color.withOpacity(0.9),
-        borderRadius: BorderRadius.circular(10.0),
+        borderRadius: BorderRadius.circular(AppRadius.sm),
       ),
       child: Center(
         child: Text(
           "${(percent * 100).toStringAsFixed(2)}%",
           textAlign: TextAlign.center,
-          style: TextStyle(
-              fontSize: MediaQuery.of(context).size.width * 0.025,
-              color: Colors.black),
+          style: Theme.of(context)
+              .textTheme
+              .labelSmall
+              ?.copyWith(color: AppColors.shadowWarm),
         ),
       ));
 }
@@ -282,23 +243,23 @@ Widget emotionsForWeekWidget(
   return Container(
     width: MediaQuery.of(context).size.width * 0.95,
     height: MediaQuery.of(context).size.height * 0.3,
-    margin: const EdgeInsets.symmetric(horizontal: 10.0),
+    margin: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
     decoration: BoxDecoration(
-      color: const Color.fromARGB(183, 246, 246, 246),
-      borderRadius: BorderRadius.circular(20),
+      color: AppColors.daySurface,
+      borderRadius: BorderRadius.circular(AppRadius.lg),
+      boxShadow: AppShadows.soft,
     ),
     child: Column(
       children: [
-        const SizedBox(
-          height: 10,
-        ),
+        const SizedBox(height: AppSpacing.sm),
         Text(
           semana,
-          style: const TextStyle(fontSize: 20, color: Colors.black),
+          style: Theme.of(context)
+              .textTheme
+              .titleMedium
+              ?.copyWith(color: AppColors.shadowWarm),
         ),
-        const SizedBox(
-          height: 10,
-        ),
+        const SizedBox(height: AppSpacing.sm),
         Expanded(
           child: Row(
             children: [
@@ -327,12 +288,13 @@ Widget notesForDayWidget(
     margin: const EdgeInsets.symmetric(vertical: 1.0, horizontal: 1.0),
     child: Column(
       children: [
-        const SizedBox(
-          height: 10,
-        ),
+        const SizedBox(height: AppSpacing.sm),
         Text(
           days[dayIndex % 7],
-          style: const TextStyle(fontSize: 14),
+          style: Theme.of(context)
+              .textTheme
+              .labelSmall
+              ?.copyWith(color: AppColors.shadowWarm),
         ),
         Expanded(
           child: ListView.builder(
@@ -370,20 +332,17 @@ Future<void> showNoteInfoFromBottomShet(
         height: MediaQuery.of(context).size.height * 0.8,
         width: double.infinity,
         decoration: BoxDecoration(
-          color: emotionColors[note.emotion.name]!.withOpacity(0.5),
+          color: emotionColors[note.emotion.name]!.withOpacity(0.25),
           borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
+            topLeft: Radius.circular(AppRadius.xl),
+            topRight: Radius.circular(AppRadius.xl),
           ),
         ),
         child: Column(
           children: [
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.02,
-            ),
+            const SizedBox(height: AppSpacing.lg),
             Padding(
-              padding: EdgeInsets.symmetric(
-                  horizontal: MediaQuery.of(context).size.width * 0.03),
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
               child: Row(
                 children: [
                   Expanded(
@@ -391,53 +350,47 @@ Future<void> showNoteInfoFromBottomShet(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Titulo: ${note.title}",
-                          style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.width * 0.05,
-                          ),
+                          "Título: ${note.title}",
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleLarge
+                              ?.copyWith(color: AppColors.shadowWarm),
                         ),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.01,
-                        ),
+                        const SizedBox(height: AppSpacing.xs),
                         Text(
                           "Fecha: ${note.createdAt.day}/${note.createdAt.month}/${note.createdAt.year}",
-                          style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.width * 0.03,
-                          ),
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.copyWith(color: AppColors.shadowWarm),
                         ),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.01,
-                        ),
+                        const SizedBox(height: AppSpacing.xs),
                         Text(
                           "Emoción: ${note.emotion.name}",
-                          style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.width * 0.03,
-                          ),
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.copyWith(color: AppColors.shadowWarm),
                         ),
                       ],
                     ),
                   ),
-                  Text(note.emotion.icon!,
-                      style: TextStyle(
-                          fontSize: MediaQuery.of(context).size.width * 0.1,
-                          color: Colors.black)),
+                  Text(note.emotion.icon!, style: const TextStyle(fontSize: 34)),
                 ],
               ),
             ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.02,
-            ),
+            const SizedBox(height: AppSpacing.lg),
             Expanded(
               child: Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: MediaQuery.of(context).size.width * 0.05),
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
                 child: SingleChildScrollView(
                   child: Text(
                     textAlign: TextAlign.justify,
                     note.content,
-                    style: TextStyle(
-                      fontSize: MediaQuery.of(context).size.width * 0.04,
-                    ),
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyLarge
+                        ?.copyWith(color: AppColors.shadowWarm),
                   ),
                 ),
               ),

@@ -66,26 +66,23 @@ class ItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return AppCard(
       onTap: onTap,
-      child: Card(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            demoSvg(
-              imagePath,
-              width: 100,
-              height: 100,
-              fit: BoxFit.cover,
-            ),
-            const SizedBox(height: 10),
-            Text(title, style: const TextStyle(fontSize: 16)),
-            const SizedBox(height: 5),
-            Text(description,
-                style: const TextStyle(fontSize: 12, color: Colors.grey)),
-          ],
-        ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          demoSvg(
+            imagePath,
+            width: 100,
+            height: 100,
+            fit: BoxFit.cover,
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          Text(title, style: Theme.of(context).textTheme.titleSmall),
+          const SizedBox(height: AppSpacing.xs),
+          Text(description, style: Theme.of(context).textTheme.bodySmall),
+        ],
       ),
     );
   }

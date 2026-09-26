@@ -78,7 +78,7 @@ class _NotesProgressScreenState extends State<NotesProgressScreen> {
               await showTutorialDialog(context,
                   "Para observar tu evolución desde que iniciaste la aplicación puedes deslizar a través de las semanas. |Al seleccionar una semana, podrás elegir una emoción y ver tus notas relacionadas con ella.");
             },
-            icon: const Icon(Icons.help),
+            icon: const Icon(Icons.help_outline_rounded),
           ),
         ],
       ),
@@ -91,31 +91,25 @@ class _NotesProgressScreenState extends State<NotesProgressScreen> {
           radius: const Radius.circular(10),
           child: ListView(
             children: [
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.03,
-              ),
+              const SizedBox(height: AppSpacing.lg),
               Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: MediaQuery.of(context).size.width * 0.02),
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
                 child: Text(
                   "Estas son tus emociones a lo largo de las semanas, selecciona una para ver la nota a la que pertenece",
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: MediaQuery.of(context).size.width * 0.03,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium
+                      ?.copyWith(color: AppColors.shadowWarm),
                 ),
               ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.03,
-              ),
+              const SizedBox(height: AppSpacing.lg),
               Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: MediaQuery.of(context).size.width * 0.005),
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xs),
                 child: Container(
                   width: double.infinity,
                   height: MediaQuery.of(context).size.height * 0.3,
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
                   child: Scrollbar(
                     child: PageView.builder(
                       controller: daysController,
@@ -133,61 +127,48 @@ class _NotesProgressScreenState extends State<NotesProgressScreen> {
                 ),
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.1,
-                  ),
                   IconButton(
                     onPressed: () {
                       navInDays(false);
                     },
-                    icon: const Icon(Icons.arrow_back_ios),
+                    icon: const Icon(Icons.arrow_back_ios_rounded),
                   ),
-                  const Spacer(),
-                  const Text(
+                  Text(
                     "Navegar",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium
+                        ?.copyWith(color: AppColors.shadowWarm),
                   ),
-                  const Spacer(),
                   IconButton(
                     onPressed: () {
                       navInDays(true);
                     },
-                    icon: const Icon(Icons.arrow_forward_ios),
-                  ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.1,
+                    icon: const Icon(Icons.arrow_forward_ios_rounded),
                   ),
                 ],
               ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.03,
-              ),
+              const SizedBox(height: AppSpacing.lg),
               Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: MediaQuery.of(context).size.width * 0.02),
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
                 child: Text(
                   "Esta gráfica muestra tus emociones mas frecuentes a lo largo de las semanas",
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: MediaQuery.of(context).size.width * 0.03,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium
+                      ?.copyWith(color: AppColors.shadowWarm),
                 ),
               ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.03,
-              ),
+              const SizedBox(height: AppSpacing.lg),
               Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: MediaQuery.of(context).size.width * 0.005),
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xs),
                 child: Container(
                   width: double.infinity,
                   height: MediaQuery.of(context).size.height * 0.3,
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
                   child: Scrollbar(
                     child: PageView.builder(
                       controller: chartController,
@@ -202,33 +183,26 @@ class _NotesProgressScreenState extends State<NotesProgressScreen> {
                 ),
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.1,
-                  ),
                   IconButton(
                     onPressed: () {
                       navInChart(false);
                     },
-                    icon: const Icon(Icons.arrow_back_ios),
+                    icon: const Icon(Icons.arrow_back_ios_rounded),
                   ),
-                  const Spacer(),
-                  const Text(
+                  Text(
                     "Navegar",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium
+                        ?.copyWith(color: AppColors.shadowWarm),
                   ),
-                  const Spacer(),
                   IconButton(
                     onPressed: () {
                       navInChart(true);
                     },
-                    icon: const Icon(Icons.arrow_forward_ios),
-                  ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.1,
+                    icon: const Icon(Icons.arrow_forward_ios_rounded),
                   ),
                 ],
               ),
@@ -246,18 +220,27 @@ Future<void> showTutorialDialog(BuildContext context, String message) async {
     barrierDismissible: true,
     builder: (BuildContext context) {
       return AlertDialog(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        title: const Text('Ayuda'),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppRadius.lg)),
+        title: Text('Ayuda',
+            style: Theme.of(context)
+                .textTheme
+                .titleLarge
+                ?.copyWith(color: AppColors.shadowWarm)),
         content: SingleChildScrollView(
           child: ListBody(
             children: <Widget>[
-              Text(message),
+              Text(message,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(color: AppColors.shadowWarm)),
             ],
           ),
         ),
         actions: <Widget>[
-          TextButton(
-            child: const Text('Ok'),
+          AppButton.text(
+            label: 'Ok',
             onPressed: () {
               Navigator.of(context).pop();
             },
