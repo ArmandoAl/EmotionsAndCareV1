@@ -1,4 +1,4 @@
-import 'package:flutter_svg/flutter_svg.dart';
+import '../demo/widgets/demo_svg.dart';
 
 import '../helpers/paths.dart';
 
@@ -14,22 +14,17 @@ Widget cartWidget(BuildContext context, CartModel cart, {Function()? onTap}) {
     child: Container(
       height: MediaQuery.of(context).size.height * 0.2,
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.onPrimaryContainer,
-        borderRadius: BorderRadius.circular(30),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 5,
-            offset: Offset(0, 5),
-          ),
-        ],
+        color: Theme.of(context).colorScheme.surface,
+        borderRadius: BorderRadius.circular(AppRadius.xl),
+        boxShadow: AppShadows.card,
       ),
       margin: const EdgeInsets.symmetric(
-        horizontal: 20,
-        vertical: 10,
+        horizontal: AppSpacing.lg,
+        vertical: AppSpacing.sm,
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.lg, vertical: AppSpacing.sm),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -38,26 +33,23 @@ Widget cartWidget(BuildContext context, CartModel cart, {Function()? onTap}) {
                 Text(
                   "${cart.fechaCreacion!.day}/${cart.fechaCreacion!.month}/${cart.fechaCreacion!.year}",
                   textAlign: TextAlign.start,
-                  style: TextStyle(
-                    fontSize: MediaQuery.of(context).size.height * 0.018,
-                    fontWeight: FontWeight.bold,
-                    decoration: TextDecoration.none,
-                    color: Theme.of(context).colorScheme.secondary,
-                  ),
+                  style: Theme.of(context)
+                      .textTheme
+                      .labelMedium
+                      ?.copyWith(color: Theme.of(context).colorScheme.secondary),
                 ),
               ],
             ),
-            const SizedBox(height: 5),
+            const SizedBox(height: AppSpacing.xs),
             Expanded(
               child: SingleChildScrollView(
                 child: Text(
                   cart.contenido,
                   textAlign: TextAlign.justify,
-                  style: TextStyle(
-                    fontSize: MediaQuery.of(context).size.height * 0.018,
-                    fontWeight: FontWeight.bold,
-                    decoration: TextDecoration.none,
-                  ),
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(color: AppColors.shadowWarm),
                 ),
               ),
             ),
@@ -66,25 +58,22 @@ Widget cartWidget(BuildContext context, CartModel cart, {Function()? onTap}) {
                 Text(
                   "- ${cart.letraEmisor}",
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: MediaQuery.of(context).size.height * 0.02,
-                    fontWeight: FontWeight.bold,
-                    decoration: TextDecoration.none,
-                  ),
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium
+                      ?.copyWith(color: AppColors.shadowWarm),
                 ),
                 const Spacer(),
                 Text(
                   "${cart.respuestas.length} respuestas",
                   textAlign: TextAlign.start,
-                  style: TextStyle(
-                    fontSize: MediaQuery.of(context).size.height * 0.018,
-                    fontWeight: FontWeight.bold,
-                    decoration: TextDecoration.none,
-                  ),
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: AppColors.shadowWarm.withOpacity(0.7),
+                      ),
                 ),
               ],
             ),
-            const SizedBox(height: 5),
+            const SizedBox(height: AppSpacing.xs),
           ],
         ),
       ),
@@ -104,15 +93,9 @@ Widget responseWidget(
 }) {
   return Container(
     decoration: BoxDecoration(
-      color: Theme.of(context).colorScheme.onSecondaryContainer,
-      borderRadius: BorderRadius.circular(30),
-      boxShadow: const [
-        BoxShadow(
-          color: Colors.black12,
-          blurRadius: 5,
-          offset: Offset(0, 5),
-        ),
-      ],
+      color: Theme.of(context).colorScheme.surface,
+      borderRadius: BorderRadius.circular(AppRadius.xl),
+      boxShadow: AppShadows.card,
     ),
     child: Column(
       children: [
@@ -121,32 +104,35 @@ Widget responseWidget(
                 ? TextField(
                     controller: controller,
                     maxLines: null,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(color: AppColors.shadowWarm),
                     decoration: InputDecoration(
                       hintText: hintText,
                       border: InputBorder.none,
-                      contentPadding: const EdgeInsets.all(20),
+                      contentPadding: const EdgeInsets.all(AppSpacing.lg),
                     ),
                   )
                 : Container(
-                    padding: const EdgeInsets.all(20),
+                    padding: const EdgeInsets.all(AppSpacing.lg),
                     child: Text(
                       content,
                       textAlign: TextAlign.justify,
-                      style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.height * 0.018,
-                        fontWeight: FontWeight.bold,
-                        decoration: TextDecoration.none,
-                      ),
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(color: AppColors.shadowWarm),
                     ),
                   )),
-        SizedBox(height: MediaQuery.of(context).size.height * 0.001),
+        const SizedBox(height: AppSpacing.xs),
         Row(
           children: [
-            SizedBox(width: MediaQuery.of(context).size.width * 0.02),
+            const SizedBox(width: AppSpacing.sm),
             stickerModel != null
                 ? IconButton(
                     onPressed: onStickerPressed,
-                    icon: SvgPicture.network(
+                    icon: demoSvg(
                       stickerModel.url ?? "",
                       height: MediaQuery.of(context).size.height * 0.05,
                       width: MediaQuery.of(context).size.width * 0.05,
@@ -158,21 +144,20 @@ Widget responseWidget(
                           onStickerPressed!();
                         },
                         icon: const Icon(Icons.sticky_note_2_rounded))
-                    : Container(),
+                    : const SizedBox.shrink(),
             const Spacer(),
             Text(
               letra,
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: MediaQuery.of(context).size.height * 0.02,
-                fontWeight: FontWeight.bold,
-                decoration: TextDecoration.none,
-              ),
+              style: Theme.of(context)
+                  .textTheme
+                  .titleMedium
+                  ?.copyWith(color: AppColors.shadowWarm),
             ),
-            SizedBox(width: MediaQuery.of(context).size.width * 0.03),
+            const SizedBox(width: AppSpacing.md),
           ],
         ),
-        SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+        const SizedBox(height: AppSpacing.sm),
       ],
     ),
   );
@@ -184,28 +169,27 @@ Future<void> showCartDialog(BuildContext context, CartModel cart) async {
     builder: (context) {
       return Dialog(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.circular(AppRadius.xl),
         ),
         child: Container(
           height: MediaQuery.of(context).size.height * 0.6,
           decoration: BoxDecoration(
-            color: Theme.of(context).scaffoldBackgroundColor,
-            borderRadius: BorderRadius.circular(30),
+            color: Theme.of(context).colorScheme.surface,
+            borderRadius: BorderRadius.circular(AppRadius.xl),
           ),
           child: Column(
             children: [
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(AppSpacing.lg),
                   child: SingleChildScrollView(
                     child: Text(
                       cart.contenido,
                       textAlign: TextAlign.justify,
-                      style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.height * 0.018,
-                        fontWeight: FontWeight.bold,
-                        decoration: TextDecoration.none,
-                      ),
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(color: AppColors.shadowWarm),
                     ),
                   ),
                 ),
@@ -216,16 +200,15 @@ Future<void> showCartDialog(BuildContext context, CartModel cart) async {
                   Text(
                     "- ${cart.letraEmisor}",
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: MediaQuery.of(context).size.height * 0.02,
-                      fontWeight: FontWeight.bold,
-                      decoration: TextDecoration.none,
-                    ),
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium
+                        ?.copyWith(color: AppColors.shadowWarm),
                   ),
-                  SizedBox(width: MediaQuery.of(context).size.width * 0.08),
+                  const SizedBox(width: AppSpacing.xl),
                 ],
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+              const SizedBox(height: AppSpacing.lg),
             ],
           ),
         ),

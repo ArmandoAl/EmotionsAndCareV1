@@ -17,7 +17,12 @@ class FirebaseNotificationsCubit extends Cubit<NotificationState> {
       required this.patientsRequestCubit})
       : super(const NotificationState());
 
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+  // Perezoso a propósito: acceder a `FirebaseMessaging.instance` requiere
+  // que exista una app de Firebase inicializada. En modo demo nunca se
+  // llama a `initialize()` (ver `service_locator.dart`), pero si esta
+  // propiedad fuera un campo con inicialización inmediata, se evaluaría al
+  // construir el cubit y fallaría igual sin haber inicializado Firebase.
+  FirebaseMessaging get _firebaseMessaging => FirebaseMessaging.instance;
 
   Future<void> initialize() async {
     await _firebaseMessaging.setAutoInitEnabled(true);

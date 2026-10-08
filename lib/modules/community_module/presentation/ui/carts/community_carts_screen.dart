@@ -24,10 +24,18 @@ class _CommunityCartsScreenState extends State<CommunityCartsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.carts.isEmpty) {
+      return const AppEmptyState(
+        icon: Icons.mail_outline_rounded,
+        title: 'Todavía no hay cartas',
+        message: 'Cuando la comunidad comparta cartas de apoyo, aparecerán aquí.',
+      );
+    }
+
     return Container(
       width: double.infinity,
       height: double.infinity,
-      padding: const EdgeInsets.all(20.0),
+      padding: const EdgeInsets.all(AppSpacing.lg),
       child: Column(
         children: [
           SizedBox(height: MediaQuery.of(context).size.height * 0.055),
@@ -45,7 +53,7 @@ class _CommunityCartsScreenState extends State<CommunityCartsScreen> {
             itemBuilder: (context, index) {
               return Container(
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30),
+                  borderRadius: BorderRadius.circular(AppRadius.xl),
                   image: DecorationImage(
                     colorFilter: ColorFilter.mode(
                         Theme.of(context)
@@ -58,62 +66,47 @@ class _CommunityCartsScreenState extends State<CommunityCartsScreen> {
                     ),
                     fit: BoxFit.cover,
                   ),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Colors.black12,
-                      blurRadius: 5,
-                      offset: Offset(0, 10),
-                    ),
-                  ],
+                  boxShadow: AppShadows.card,
                 ),
                 child: Column(
                   children: [
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+                    const SizedBox(height: AppSpacing.sm),
                     Expanded(
                       child: Container(
-                        padding: EdgeInsets.all(
-                            MediaQuery.of(context).size.height * 0.025),
+                        padding: const EdgeInsets.all(AppSpacing.lg),
                         child: SingleChildScrollView(
                           child: Text(
                             widget.carts[index].contenido,
-                            style: TextStyle(
-                              fontSize:
-                                  MediaQuery.of(context).size.height * 0.025,
-                              fontWeight: FontWeight.bold,
-                              decoration: TextDecoration.none,
-                            ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(color: AppColors.shadowWarm),
                           ),
                         ),
                       ),
                     ),
                     Row(
                       children: [
-                        SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.05),
+                        const SizedBox(width: AppSpacing.lg),
                         Text(
                           "${widget.carts[index].respuestas.length} respuestas",
-                          style: TextStyle(
-                            fontSize:
-                                MediaQuery.of(context).size.height * 0.018,
-                            fontWeight: FontWeight.bold,
-                            decoration: TextDecoration.none,
-                          ),
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall
+                              ?.copyWith(color: AppColors.shadowWarm.withOpacity(0.7)),
                         ),
                         const Spacer(),
                         Text(
                           "- ${widget.carts[index].letraEmisor}",
-                          style: TextStyle(
-                            fontSize:
-                                MediaQuery.of(context).size.height * 0.025,
-                            fontWeight: FontWeight.bold,
-                            decoration: TextDecoration.none,
-                          ),
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium
+                              ?.copyWith(color: AppColors.shadowWarm),
                         ),
-                        SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.08),
+                        const SizedBox(width: AppSpacing.xl),
                       ],
                     ),
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+                    const SizedBox(height: AppSpacing.lg),
                   ],
                 ),
               );
@@ -121,28 +114,28 @@ class _CommunityCartsScreenState extends State<CommunityCartsScreen> {
           ),
           const Spacer(),
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               IconButton(
                 onPressed: moveToPreviousCard,
-                icon: const Icon(Icons.arrow_back_ios, size: 30),
-                color: Theme.of(context).colorScheme.onSecondary,
+                icon: const Icon(Icons.arrow_back_ios_rounded, size: 22),
+                color: AppColors.shadowWarm,
               ),
               Text(
                 "Navegar",
-                style: TextStyle(
-                  fontSize: MediaQuery.of(context).size.height * 0.025,
-                  fontWeight: FontWeight.bold,
-                  decoration: TextDecoration.none,
-                ),
+                style: Theme.of(context)
+                    .textTheme
+                    .titleMedium
+                    ?.copyWith(color: AppColors.shadowWarm),
               ),
               IconButton(
                 onPressed: moveToNextCard,
-                icon: const Icon(Icons.arrow_forward_ios, size: 30),
-                color: Theme.of(context).colorScheme.onSecondary,
+                icon: const Icon(Icons.arrow_forward_ios_rounded, size: 22),
+                color: AppColors.shadowWarm,
               ),
             ],
           ),
-          const SizedBox(height: 15),
+          const SizedBox(height: AppSpacing.md),
         ],
       ),
     );

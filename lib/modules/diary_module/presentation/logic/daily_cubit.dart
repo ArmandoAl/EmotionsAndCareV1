@@ -1,7 +1,7 @@
 import '../../../../helpers/paths.dart';
 
 class DailyCubit extends Cubit<DailyState> {
-  final NoteRepository repository;
+  final INoteRepository repository;
 
   DailyCubit({required this.repository}) : super(const DailyState());
 

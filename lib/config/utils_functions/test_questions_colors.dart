@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 
+// Paleta armonizada con lib/config/theme/app_colors.dart ("Jardín editorial").
 const fourQuestionsColors = {
-  1: Color(0xFF92D406),
-  2: Color(0xFFEAAA07),
-  3: Color(0xFFEA7407),
-  4: Color(0xFFDE0606),
+  1: Color(0xFF3B8859),
+  2: Color(0xFFC9A227),
+  3: Color(0xFFC97B32),
+  4: Color(0xFFB3432E),
 };
 
 const sixQuestionsColors = {
-  1: Color(0xFF92D406),
-  2: Color(0xFFEAAA07),
-  3: Color(0xFFEAAA07),
-  4: Color(0xFFEA7407),
-  5: Color(0xFFEA7407),
-  6: Color(0xFFDE0606),
-  7: Color(0xFFDE0606),
+  1: Color(0xFF3B8859),
+  2: Color(0xFFC9A227),
+  3: Color(0xFFC9A227),
+  4: Color(0xFFC97B32),
+  5: Color(0xFFC97B32),
+  6: Color(0xFFB3432E),
+  7: Color(0xFFB3432E),
 };
 
 const numbersForMoreThanFourDigits = {

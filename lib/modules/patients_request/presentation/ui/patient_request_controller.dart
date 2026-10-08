@@ -25,10 +25,20 @@ class _PatientsRequestControllerState extends State<PatientsRequestController> {
       buildWhen: (previous, current) => previous != current,
       builder: (context, state) {
         if (state.status == PatientsRequestsStatus.loading) {
-          // state.status == PatientsRequestsStatus.loading
           return const Scaffold(
-            body: Center(
-              child: CircularProgressIndicator(),
+            body: Center(child: AppLoadingIndicator()),
+          );
+        }
+
+        if (state.status == PatientsRequestsStatus.error) {
+          return Scaffold(
+            appBar: const HeaderWidget(
+                title: "Solicitudes de pacientes", isForReturn: true),
+            body: AppErrorState(
+              message: 'No pudimos cargar las solicitudes de pacientes.',
+              onRetry: () => context
+                  .read<PatientsRequestCubit>()
+                  .getPatientsRequestList(widget.idUser),
             ),
           );
         }
@@ -42,7 +52,7 @@ class _PatientsRequestControllerState extends State<PatientsRequestController> {
                 isForReturn: true,
                 actions: [
                   IconButton(
-                    icon: Icon(Icons.replay,
+                    icon: Icon(Icons.replay_rounded,
                         color: Theme.of(context).colorScheme.primary),
                     onPressed: () {
                       context
@@ -52,14 +62,11 @@ class _PatientsRequestControllerState extends State<PatientsRequestController> {
                   )
                 ],
               ),
-              body: const Center(
-                child: Padding(
-                  padding: EdgeInsets.all(20.0),
-                  child: Text(
+              body: const AppEmptyState(
+                icon: Icons.group_add_rounded,
+                title: 'Sin solicitudes pendientes',
+                message:
                     "No tienes solicitudes de pacientes pendientes. Puedes dirigirte a la sección de configuración para ver tu código de vinculación y compartirlo con tus pacientes.",
-                    textAlign: TextAlign.center,
-                  ),
-                ),
               ));
         }
 

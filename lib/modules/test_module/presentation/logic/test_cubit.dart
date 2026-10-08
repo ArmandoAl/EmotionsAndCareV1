@@ -1,7 +1,7 @@
 import '../../../../helpers/paths.dart';
 
 class TestCubit extends Cubit<TestState> {
-  final TestRepository repository;
+  final ITestRepository repository;
   TestCubit({required this.repository}) : super(const TestState());
 
   //complete test

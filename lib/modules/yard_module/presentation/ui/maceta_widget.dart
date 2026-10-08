@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter_svg/flutter_svg.dart';
+import '../../../../demo/widgets/demo_svg.dart';
 import '../../../../helpers/paths.dart';
 import '../../../auth_module/domain/progress.dart';
 
@@ -42,10 +42,13 @@ class _PotWidgetState extends State<PotWidget> with TickerProviderStateMixin {
 
     if (mounted) {
       if (widget.customEnable) {
+        final bool reduceMotion = WidgetsBinding
+            .instance.platformDispatcher.accessibilityFeatures.disableAnimations;
+
         _stickersController = AnimationController(
           vsync: this,
           duration: const Duration(milliseconds: 500),
-        )..repeat(reverse: true);
+        );
         // Configurar la animación de los stickers
         _stickersAnimation = Tween<double>(
           begin: 1.0,
@@ -67,12 +70,20 @@ class _PotWidgetState extends State<PotWidget> with TickerProviderStateMixin {
         _animationController = AnimationController(
           vsync: this,
           duration: const Duration(milliseconds: 2000),
-        )..repeat(reverse: true);
+        );
 
         _animation = ColorTween(
           begin: const Color.fromARGB(255, 255, 255, 255),
           end: const Color.fromARGB(255, 87, 87, 83),
         ).animate(_animationController!);
+
+        if (reduceMotion) {
+          _stickersController!.value = 1;
+          _animationController!.value = 1;
+        } else {
+          _stickersController!.repeat(reverse: true);
+          _animationController!.repeat(reverse: true);
+        }
       }
 
       _controller = AnimationController(
@@ -201,7 +212,7 @@ class _PotWidgetState extends State<PotWidget> with TickerProviderStateMixin {
                                 changeHeightTap();
                               }
                             },
-                            child: SvgPicture.network(
+                            child: demoSvg(
                               widget.state.currentFlower!.flower
                                   .urls![widget.state.currentFlower!.state].url,
                               width: plantPotData['plantSize'],
@@ -245,11 +256,10 @@ class _PotWidgetState extends State<PotWidget> with TickerProviderStateMixin {
                                   child: AnimatedBuilder(
                                     animation: _animationController!,
                                     builder: (context, child) {
-                                      return SvgPicture.network(
+                                      return demoSvg(
                                         Assets.potSvgAssets,
                                         height: plantPotData['potSize'],
                                         fit: BoxFit.fill,
-                                        // ignore: deprecated_member_use
                                         color: _animation!.value,
                                       );
                                     },
@@ -268,7 +278,7 @@ class _PotWidgetState extends State<PotWidget> with TickerProviderStateMixin {
                                       changeHeightTap();
                                     }
                                   },
-                                  child: SvgPicture.network(
+                                  child: demoSvg(
                                     Assets.potSvgAssets,
                                     height: plantPotData['potSize'],
                                     fit: BoxFit.fill,
@@ -358,11 +368,10 @@ class ObjetivesWidget extends StatelessWidget {
       children: [
         Text(
           'Fase ${stage.stageNumber + 1}',
-          style: const TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 24,
-          ),
+          style: Theme.of(context)
+              .textTheme
+              .headlineSmall
+              ?.copyWith(color: Colors.white),
         ),
         ...stage.progressInfos.map(
           (item) {
@@ -372,10 +381,13 @@ class ObjetivesWidget extends StatelessWidget {
 
             return buildObjetiveItem(
               context,
-              icon:
-                  item.isCompleted ? Icons.check_circle : Icons.circle_outlined,
+              icon: item.isCompleted
+                  ? Icons.check_circle_rounded
+                  : Icons.circle_outlined,
               iconColor: Colors.white,
-              backgroundColor: item.isCompleted ? Colors.green : Colors.grey,
+              backgroundColor: item.isCompleted
+                  ? Theme.of(context).colorScheme.primary
+                  : AppColors.shadowWarm.withOpacity(0.5),
               text: item.description,
               progress: progress,
               showProgress: true,
@@ -408,16 +420,15 @@ Widget buildObjetiveItem(
         children: [
           Row(
             children: [
-              Icon(icon, color: iconColor, size: 35),
-              const SizedBox(width: 10),
+              Icon(icon, color: iconColor, size: 28),
+              const SizedBox(width: AppSpacing.sm),
               Expanded(
                 child: Text(
                   text,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleSmall
+                      ?.copyWith(color: Colors.white),
                 ),
               ),
             ],
@@ -427,22 +438,24 @@ Widget buildObjetiveItem(
             children: [
               Text(
                 '$progress/$maxProgress',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: Theme.of(context)
+                    .textTheme
+                    .labelLarge
+                    ?.copyWith(color: Colors.white),
               ),
             ],
           ),
           if (showProgress)
             SizedBox(
               width: width,
-              child: LinearProgressIndicator(
-                value: progress / maxProgress,
-                backgroundColor: Colors.grey,
-                color: Colors.white,
-                minHeight: 10,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(AppRadius.pill),
+                child: LinearProgressIndicator(
+                  value: progress / maxProgress,
+                  backgroundColor: Colors.white.withOpacity(0.3),
+                  color: Colors.white,
+                  minHeight: 8,
+                ),
               ),
             ),
         ],

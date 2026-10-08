@@ -29,7 +29,7 @@ class _PrivacyScreenState extends State<PrivacyScreen> {
         title: const Text('Privacidad'),
         leading: IconButton(
           icon: const Icon(
-            Icons.arrow_back_ios,
+            Icons.arrow_back_ios_rounded,
           ),
           onPressed: () async {
             final BegginCubit userProvider = getIt<BegginCubit>();
@@ -46,108 +46,104 @@ class _PrivacyScreenState extends State<PrivacyScreen> {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        padding: const EdgeInsets.all(30),
+        padding: const EdgeInsets.all(AppSpacing.xl),
         child: ListView(
           children: [
-            Row(
-              children: [
-                const Expanded(
-                  child: Text(
-                    'Notificaciones',
-                    style: TextStyle(
-                      fontSize: 20,
+            AppCard(
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      'Notificaciones',
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleMedium
+                          ?.copyWith(color: AppColors.shadowWarm),
                     ),
                   ),
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.1,
-                ),
-                Switch(
-                  value: notificationsSwitch,
-                  onChanged: (value) {
-                    setState(() {
-                      notificationsSwitch = value;
-                    });
-                  },
-                  activeColor: const Color(0xff2CB5E0),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.03,
-            ),
-            Row(
-              children: [
-                const Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Diario',
-                        style: TextStyle(
-                          fontSize: 20,
-                        ),
-                      ),
-                      Text(
-                        'Tus notas se compartirán con tu especialista',
-                        style: TextStyle(
-                          fontSize: 15,
-                        ),
-                      ),
-                    ],
+                  const SizedBox(width: AppSpacing.md),
+                  Switch(
+                    value: notificationsSwitch,
+                    onChanged: (value) {
+                      setState(() {
+                        notificationsSwitch = value;
+                      });
+                    },
                   ),
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.1,
-                ),
-                Switch(
-                  value: daitySwitch,
-                  onChanged: (value) {
-                    setState(() {
-                      daitySwitch = value;
-                    });
-                  },
-                  activeColor: const Color(0xff2CB5E0),
-                ),
-              ],
+                ],
+              ),
             ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.03,
-            ),
-            Row(
-              children: [
-                const Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Cuestionarios',
-                        style: TextStyle(
-                          fontSize: 20,
+            const SizedBox(height: AppSpacing.md),
+            AppCard(
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Diario',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium
+                              ?.copyWith(color: AppColors.shadowWarm),
                         ),
-                      ),
-                      Text(
-                        'Las respuestas de tus cuestionarios se compartirán con tu especialista',
-                        style: TextStyle(
-                          fontSize: 15,
+                        Text(
+                          'Tus notas se compartirán con tu especialista',
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                color: AppColors.shadowWarm.withOpacity(0.7),
+                              ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.1,
-                ),
-                Switch(
-                  value: testSwitch,
-                  onChanged: (value) {
-                    setState(() {
-                      testSwitch = value;
-                    });
-                  },
-                  activeColor: const Color(0xff2CB5E0),
-                ),
-              ],
+                  const SizedBox(width: AppSpacing.md),
+                  Switch(
+                    value: daitySwitch,
+                    onChanged: (value) {
+                      setState(() {
+                        daitySwitch = value;
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: AppSpacing.md),
+            AppCard(
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Cuestionarios',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium
+                              ?.copyWith(color: AppColors.shadowWarm),
+                        ),
+                        Text(
+                          'Las respuestas de tus cuestionarios se compartirán con tu especialista',
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                color: AppColors.shadowWarm.withOpacity(0.7),
+                              ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: AppSpacing.md),
+                  Switch(
+                    value: testSwitch,
+                    onChanged: (value) {
+                      setState(() {
+                        testSwitch = value;
+                      });
+                    },
+                  ),
+                ],
+              ),
             ),
           ],
         ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../../config/assets/assets.dart';
+import '../../../../config/theme/app_colors.dart';
+import '../../../../config/theme/app_spacing.dart';
 
 class BegginScreen extends StatefulWidget {
   final void Function() onLogin;
@@ -19,7 +21,7 @@ class _BegginScreenState extends State<BegginScreen> {
       height: double.infinity,
       width: double.infinity,
       decoration: const BoxDecoration(
-        color: Color(0xff1C8AAD),
+        color: AppColors.dayPrimary,
       ),
       child: Stack(
         children: [
@@ -31,7 +33,7 @@ class _BegginScreenState extends State<BegginScreen> {
                 width: double.infinity,
                 height: MediaQuery.of(context).size.height * 0.35,
                 decoration: const BoxDecoration(
-                  color: Color.fromARGB(255, 0, 88, 165),
+                  color: AppColors.nightPrimaryContainer,
                   borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(0),
                     bottomRight: Radius.circular(500),
@@ -53,7 +55,7 @@ class _BegginScreenState extends State<BegginScreen> {
                 width: MediaQuery.of(context).size.width * 0.2,
                 height: MediaQuery.of(context).size.height * 0.1,
                 decoration: const BoxDecoration(
-                    color: Color(0xffFF7987),
+                    color: AppColors.dayTertiary,
                     borderRadius: BorderRadius.all(Radius.circular(500))),
               )),
           Positioned(
@@ -63,12 +65,12 @@ class _BegginScreenState extends State<BegginScreen> {
                 width: MediaQuery.of(context).size.width * 0.3,
                 height: MediaQuery.of(context).size.height * 0.2,
                 decoration: const BoxDecoration(
-                    color: Color(0xffFF7987),
+                    color: AppColors.dayTertiary,
                     borderRadius: BorderRadius.all(Radius.circular(500))),
               )),
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(AppSpacing.lg),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -76,33 +78,33 @@ class _BegginScreenState extends State<BegginScreen> {
                 ElevatedButton(
                   onPressed: widget.onRegister,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xffF3A953),
-                    elevation: 10,
-                  ),
-                  child: Padding(
+                    backgroundColor: AppColors.daySecondary,
+                    foregroundColor: Colors.white,
+                    elevation: 6,
                     padding: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 30),
-                    child: Text('Registrarse',
-                        style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.width * 0.08,
-                            color: Colors.white)),
+                        vertical: AppSpacing.md, horizontal: AppSpacing.xxl),
                   ),
+                  child: Text('Registrarse',
+                      style: Theme.of(context)
+                          .textTheme
+                          .headlineSmall
+                          ?.copyWith(color: Colors.white)),
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.1),
                 ElevatedButton(
                   onPressed: widget.onLogin,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    elevation: 10,
-                  ),
-                  child: Padding(
+                    backgroundColor: AppColors.daySurface,
+                    foregroundColor: AppColors.dayPrimary,
+                    elevation: 6,
                     padding: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 20),
-                    child: Text('Iniciar sesión',
-                        style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.width * 0.08,
-                            color: Colors.black)),
+                        vertical: AppSpacing.md, horizontal: AppSpacing.xl),
                   ),
+                  child: Text('Iniciar sesión',
+                      style: Theme.of(context)
+                          .textTheme
+                          .headlineSmall
+                          ?.copyWith(color: AppColors.dayPrimary)),
                 ),
               ],
             ),

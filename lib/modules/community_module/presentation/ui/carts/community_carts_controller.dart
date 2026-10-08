@@ -45,6 +45,18 @@ class _CommunityCartsControolerState extends State<CommunityCartsControoler> {
           );
         }
 
+        if (state.status == CommunityStatus.error) {
+          return Scaffold(
+            appBar: const HeaderWidget(title: 'Cartas de apoyo', isForReturn: true),
+            body: AppErrorState(
+              message: 'No pudimos cargar las cartas de la comunidad.',
+              onRetry: () => context.read<CommunityCubit>().initCommunity(
+                    widget.isPatient ? widget.patient!.id! : widget.specialist!.id!,
+                  ),
+            ),
+          );
+        }
+
         final carts = state.cartFromCommunity;
 
         return Scaffold(
@@ -54,6 +66,11 @@ class _CommunityCartsControolerState extends State<CommunityCartsControoler> {
               actions: widget.isPatient
                   ? [
                       ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            minimumSize: const Size(0, 36),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: AppSpacing.md),
+                          ),
                           onPressed: () {
                             Navigator.push(
                                 context,
@@ -64,14 +81,8 @@ class _CommunityCartsControolerState extends State<CommunityCartsControoler> {
                                           isPatient: widget.isPatient,
                                         )));
                           },
-                          child: Text('Buzón',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize:
-                                    MediaQuery.of(context).size.width * 0.03,
-                                fontWeight: FontWeight.bold,
-                              ))),
-                      const SizedBox(width: 10),
+                          child: const Text('Buzón')),
+                      const SizedBox(width: AppSpacing.xs),
                     ]
                   : null,
             ),
@@ -121,7 +132,7 @@ class _CommunityCartsControolerState extends State<CommunityCartsControoler> {
                 : FloatingActionButton(
                     heroTag: null,
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(50)),
+                        borderRadius: BorderRadius.circular(AppRadius.pill)),
                     onPressed: () {
                       Navigator.push(
                         context,
@@ -162,8 +173,8 @@ class _CommunityCartsControolerState extends State<CommunityCartsControoler> {
                                 })),
                       );
                     },
-                    child: const Icon(Icons.border_color_outlined,
-                        color: Colors.white),
+                    child: Icon(Icons.edit_rounded,
+                        color: Theme.of(context).colorScheme.onPrimary),
                   ));
       },
     );

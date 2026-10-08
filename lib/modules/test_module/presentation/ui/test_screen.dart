@@ -43,12 +43,19 @@ class _TestsScreenState extends State<TestsScreen>
       _animationController = AnimationController(
         vsync: this,
         duration: const Duration(milliseconds: 1000),
-      )..repeat(reverse: true);
+      );
 
       _animation = ColorTween(
-        begin: const Color.fromARGB(255, 67, 59, 59),
-        end: const Color.fromARGB(255, 13, 24, 172),
+        begin: AppColors.dayPrimaryContainer,
+        end: AppColors.daySecondary.withOpacity(0.55),
       ).animate(_animationController!);
+
+      if (WidgetsBinding
+              .instance.platformDispatcher.accessibilityFeatures.disableAnimations) {
+        _animationController!.value = 1;
+      } else {
+        _animationController!.repeat(reverse: true);
+      }
 
       setState(() {});
     }
@@ -108,10 +115,11 @@ class _TestsScreenState extends State<TestsScreen>
 
   @override
   Widget build(BuildContext context) {
+    final ColorScheme scheme = Theme.of(context).colorScheme;
     return Container(
         width: double.infinity,
         height: double.infinity,
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(AppSpacing.lg),
         child: RefreshIndicator(
             onRefresh: () async {
               await widget.onRefresh();
@@ -120,6 +128,8 @@ class _TestsScreenState extends State<TestsScreen>
                 itemCount: widget.testList.length,
                 itemBuilder: (context, index) {
                   final item = widget.testList[index];
+                  final bool isCompleted = widget.completedTestList
+                      .any((element) => element.testId == item.id);
                   if (userProvider.state.registerPatientFlow == "register") {
                     return AnimatedBuilder(
                       animation: _animationController!,
@@ -127,18 +137,11 @@ class _TestsScreenState extends State<TestsScreen>
                         return Container(
                             decoration: BoxDecoration(
                               color: _animation!.value,
-                              borderRadius: BorderRadius.circular(15),
-                              boxShadow: const [
-                                BoxShadow(
-                                  color: Colors.black,
-                                  blurRadius: 1,
-                                  spreadRadius: 0,
-                                  offset: Offset(0, 1),
-                                ),
-                              ],
+                              borderRadius: BorderRadius.circular(AppRadius.md),
+                              boxShadow: AppShadows.card,
                             ),
-                            margin: const EdgeInsets.all(10),
-                            padding: const EdgeInsets.all(15),
+                            margin: const EdgeInsets.all(AppSpacing.sm),
+                            padding: const EdgeInsets.all(AppSpacing.md),
                             child: ListTestItems(
                               item: item,
                               completedTestList: widget.completedTestList,
@@ -148,31 +151,19 @@ class _TestsScreenState extends State<TestsScreen>
                     );
                   } else {
                     return Container(
-                        decoration: BoxDecoration(
-                          color: userProvider.state.registerPatientFlow ==
-                                  "register"
-                              ? _animation!.value
-                              : widget.completedTestList.any(
-                                      (element) => element.testId == item.id)
-                                  ? Colors.grey[300]
-                                  : const Color(0xff2CB5E0),
-                          borderRadius: BorderRadius.circular(15),
-                          boxShadow: const [
-                            BoxShadow(
-                              color: Colors.black,
-                              blurRadius: 1,
-                              spreadRadius: 0,
-                              offset: Offset(0, 1),
-                            ),
-                          ],
-                        ),
-                        margin: const EdgeInsets.all(10),
-                        padding: const EdgeInsets.all(15),
+                      margin: const EdgeInsets.all(AppSpacing.sm),
+                      child: AppCard(
+                        color: isCompleted
+                            ? scheme.surfaceContainerHighest
+                            : scheme.primaryContainer,
+                        padding: EdgeInsets.zero,
                         child: ListTestItems(
                           item: item,
                           completedTestList: widget.completedTestList,
                           onTestTap: widget.onTestTap,
-                        ));
+                        ),
+                      ),
+                    );
                   }
                 })));
   }
@@ -195,61 +186,38 @@ class ListTestItems extends StatefulWidget {
 class _ListTestItemsState extends State<ListTestItems> {
   @override
   Widget build(BuildContext context) {
+    final bool isCompleted = widget.completedTestList
+        .any((element) => element.testId == widget.item.id);
+    final ColorScheme scheme = Theme.of(context).colorScheme;
+    final Color foreground =
+        isCompleted ? AppColors.shadowWarm.withOpacity(0.6) : AppColors.shadowWarm;
+
     return ListTile(
       title: Text(widget.item.name,
-          style: TextStyle(
-            color: widget.completedTestList
-                    .any((element) => element.testId == widget.item.id)
-                ? Colors.black
-                : const Color(0xffE3EDF3),
-            fontSize: MediaQuery.of(context).size.width * 0.04,
-            fontWeight: FontWeight.bold,
-            overflow: TextOverflow.ellipsis,
-          )),
-      subtitle: Row(
+          style: Theme.of(context)
+              .textTheme
+              .titleMedium
+              ?.copyWith(color: foreground)),
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("${widget.item.questions.length} Preguntas",
-                  style: TextStyle(
-                    color: widget.completedTestList
-                            .any((element) => element.testId == widget.item.id)
-                        ? Colors.black
-                        : const Color(0xffE3EDF3),
-                    fontSize: MediaQuery.of(context).size.width * 0.03,
-                    fontWeight: FontWeight.bold,
-                    overflow: TextOverflow.ellipsis,
-                  )),
-              if (widget.completedTestList
-                  .any((element) => element.testId == widget.item.id))
-                Text(
-                    "Completado ${widget.completedTestList.firstWhere((element) => element.testId == widget.item.id).date.day}/${widget.completedTestList.firstWhere((element) => element.testId == widget.item.id).date.month}/${widget.completedTestList.firstWhere((element) => element.testId == widget.item.id).date.year}",
-                    style: TextStyle(
-                      color: widget.completedTestList.any(
-                              (element) => element.testId == widget.item.id)
-                          ? Colors.black
-                          : const Color(0xffE3EDF3),
-                      fontSize: MediaQuery.of(context).size.width * 0.03,
-                      fontWeight: FontWeight.bold,
-                      overflow: TextOverflow.ellipsis,
-                    )),
-            ],
-          ),
-          const Spacer(),
-          // Text(widget.item.questions.length.toString()),
+          Text("${widget.item.questions.length} preguntas",
+              style: Theme.of(context)
+                  .textTheme
+                  .bodySmall
+                  ?.copyWith(color: foreground)),
+          if (isCompleted)
+            Text(
+                "Completado ${widget.completedTestList.firstWhere((element) => element.testId == widget.item.id).date.day}/${widget.completedTestList.firstWhere((element) => element.testId == widget.item.id).date.month}/${widget.completedTestList.firstWhere((element) => element.testId == widget.item.id).date.year}",
+                style: Theme.of(context)
+                    .textTheme
+                    .bodySmall
+                    ?.copyWith(color: foreground)),
         ],
       ),
-      trailing: widget.completedTestList
-              .any((element) => element.testId == widget.item.id)
-          ? Icon(
-              Icons.check,
-              color: widget.completedTestList
-                      .any((element) => element.testId == widget.item.id)
-                  ? Colors.black
-                  : const Color(0xffE3EDF3),
-            )
-          : null,
+      trailing: isCompleted
+          ? Icon(Icons.check_circle_rounded, color: scheme.primary)
+          : Icon(Icons.chevron_right_rounded, color: foreground),
       onTap: () {
         widget.onTestTap(widget.item);
       },

@@ -32,8 +32,17 @@ class _SpecialistPattientsControllerState
         builder: (context, state) {
           if (state.status == PattientsStatus.loading) {
             return const Scaffold(
-              body: Center(
-                child: CircularProgressIndicator(),
+              body: Center(child: AppLoadingIndicator()),
+            );
+          }
+
+          if (state.status == PattientsStatus.error) {
+            return Scaffold(
+              appBar: AppBar(title: const Text('Pacientes')),
+              body: AppErrorState(
+                message: 'No pudimos cargar tus pacientes.',
+                onRetry: () =>
+                    context.read<PattientsCubit>().getPattients(widget.idUser),
               ),
             );
           }
@@ -45,14 +54,11 @@ class _SpecialistPattientsControllerState
                 appBar: AppBar(
                   title: const Text('Pacientes'),
                 ),
-                body: const Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(20.0),
-                    child: Text(
-                      'Aún no tienes pacientes asignados, puedes dirigirte a la sección de configuración para ver tu código de vinculación y compartirlo con tus pacientes.',
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
+                body: const AppEmptyState(
+                  icon: Icons.people_outline_rounded,
+                  title: 'Aún no tienes pacientes',
+                  message:
+                      'Puedes dirigirte a la sección de configuración para ver tu código de vinculación y compartirlo con tus pacientes.',
                 ));
           }
 

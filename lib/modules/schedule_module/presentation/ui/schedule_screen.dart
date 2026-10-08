@@ -55,27 +55,52 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                   leftChevronVisible: true,
                   rightChevronVisible: true,
                   rightChevronIcon: const Icon(
-                    Icons.chevron_right,
-                    size: 30,
+                    Icons.chevron_right_rounded,
+                    size: 26,
+                    color: AppColors.shadowWarm,
                   ),
                   leftChevronIcon: const Icon(
-                    Icons.chevron_left,
-                    size: 30,
+                    Icons.chevron_left_rounded,
+                    size: 26,
+                    color: AppColors.shadowWarm,
                   ),
-                  headerMargin: const EdgeInsets.only(bottom: 10, top: 10),
-                  titleTextStyle: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  headerMargin:
+                      const EdgeInsets.only(bottom: AppSpacing.sm, top: AppSpacing.sm),
+                  titleTextStyle: Theme.of(context)
+                          .textTheme
+                          .titleLarge
+                          ?.copyWith(color: AppColors.shadowWarm) ??
+                      const TextStyle(),
                   titleTextFormatter: (date, locale) =>
                       '${Utils.getMonthName(date.month)} ${date.year}',
                 ),
-                daysOfWeekStyle: const DaysOfWeekStyle(
+                daysOfWeekStyle: DaysOfWeekStyle(
                   weekdayStyle: TextStyle(
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.shadowWarm.withOpacity(0.7),
                   ),
                   weekendStyle: TextStyle(
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.shadowWarm.withOpacity(0.7),
+                  ),
+                ),
+                calendarStyle: CalendarStyle(
+                  defaultTextStyle: const TextStyle(color: AppColors.shadowWarm),
+                  weekendTextStyle: const TextStyle(color: AppColors.shadowWarm),
+                  outsideTextStyle:
+                      TextStyle(color: AppColors.shadowWarm.withOpacity(0.35)),
+                  todayDecoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primaryContainer,
+                    shape: BoxShape.circle,
+                  ),
+                  todayTextStyle: const TextStyle(color: AppColors.shadowWarm),
+                  selectedDecoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primary,
+                    shape: BoxShape.circle,
+                  ),
+                  markerDecoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.secondary,
+                    shape: BoxShape.circle,
                   ),
                 ),
                 focusedDay: DateTime.now().toLocal(),
@@ -112,29 +137,22 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                 },
               ),
             ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.03,
-            ),
+            const SizedBox(height: AppSpacing.lg),
             Expanded(
                 child: Padding(
               padding: widget.isPatient
                   ? EdgeInsets.zero
-                  : EdgeInsets.symmetric(
-                      horizontal: MediaQuery.of(context).size.width * 0.05,
-                    ),
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 300),
+                  : const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+              child: Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: _selectedDate == null
-                      ? Theme.of(context).colorScheme.secondary
-                      : Colors.deepPurple[900]!,
+                  color: Theme.of(context).colorScheme.primary,
                   borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(50),
-                    topRight: Radius.circular(50),
+                    topLeft: Radius.circular(AppRadius.xl),
+                    topRight: Radius.circular(AppRadius.xl),
                   ),
                 ),
-                padding: const EdgeInsets.all(30),
+                padding: const EdgeInsets.all(AppSpacing.xxl),
                 child: containerContentWidget(context, _selectedDate,
                     widget.isPatient, patient, specialist, widget.dates),
               ),

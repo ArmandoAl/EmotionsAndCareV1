@@ -5,7 +5,7 @@ import '../../helpers/paths.dart';
 
 class UICubit extends Cubit<UIState> {
   final StorageRepository storageRepository;
-  final UIRepositoryImpl uiRepoitory;
+  final UIRepository uiRepoitory;
 
   UICubit({
     required this.storageRepository,
@@ -16,129 +16,14 @@ class UICubit extends Cubit<UIState> {
     int? selectedTheme = await storageRepository.getSelectedTheme();
     selectedTheme ??= 0;
 
+    // Los dos "skins" seleccionables (índice 0 = Día, índice 1 = Noche)
+    // ahora se construyen desde el sistema de diseño centralizado en
+    // lib/config/theme/, en vez de definirse inline aquí. El mecanismo de
+    // selección (storageRepository.getSelectedTheme / selectedTheme) no
+    // cambia.
     List<ThemeData> themes = [
-      // 🌊 Tema Azul (Principal)
-      ThemeData(
-        useMaterial3: true,
-        primaryColor: Colors.blue[50]!,
-        colorScheme: const ColorScheme.light(
-          primary: Colors.blue,
-          secondary: Color(0xFF2CB5E0),
-          surface: Color(0xFFE3EDF3),
-          onSecondary: Colors.black,
-          onPrimary: Colors.white,
-          onSurface: Colors.black,
-          //this color C5F1FF
-          onPrimaryContainer: Color(0xFFB7E1FF),
-          //THIS COLOR F3E7D6
-          onSecondaryContainer: Color(0xFFF3E7D6),
-        ),
-        scaffoldBackgroundColor: const Color(0xFFE3EDF3),
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Color(0xFFE3EDF3),
-        ),
-        dialogTheme: const DialogTheme(
-          backgroundColor: Color(0xFFE3EDF3),
-          iconColor: Colors.black,
-          surfaceTintColor: Colors.black,
-        ),
-        bottomSheetTheme: const BottomSheetThemeData(
-          backgroundColor: Color(0xFFE3EDF3),
-          surfaceTintColor: Colors.black,
-        ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(
-              const Color(0xFF2CB5E0),
-            ),
-            surfaceTintColor: MaterialStateProperty.all(
-              Colors.black,
-            ),
-          ),
-        ),
-        floatingActionButtonTheme: const FloatingActionButtonThemeData(
-          backgroundColor: Color(0xFF2CB5E0),
-          foregroundColor: Colors.black,
-        ),
-        dropdownMenuTheme: const DropdownMenuThemeData(
-          menuStyle: MenuStyle(
-            backgroundColor: WidgetStatePropertyAll(Color(0xFFE3EDF3)),
-            surfaceTintColor: WidgetStatePropertyAll(Colors.black),
-          ),
-        ),
-        drawerTheme: const DrawerThemeData(backgroundColor: Colors.blueGrey),
-        textTheme: const TextTheme(
-          bodyMedium: TextStyle(
-            color: Colors.black,
-            fontSize: 16,
-            fontFamily: 'Gilroy',
-          ),
-          bodyLarge: TextStyle(
-            color: Colors.black,
-            fontSize: 18,
-            fontFamily: 'Gilroy',
-          ),
-          titleLarge: TextStyle(
-            color: Colors.black,
-            fontSize: 20,
-            fontFamily: 'Gilroy',
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-
-      // 🌙 Tema Oscuro
-      ThemeData(
-        useMaterial3: true,
-        primaryColor: Colors.blue,
-        colorScheme: ColorScheme.dark(
-          primary: Colors.blue,
-          secondary: Colors.greenAccent,
-          surface: Colors.grey[900]!,
-          onPrimary: Colors.black,
-          onSecondary: Colors.white,
-          onSurface: Colors.white,
-        ),
-        scaffoldBackgroundColor: Colors.grey[850],
-        appBarTheme: AppBarTheme(
-          backgroundColor: Colors.grey[900],
-          foregroundColor: Colors.white,
-        ),
-        dialogTheme: DialogTheme(
-          backgroundColor: Colors.grey[900],
-          iconColor: Colors.white,
-          surfaceTintColor: Colors.white,
-        ),
-        bottomSheetTheme: BottomSheetThemeData(
-          backgroundColor: Colors.grey[900],
-          surfaceTintColor: Colors.white,
-        ),
-        drawerTheme: const DrawerThemeData(backgroundColor: Colors.grey),
-        dropdownMenuTheme: DropdownMenuThemeData(
-          menuStyle: MenuStyle(
-            backgroundColor: WidgetStatePropertyAll(Colors.grey[900]),
-            surfaceTintColor: const WidgetStatePropertyAll(Colors.white),
-          ),
-        ),
-        textTheme: const TextTheme(
-          bodyMedium: TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-            fontFamily: 'Gilroy',
-          ),
-          bodyLarge: TextStyle(
-            color: Colors.white,
-            fontSize: 18,
-            fontFamily: 'Gilroy',
-          ),
-          titleLarge: TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-            fontFamily: 'Gilroy',
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
+      AppTheme.day(),
+      AppTheme.night(),
     ];
 
     String? selectedBackground =

@@ -90,10 +90,8 @@ class _CustomUIScreenState extends State<CustomUIScreen>
                       left: MediaQuery.of(context).size.width * 0.01,
                       child: Builder(builder: (context) {
                         return IconButton(
-                          icon: Icon(Icons.check_circle,
-                              color: const Color(
-                                0xff064ACB,
-                              ),
+                          icon: Icon(Icons.check_circle_rounded,
+                              color: Theme.of(context).colorScheme.primary,
                               size: MediaQuery.of(context).size.width * 0.1),
                           onPressed: () async {
                             if (uiProvider.state.currentFlower == null) {

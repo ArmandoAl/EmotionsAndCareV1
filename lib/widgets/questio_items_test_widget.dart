@@ -17,17 +17,17 @@ Widget questionItems(
   Function(Achievement? goal) setGoal,
 ) {
   return Padding(
-    padding: EdgeInsets.symmetric(
-      horizontal: MediaQuery.of(context).size.width * 0.07,
-      vertical: MediaQuery.of(context).size.height * 0.01,
+    padding: const EdgeInsets.symmetric(
+      horizontal: AppSpacing.xl,
+      vertical: AppSpacing.sm,
     ),
     child: Column(
       children: [
-        SizedBox(height: MediaQuery.of(context).size.height * 0.035),
+        const SizedBox(height: AppSpacing.xl),
         Row(
           children: [
             IconButton(
-              icon: const Icon(Icons.arrow_back, size: 30),
+              icon: const Icon(Icons.arrow_back_rounded, size: 26),
               onPressed: () {
                 //change page
                 pageController.previousPage(
@@ -38,132 +38,115 @@ Widget questionItems(
             const Spacer(),
             Text(
               '$index/${state.testList[testId - 1].questions.length}',
-              style: const TextStyle(
-                  fontSize: 20,
-                  color: Colors.grey,
-                  fontWeight: FontWeight.bold,
-                  decoration: TextDecoration.none),
-
-              //progress bar
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: AppColors.shadowWarm.withOpacity(0.6),
+                  ),
             ),
           ],
         ),
-        SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-        LinearProgressIndicator(
-          value: progress,
-          valueColor: AlwaysStoppedAnimation<Color>(Color.lerp(
-              Theme.of(context).colorScheme.primary,
-              const Color.fromARGB(255, 21, 137, 19),
-              progress)!),
+        const SizedBox(height: AppSpacing.sm),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(AppRadius.pill),
+          child: LinearProgressIndicator(
+            value: progress,
+            minHeight: 6,
+            backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+            valueColor: AlwaysStoppedAnimation<Color>(
+                Theme.of(context).colorScheme.primary),
+          ),
         ),
-        SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+        const SizedBox(height: AppSpacing.sm),
         Row(
           children: [
             Text("Pregunta ${index.toString()}",
-                style: TextStyle(
-                    fontSize: MediaQuery.of(context).size.width * 0.04,
-                    decoration: TextDecoration.none)),
+                style: Theme.of(context)
+                    .textTheme
+                    .labelLarge
+                    ?.copyWith(color: AppColors.shadowWarm.withOpacity(0.7))),
             const Spacer()
           ],
         ),
-        const SizedBox(height: 5),
+        const SizedBox(height: AppSpacing.xs),
         Text(item.question,
             textAlign: TextAlign.center,
-            style: TextStyle(
-                fontSize: MediaQuery.of(context).size.width * 0.07,
-                decoration: TextDecoration.none)),
+            style: Theme.of(context)
+                .textTheme
+                .headlineSmall
+                ?.copyWith(color: AppColors.shadowWarm)),
         Expanded(
           child: ListView.builder(
             shrinkWrap: true,
             itemCount: item.answers.length,
             itemBuilder: (context, index) {
               ResponseModel answer = item.answers[index];
-              return Column(
-                children: [
-                  GestureDetector(
+              final ColorScheme scheme = Theme.of(context).colorScheme;
+              return Padding(
+                padding: const EdgeInsets.only(bottom: AppSpacing.md),
+                child: Material(
+                  color: answer.isSelected
+                      ? scheme.primaryContainer
+                      : Colors.transparent,
+                  borderRadius: BorderRadius.circular(AppRadius.md),
+                  child: InkWell(
                     onTap: () {
                       onTap(testId, item.id, index);
                     },
+                    borderRadius: BorderRadius.circular(AppRadius.md),
                     child: Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.all(8),
+                      padding: const EdgeInsets.all(AppSpacing.sm),
                       decoration: BoxDecoration(
-                        color: !answer.isSelected
-                            ? Colors.transparent
-                            : Colors.amber,
-
-                        borderRadius: answer.isSelected
-                            ? BorderRadius.circular(10)
-                            : BorderRadius.circular(0),
-                        //border just in the bottom
-                        border: const Border(
-                          bottom: BorderSide(
-                            width: 0.5,
-                          ),
-                          top: BorderSide.none,
-                          left: BorderSide.none,
-                          right: BorderSide.none,
+                        borderRadius: BorderRadius.circular(AppRadius.md),
+                        border: Border.all(
+                          color: answer.isSelected
+                              ? scheme.primary
+                              : AppColors.shadowWarm.withOpacity(0.15),
                         ),
                       ),
                       child: Row(
                         children: [
                           Container(
-                            width: MediaQuery.of(context).size.width * 0.1,
-                            height: MediaQuery.of(context).size.width * 0.1,
-                            margin: const EdgeInsets.only(right: 10),
+                            width: 28,
+                            height: 28,
+                            margin: const EdgeInsets.only(right: AppSpacing.sm),
                             decoration: BoxDecoration(
-                              color: !answer.isSelected
-                                  ? Colors.transparent
-                                  : Colors.amberAccent,
-                              borderRadius: BorderRadius.circular(50),
+                              color: answer.isSelected
+                                  ? scheme.primary
+                                  : Colors.transparent,
+                              shape: BoxShape.circle,
                               border: Border.all(
-                                width: 1,
+                                color: answer.isSelected
+                                    ? scheme.primary
+                                    : AppColors.shadowWarm.withOpacity(0.4),
+                                width: 1.5,
                               ),
                             ),
-                            child: const Center(
-                              child: Text(
-                                "",
-                                style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    decoration: TextDecoration.none),
-                              ),
-                            ),
+                            child: answer.isSelected
+                                ? Icon(Icons.check_rounded,
+                                    size: 18, color: scheme.onPrimary)
+                                : null,
                           ),
                           Flexible(
                             child: Text(answer.response,
-                                style: TextStyle(
-                                    fontSize:
-                                        MediaQuery.of(context).size.width *
-                                            0.055,
-                                    color: !answer.isSelected
-                                        ? Theme.of(context)
-                                            .colorScheme
-                                            .onSecondary
-                                        : Theme.of(context)
-                                            .colorScheme
-                                            .onPrimary,
-                                    fontWeight: FontWeight.normal,
-                                    decoration: TextDecoration.none)),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge
+                                    ?.copyWith(color: AppColors.shadowWarm)),
                           ),
                         ],
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.05,
-                  ),
-                ],
+                ),
               );
             },
           ),
         ),
-        const SizedBox(height: 5),
-        ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Color.lerp(Theme.of(context).colorScheme.primary,
-                  const Color.fromARGB(255, 21, 137, 19), progress)!,
-            ),
+        const SizedBox(height: AppSpacing.xs),
+        AppButton(
+            expand: true,
+            isLoading: isLoading,
+            label: 'Continuar',
             onPressed: () async {
               final String? registerFlow =
                   context.read<BegginCubit>().state.registerPatientFlow;
@@ -202,15 +185,8 @@ Widget questionItems(
                   );
                 }
               }
-            },
-            child: isLoading
-                ? const CircularProgressIndicator()
-                : const Text('Continuar',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 30,
-                        decoration: TextDecoration.none))),
-        SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+            }),
+        const SizedBox(height: AppSpacing.lg),
       ],
     ),
   );

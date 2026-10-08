@@ -41,28 +41,30 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  //hacer lo mismo que abajo, pon un campo para poner el codigo que se le mando por correo, arriba del textfield pon el aviso de que se debe de revisar la bandeja de entrada y un boton para validar
-                  const Text(
-                    'Revisa tu bandeja de entrada y agrega el código que se te envió',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 20),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    height: MediaQuery.of(context).size.height * 0.1,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+                    child: Text(
+                      'Revisa tu bandeja de entrada y agrega el código que se te envió',
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge
+                          ?.copyWith(color: AppColors.shadowWarm),
                     ),
+                  ),
+                  const SizedBox(height: AppSpacing.xl),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.9,
                     child: TextField(
                       controller: codeController,
                       decoration: const InputDecoration(
                         labelText: 'Código',
-                        border: OutlineInputBorder(),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 10),
-                  ElevatedButton(
+                  const SizedBox(height: AppSpacing.sm),
+                  AppButton(
+                    label: 'Enviar',
                     onPressed: () async {
                       if (codeController.text.isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -110,13 +112,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         }
                       }
                     },
-                    child: const Text(
-                      'Enviar',
-                      style: TextStyle(
-                        fontSize: 25,
-                        color: Colors.white,
-                      ),
-                    ),
                   ),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.3),
                 ],
@@ -139,29 +134,32 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const SizedBox(height: 20),
-                    const Text(
-                      'Agrega tu correo electrónico para restablecer tu contraseña',
-                      style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 20),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.9,
-                      height: MediaQuery.of(context).size.height * 0.1,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
+                    const SizedBox(height: AppSpacing.lg),
+                    Padding(
+                      padding:
+                          const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+                      child: Text(
+                        'Agrega tu correo electrónico para restablecer tu contraseña',
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleLarge
+                            ?.copyWith(color: AppColors.shadowWarm),
                       ),
+                    ),
+                    const SizedBox(height: AppSpacing.lg),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.9,
                       child: TextField(
                         controller: controller,
                         decoration: const InputDecoration(
                           labelText: 'Correo electrónico',
-                          border: OutlineInputBorder(),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 10),
-                    ElevatedButton(
+                    const SizedBox(height: AppSpacing.sm),
+                    AppButton(
+                      label: 'Enviar',
                       onPressed: () async {
                         bool? res;
 
@@ -191,13 +189,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           }
                         }
                       },
-                      child: const Text(
-                        'Enviar',
-                        style: TextStyle(
-                          fontSize: 25,
-                          color: Colors.white,
-                        ),
-                      ),
                     ),
                     SizedBox(height: MediaQuery.of(context).size.height * 0.3),
                   ],

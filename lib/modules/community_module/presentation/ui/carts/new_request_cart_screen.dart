@@ -49,70 +49,46 @@ class _NewRequestCartScreenState extends State<NewRequestCartScreen> {
                       "Escribe una nota corta para pedir consejos de la comunidad",
                       sticker: false),
                 )),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-            InkWell(
-              onTap: () async {
-                if (isloading) return;
+            const SizedBox(height: AppSpacing.sm),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
+              child: AppButton(
+                label: 'Enviar',
+                isLoading: isloading,
+                expand: true,
+                onPressed: () async {
+                  if (isloading) return;
 
-                if (controller.text.isEmpty) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content:
-                          Text('El contenido de la carta no puede estar vacío'),
-                    ),
-                  );
-                  return;
-                }
+                  if (controller.text.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                            'El contenido de la carta no puede estar vacío'),
+                      ),
+                    );
+                    return;
+                  }
 
-                setState(() {
-                  isloading = true;
-                });
+                  setState(() {
+                    isloading = true;
+                  });
 
-                final cart = CartModel(
-                    idEmisor: widget.userId,
-                    letraEmisor: widget.userLetter.toUpperCase(),
-                    contenido: controller.text);
+                  final cart = CartModel(
+                      idEmisor: widget.userId,
+                      letraEmisor: widget.userLetter.toUpperCase(),
+                      contenido: controller.text);
 
-                await widget.onSend(cart);
+                  await widget.onSend(cart);
 
-                setState(() {
-                  isloading = false;
-                });
+                  setState(() {
+                    isloading = false;
+                  });
 
-                if (context.mounted) Navigator.of(context).pop();
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary,
-                  borderRadius: BorderRadius.circular(30),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Colors.black12,
-                      blurRadius: 10,
-                      offset: Offset(0, 5),
-                    ),
-                  ],
-                ),
-                margin: EdgeInsets.symmetric(
-                    horizontal: MediaQuery.of(context).size.width * 0.06),
-                child: Center(
-                  child: isloading
-                      ? const CircularProgressIndicator(
-                          color: Colors.white,
-                        )
-                      : Text(
-                          "Enviar",
-                          style: TextStyle(
-                            fontSize:
-                                MediaQuery.of(context).size.height * 0.025,
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).primaryColor,
-                          ),
-                        ),
-                ),
+                  if (context.mounted) Navigator.of(context).pop();
+                },
               ),
             ),
-            SizedBox(width: MediaQuery.of(context).size.width * 0.06),
+            const SizedBox(height: AppSpacing.xl),
           ],
         ),
       ),

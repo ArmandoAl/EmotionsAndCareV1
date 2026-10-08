@@ -24,9 +24,8 @@ class _LoginStackState extends State<LoginStack> {
   Widget build(BuildContext context) {
     if (userProvider.state.status == BegginStatus.loading) {
       return const Scaffold(
-        backgroundColor: Colors.white,
         body: Center(
-          child: CircularProgressIndicator(),
+          child: AppLoadingIndicator(size: 36),
         ),
       );
     }
@@ -178,15 +177,15 @@ PreferredSizeWidget? _getAppBarFromState(
       return null;
     case NavigationItem.goals:
       return HeaderWidget(
-        title: 'Collección',
+        title: 'Colección',
         isForReturn: false,
         actions: [
           IconButton(
               onPressed: () {
-                showMessageDialog(context, "Collección",
+                showMessageDialog(context, "Colección",
                     "La colección es un espacio donde puedes ver tus logros, stickers y flores. |Puedes coleccionar stickers y flores al completar tus objetivos y retos. |Recuerda que cada sticker y flor tiene un significado especial, así que asegúrate de leer su descripción.");
               },
-              icon: const Icon(Icons.info)),
+              icon: const Icon(Icons.info_outline_rounded)),
         ],
       );
     case NavigationItem.test:
@@ -244,13 +243,12 @@ PreferredSizeWidget? _getAppBarFromState(
                 );
               }));
             },
-            child: Text('Progreso',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: MediaQuery.of(context).size.width * 0.03,
-                  fontWeight: FontWeight.bold,
-                ))),
-        const SizedBox(width: 10),
+            style: ElevatedButton.styleFrom(
+              minimumSize: const Size(0, 36),
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+            ),
+            child: const Text('Progreso')),
+        const SizedBox(width: AppSpacing.sm),
       ]);
     case NavigationItem.dairy:
       return HeaderWidget(title: 'Diario', isForReturn: false, actions: [
@@ -282,13 +280,12 @@ PreferredSizeWidget? _getAppBarFromState(
                       notes: dailyCubit.state.notes,
                       patientModel: begginCubit.state.patientModel!)));
             },
-            child: Text('Progreso',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: MediaQuery.of(context).size.width * 0.03,
-                  fontWeight: FontWeight.bold,
-                ))),
-        const SizedBox(width: 10),
+            style: ElevatedButton.styleFrom(
+              minimumSize: const Size(0, 36),
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+            ),
+            child: const Text('Progreso')),
+        const SizedBox(width: AppSpacing.sm),
       ]);
     case NavigationItem.community:
       return HeaderWidget(
@@ -300,7 +297,7 @@ PreferredSizeWidget? _getAppBarFromState(
                 showMessageDialog(context, "Comunidad",
                     "Emotions&Care cuenta con una comunidad constituida por todos los usuarios, en ella puedes escribir cartas anónimas para compartir tus sentimientos y recibir apoyo. |De igual forma, puedes responder a las cartas de otros para brindar aliento y comprensión.");
               },
-              icon: const Icon(Icons.info)),
+              icon: const Icon(Icons.info_outline_rounded)),
         ],
       );
     case NavigationItem.schedule:
@@ -453,29 +450,22 @@ class _SpecialistStackState extends State<SpecialistStack>
     super.build(context);
     return Scaffold(
       body: loading
-          ? const SizedBox(
-              width: double.infinity,
-              height: double.infinity,
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
-            )
+          ? const Center(child: AppLoadingIndicator(size: 36))
           : SafeArea(
               top: true,
-              child: Container(
-                width: double.infinity,
-                height: double.infinity,
-                padding: const EdgeInsets.all(30),
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(AppSpacing.xl),
                 child: Column(children: [
                   headerSpecialistWidget(),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.05,
-                  ),
+                  const SizedBox(height: AppSpacing.xl),
                   IntrinsicHeight(
                     child: Row(
                       children: [
                         Expanded(
-                          child: GestureDetector(
+                          child: _dashboardCard(
+                            context,
+                            icon: Icons.event_note_rounded,
+                            label: "Solicitudes de citas",
                             onTap: () {
                               Navigator.push(context,
                                   MaterialPageRoute(builder: (context) {
@@ -485,56 +475,14 @@ class _SpecialistStackState extends State<SpecialistStack>
                                 );
                               }));
                             },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(10)),
-                                color:
-                                    Theme.of(context).scaffoldBackgroundColor,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.3),
-                                    spreadRadius: 1,
-                                    blurRadius: 5,
-                                    offset: const Offset(
-                                        0, 3), // changes position of shadow
-                                  ),
-                                ],
-                              ),
-                              padding: const EdgeInsets.all(10),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.date_range,
-                                      size: MediaQuery.of(context).size.width *
-                                          0.1,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .secondary),
-                                  const SizedBox(width: 10),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text("Solicitudes de citas",
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            fontSize: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.045,
-                                            decoration: TextDecoration.none,
-                                            fontWeight: FontWeight.w400,
-                                            color: Colors.black)),
-                                  ),
-                                ],
-                              ),
-                            ),
                           ),
                         ),
-                        SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.05),
+                        const SizedBox(width: AppSpacing.lg),
                         Expanded(
-                          child: GestureDetector(
+                          child: _dashboardCard(
+                            context,
+                            icon: Icons.person_add_alt_1_rounded,
+                            label: "Vinculación de pacientes",
                             onTap: () {
                               Navigator.push(context,
                                   MaterialPageRoute(builder: (context) {
@@ -544,59 +492,17 @@ class _SpecialistStackState extends State<SpecialistStack>
                                 );
                               }));
                             },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(10)),
-                                color:
-                                    Theme.of(context).scaffoldBackgroundColor,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.3),
-                                    spreadRadius: 1,
-                                    blurRadius: 5,
-                                    offset: const Offset(
-                                        0, 3), // changes position of shadow
-                                  ),
-                                ],
-                              ),
-                              padding: const EdgeInsets.all(10),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.person,
-                                      size: MediaQuery.of(context).size.width *
-                                          0.1,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .secondary),
-                                  const SizedBox(width: 10),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text("Vinculación de pacientes",
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            fontSize: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.045,
-                                            decoration: TextDecoration.none,
-                                            fontWeight: FontWeight.w400,
-                                            color: Colors.black)),
-                                  ),
-                                ],
-                              ),
-                            ),
                           ),
                         ),
                       ],
                     ),
                   ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.05,
-                  ),
-                  GestureDetector(
+                  const SizedBox(height: AppSpacing.lg),
+                  _dashboardCard(
+                    context,
+                    icon: Icons.event_rounded,
+                    label: "Agenda",
+                    fullWidth: true,
                     onTap: () {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
@@ -605,50 +511,13 @@ class _SpecialistStackState extends State<SpecialistStack>
                         );
                       }));
                     },
-                    child: Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(10)),
-                        color: Theme.of(context).scaffoldBackgroundColor,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.3),
-                            spreadRadius: 1,
-                            blurRadius: 5,
-                            offset: const Offset(
-                                0, 3), // changes position of shadow
-                          ),
-                        ],
-                      ),
-                      padding: const EdgeInsets.all(10),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.date_range,
-                              size: MediaQuery.of(context).size.width * 0.1,
-                              color: Theme.of(context).colorScheme.secondary),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: Text("Agenda",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize:
-                                        MediaQuery.of(context).size.width *
-                                            0.05,
-                                    decoration: TextDecoration.none,
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.black)),
-                          ),
-                        ],
-                      ),
-                    ),
                   ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.05,
-                  ),
-                  GestureDetector(
+                  const SizedBox(height: AppSpacing.lg),
+                  _dashboardCard(
+                    context,
+                    icon: Icons.groups_rounded,
+                    label: "Pacientes",
+                    fullWidth: true,
                     onTap: () {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
@@ -657,50 +526,13 @@ class _SpecialistStackState extends State<SpecialistStack>
                         );
                       }));
                     },
-                    child: Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(10)),
-                        color: Theme.of(context).scaffoldBackgroundColor,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.3),
-                            spreadRadius: 1,
-                            blurRadius: 5,
-                            offset: const Offset(
-                                0, 3), // changes position of shadow
-                          ),
-                        ],
-                      ),
-                      padding: const EdgeInsets.all(10),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.people,
-                              size: MediaQuery.of(context).size.width * 0.1,
-                              color: Theme.of(context).colorScheme.secondary),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: Text("Pacientes",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize:
-                                        MediaQuery.of(context).size.width *
-                                            0.05,
-                                    decoration: TextDecoration.none,
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.black)),
-                          ),
-                        ],
-                      ),
-                    ),
                   ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.05,
-                  ),
-                  GestureDetector(
+                  const SizedBox(height: AppSpacing.lg),
+                  _dashboardCard(
+                    context,
+                    icon: Icons.diversity_3_rounded,
+                    label: "Comunidad",
+                    fullWidth: true,
                     onTap: () {
                       Navigator.push(
                         context,
@@ -712,56 +544,64 @@ class _SpecialistStackState extends State<SpecialistStack>
                         ),
                       );
                     },
-                    child: Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(10)),
-                        color: Theme.of(context).scaffoldBackgroundColor,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.3),
-                            spreadRadius: 1,
-                            blurRadius: 5,
-                            offset: const Offset(
-                                0, 3), // changes position of shadow
-                          ),
-                        ],
-                      ),
-                      padding: const EdgeInsets.all(10),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.people,
-                            color: Theme.of(context).colorScheme.secondary,
-                            size: MediaQuery.of(context).size.width * 0.1,
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: Text("Comunidad",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize:
-                                        MediaQuery.of(context).size.width *
-                                            0.05,
-                                    decoration: TextDecoration.none,
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.black)),
-                          ),
-                        ],
-                      ),
-                    ),
                   ),
-                  Expanded(child: Container()),
                 ]),
               ),
             ),
     );
   }
 
+  Widget _dashboardCard(
+    BuildContext context, {
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+    bool fullWidth = false,
+  }) {
+    final scheme = Theme.of(context).colorScheme;
+    final content = Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: fullWidth ? CrossAxisAlignment.start : CrossAxisAlignment.center,
+      children: [
+        Container(
+          width: 44,
+          height: 44,
+          decoration: BoxDecoration(color: scheme.primaryContainer, shape: BoxShape.circle),
+          child: Icon(icon, color: scheme.primary, size: 22),
+        ),
+        const SizedBox(height: AppSpacing.md),
+        Text(
+          label,
+          textAlign: fullWidth ? TextAlign.start : TextAlign.center,
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+      ],
+    );
+
+    if (!fullWidth) {
+      return AppCard(onTap: onTap, child: content);
+    }
+
+    return AppCard(
+      onTap: onTap,
+      child: Row(
+        children: [
+          Container(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(color: scheme.primaryContainer, shape: BoxShape.circle),
+            child: Icon(icon, color: scheme.primary, size: 22),
+          ),
+          const SizedBox(width: AppSpacing.md),
+          Expanded(child: Text(label, style: Theme.of(context).textTheme.titleMedium)),
+          Icon(Icons.chevron_right_rounded, color: scheme.onSurface.withOpacity(0.4)),
+        ],
+      ),
+    );
+  }
+
   Widget headerSpecialistWidget() {
+    final scheme = Theme.of(context).colorScheme;
     return SizedBox(
       width: double.infinity,
       child: Row(
@@ -771,17 +611,8 @@ class _SpecialistStackState extends State<SpecialistStack>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text("¡Hola ${begginCubit.state.specialistModel!.name!}!",
-                    style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.width * 0.04,
-                        decoration: TextDecoration.none,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black)),
-                Text(getDate(context),
-                    style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.width * 0.04,
-                        decoration: TextDecoration.none,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.black))
+                    style: Theme.of(context).textTheme.headlineSmall),
+                Text(getDate(context), style: Theme.of(context).textTheme.bodyMedium),
               ],
             ),
           ),
@@ -808,14 +639,14 @@ class _SpecialistStackState extends State<SpecialistStack>
                 }));
               },
               icon: Icon(
-                Icons.settings,
-                color: Theme.of(context).colorScheme.secondary,
+                Icons.settings_rounded,
+                color: scheme.onSurface,
               )),
           IconButton(
               onPressed: () {},
               icon: Icon(
-                Icons.notifications,
-                color: Theme.of(context).colorScheme.primary,
+                Icons.notifications_none_rounded,
+                color: scheme.onSurface,
               ))
         ],
       ),

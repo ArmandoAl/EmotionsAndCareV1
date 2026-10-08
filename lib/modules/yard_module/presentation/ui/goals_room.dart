@@ -1,5 +1,5 @@
 import 'package:emotions_and_care_v1/modules/yard_module/presentation/ui/items_detail_screen.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import '../../../../demo/widgets/demo_svg.dart';
 import '../../../../helpers/paths.dart';
 
 class GoalsRoom extends StatefulWidget {
@@ -33,42 +33,30 @@ class _GoalsRoomState extends State<GoalsRoom> {
             Expanded(
                 child: Column(
               children: [
-                Row(
-                  children: [
-                    const SizedBox(width: 15),
-                    const Text(
-                      "Logros",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const Spacer(),
-                    TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ItemsDetailScreen(
-                                  achivementItems: uiCubit.state.achievements
-                                      .where((ach) => ach.dateEarned != null)
-                                      .toList(),
-                                  title: "Logros",
-                                  onAchivementTap:
-                                      (UserAchievement achivement) async {
-                                    await showItemDetailDialogAchivement(
-                                        context, achivement);
-                                  },
-                                  onStickerTap: (StickerModel sticker) async {},
-                                  stickersItems: const [],
-                                  flowers: const [],
-                                  onFlowerTap: (UserFlower flower) async {},
-                                ),
-                              ));
-                        },
-                        child: const Text("Ver todos")),
-                    const SizedBox(width: 15),
-                  ],
+                AppSectionHeader(
+                  title: "Logros",
+                  actionLabel: "Ver todos",
+                  onActionTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ItemsDetailScreen(
+                            achivementItems: uiCubit.state.achievements
+                                .where((ach) => ach.dateEarned != null)
+                                .toList(),
+                            title: "Logros",
+                            onAchivementTap:
+                                (UserAchievement achivement) async {
+                              await showItemDetailDialogAchivement(
+                                  context, achivement);
+                            },
+                            onStickerTap: (StickerModel sticker) async {},
+                            stickersItems: const [],
+                            flowers: const [],
+                            onFlowerTap: (UserFlower flower) async {},
+                          ),
+                        ));
+                  },
                 ),
                 Expanded(
                   child: ListView.builder(
@@ -85,42 +73,28 @@ class _GoalsRoomState extends State<GoalsRoom> {
 
                       return Container(
                         width: MediaQuery.of(context).size.width * 0.4,
-                        margin: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 5,
-                          horizontal: 20,
-                        ),
-                        child: Center(
+                        margin: const EdgeInsets.all(AppSpacing.sm),
+                        child: AppCard(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              SvgPicture.network(
+                              demoSvg(
                                 url ?? '',
                               ),
-                              const SizedBox(height: 10),
+                              const SizedBox(height: AppSpacing.sm),
                               Text(
                                 achievements[index].achievement!.name!,
                                 overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                ),
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context).textTheme.titleSmall,
                               ),
-                              const SizedBox(height: 3),
+                              const SizedBox(height: AppSpacing.xs),
                               Text(
                                 getDateFormatWithText(
                                     achievements[index].dateEarned!),
                                 overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.grey,
-                                ),
+                                style: Theme.of(context).textTheme.bodySmall,
                               ),
                             ],
                           ),
@@ -134,44 +108,32 @@ class _GoalsRoomState extends State<GoalsRoom> {
             Flexible(
                 child: Column(
               children: [
-                const SizedBox(height: 15),
-                Row(
-                  children: [
-                    const SizedBox(width: 15),
-                    const Text(
-                      "Stickers",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const Spacer(),
-                    TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ItemsDetailScreen(
-                                  achivementItems: const [],
-                                  title: "Stickers",
-                                  onAchivementTap:
-                                      (UserAchievement achivement) async {},
-                                  onStickerTap: (StickerModel sticker) async {
-                                    await showItemDetailDialogSticker(
-                                      context,
-                                      sticker,
-                                      patient,
-                                    );
-                                  },
-                                  stickersItems: uiCubit.state.stickers ?? [],
-                                  flowers: const [],
-                                  onFlowerTap: (UserFlower flower) async {},
-                                ),
-                              ));
-                        },
-                        child: const Text("Ver todos")),
-                    const SizedBox(width: 15),
-                  ],
+                const SizedBox(height: AppSpacing.md),
+                AppSectionHeader(
+                  title: "Stickers",
+                  actionLabel: "Ver todos",
+                  onActionTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ItemsDetailScreen(
+                            achivementItems: const [],
+                            title: "Stickers",
+                            onAchivementTap:
+                                (UserAchievement achivement) async {},
+                            onStickerTap: (StickerModel sticker) async {
+                              await showItemDetailDialogSticker(
+                                context,
+                                sticker,
+                                patient,
+                              );
+                            },
+                            stickersItems: uiCubit.state.stickers ?? [],
+                            flowers: const [],
+                            onFlowerTap: (UserFlower flower) async {},
+                          ),
+                        ));
+                  },
                 ),
                 Flexible(
                   child: ListView.builder(
@@ -180,17 +142,12 @@ class _GoalsRoomState extends State<GoalsRoom> {
                     itemBuilder: (context, index) {
                       return Container(
                         width: MediaQuery.of(context).size.width * 0.3,
-                        margin: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 5,
-                          horizontal: 20,
-                        ),
-                        child: Center(
-                          child: SvgPicture.network(
-                            uiCubit.state.stickers![index].url ?? '',
+                        margin: const EdgeInsets.all(AppSpacing.sm),
+                        child: AppCard(
+                          child: Center(
+                            child: demoSvg(
+                              uiCubit.state.stickers![index].url ?? '',
+                            ),
                           ),
                         ),
                       );
@@ -202,59 +159,45 @@ class _GoalsRoomState extends State<GoalsRoom> {
             Expanded(
                 child: Column(
               children: [
-                const SizedBox(height: 15),
-                Row(
-                  children: [
-                    const SizedBox(width: 15),
-                    const Text(
-                      "Flores",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const Spacer(),
-                    TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ItemsDetailScreen(
-                                  achivementItems: const [],
-                                  title: "Flores",
-                                  onAchivementTap:
-                                      (UserAchievement achivement) async {},
-                                  onStickerTap: (StickerModel sticker) async {},
-                                  stickersItems: uiCubit.state.stickers ?? [],
-                                  flowers: uiCubit.state.flowers,
-                                  onFlowerTap: (UserFlower flower) async {
-                                    await showItemDetailDialogFlower(
-                                        context, flower);
-                                  },
-                                ),
-                              ));
-                        },
-                        child: const Text("Ver todos")),
-                    const SizedBox(width: 15),
-                  ],
+                const SizedBox(height: AppSpacing.md),
+                AppSectionHeader(
+                  title: "Flores",
+                  actionLabel: "Ver todos",
+                  onActionTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ItemsDetailScreen(
+                            achivementItems: const [],
+                            title: "Flores",
+                            onAchivementTap:
+                                (UserAchievement achivement) async {},
+                            onStickerTap: (StickerModel sticker) async {},
+                            stickersItems: uiCubit.state.stickers ?? [],
+                            flowers: uiCubit.state.flowers,
+                            onFlowerTap: (UserFlower flower) async {
+                              await showItemDetailDialogFlower(
+                                  context, flower);
+                            },
+                          ),
+                        ));
+                  },
                 ),
                 Expanded(
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: uiCubit.state.flowers.length,
                     itemBuilder: (context, index) {
+                      final scheme = Theme.of(context).colorScheme;
                       return Container(
                         width: MediaQuery.of(context).size.width * 0.4,
-                        margin: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Center(
+                        margin: const EdgeInsets.all(AppSpacing.sm),
+                        child: AppCard(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              SvgPicture.network(
+                              demoSvg(
                                 uiCubit
                                     .state
                                     .flowers[index]
@@ -264,43 +207,42 @@ class _GoalsRoomState extends State<GoalsRoom> {
                                 fit: BoxFit.contain,
                                 width: MediaQuery.of(context).size.width * 0.2,
                               ),
-                              const SizedBox(height: 10),
+                              const SizedBox(height: AppSpacing.sm),
                               Text(
                                 uiCubit.state.flowers[index].flower.name!,
                                 overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                ),
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context).textTheme.titleSmall,
                               ),
-                              const SizedBox(height: 3),
+                              const SizedBox(height: AppSpacing.xs),
                               Text(
                                 "Etapa ${uiCubit.state.flowers[index].state} / 6",
                                 overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.grey,
-                                ),
+                                style: Theme.of(context).textTheme.bodySmall,
                               ),
+                              const SizedBox(height: AppSpacing.xs),
                               Padding(
                                 padding: const EdgeInsets.symmetric(
-                                  vertical: 1,
-                                  horizontal: 20,
+                                  horizontal: AppSpacing.lg,
                                 ),
-                                child: LinearProgressIndicator(
-                                  value: uiCubit.state.flowers[index].state / 6,
-                                  backgroundColor: Colors.grey[300],
-                                  color: Colors.green,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(AppRadius.pill),
+                                  child: LinearProgressIndicator(
+                                    value: uiCubit.state.flowers[index].state / 6,
+                                    backgroundColor: scheme.primaryContainer,
+                                    color: scheme.primary,
+                                    minHeight: 6,
+                                  ),
                                 ),
                               ),
-                              if (uiCubit.state.flowers[index].state == 6)
-                                const Text("Activa",
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.blue)),
+                              if (uiCubit.state.flowers[index].state == 6) ...[
+                                const SizedBox(height: AppSpacing.xs),
+                                Text("Activa",
+                                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                                          color: scheme.primary,
+                                          fontWeight: FontWeight.w700,
+                                        )),
+                              ],
                             ],
                           ),
                         ),
@@ -325,58 +267,38 @@ Future<void> showItemDetailDialogAchivement(
     barrierDismissible: true,
     builder: (context) => AlertDialog(
       scrollable: true,
-      backgroundColor: Colors.grey.withOpacity(0.85),
       content: SizedBox(
         width: MediaQuery.of(context).size.width * 0.8,
         height: MediaQuery.of(context).size.height * 0.5,
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(AppSpacing.sm),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Text(
-                "Detalle del logro",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-              const SizedBox(height: 10),
-              SvgPicture.network(
+              Text("Detalle del logro", style: Theme.of(context).textTheme.headlineSmall),
+              const SizedBox(height: AppSpacing.sm),
+              demoSvg(
                 achivement.achievement!.imageUrl ?? '',
                 height: MediaQuery.of(context).size.width * 0.4,
                 fit: BoxFit.cover,
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: AppSpacing.sm),
               Text(
                 achivement.achievement!.name!,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
+                style: Theme.of(context).textTheme.titleLarge,
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: AppSpacing.sm),
               Text(
                 achivement.achievement!.description!,
-                style: const TextStyle(
-                  fontSize: 16,
-                  color: Colors.white,
-                ),
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.bodyLarge,
               ),
-              const SizedBox(height: 5),
-              Row(
-                children: [
-                  Text(
-                    "Conseguido el ${getDateFormatWithText(achivement.dateEarned!)}",
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: Colors.black,
-                    ),
-                  ),
-                ],
+              const SizedBox(height: AppSpacing.xs),
+              Text(
+                "Conseguido el ${getDateFormatWithText(achivement.dateEarned!)}",
+                style: Theme.of(context).textTheme.bodySmall,
               ),
             ],
           ),
@@ -393,41 +315,26 @@ Future<void> showItemDetailDialogSticker(
     barrierDismissible: true,
     builder: (context) => AlertDialog(
       scrollable: true,
-      backgroundColor: Colors.grey.withOpacity(0.85),
       content: SizedBox(
         width: MediaQuery.of(context).size.width * 0.8,
         height: MediaQuery.of(context).size.height * 0.5,
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(AppSpacing.sm),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(height: 10),
-              const Text("Detalle del sticker",
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  )),
-              const SizedBox(height: 10),
-              SvgPicture.network(
+              Text("Detalle del sticker", style: Theme.of(context).textTheme.headlineSmall),
+              const SizedBox(height: AppSpacing.sm),
+              demoSvg(
                 sticker.url ?? '',
                 height: MediaQuery.of(context).size.width * 0.4,
                 fit: BoxFit.cover,
               ),
-              const SizedBox(height: 15),
-              Row(
-                children: [
-                  Text(
-                    "Conseguido ${getDateFromUserSticker(pattient, sticker)}",
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
-                ],
+              const SizedBox(height: AppSpacing.md),
+              Text(
+                "Conseguido ${getDateFromUserSticker(pattient, sticker)}",
+                style: Theme.of(context).textTheme.titleSmall,
               ),
             ],
           ),
@@ -444,79 +351,57 @@ Future<void> showItemDetailDialogFlower(
     barrierDismissible: true,
     builder: (context) => AlertDialog(
       scrollable: true,
-      backgroundColor: Colors.grey.withOpacity(0.85),
       content: SizedBox(
         width: MediaQuery.of(context).size.width * 0.8,
         height: MediaQuery.of(context).size.height * 0.5,
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(AppSpacing.sm),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Text(
-                "Detalle de flor",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-              const SizedBox(height: 10),
-              SvgPicture.network(
+              Text("Detalle de flor", style: Theme.of(context).textTheme.headlineSmall),
+              const SizedBox(height: AppSpacing.sm),
+              demoSvg(
                 flower.flower.urls![flower.state].url,
                 height: MediaQuery.of(context).size.width * 0.4,
                 fit: BoxFit.cover,
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: AppSpacing.sm),
               Text(
                 flower.flower.name ?? '',
                 textAlign: TextAlign.center,
-                style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
+                style: Theme.of(context).textTheme.titleLarge,
               ),
-              const SizedBox(height: 10),
-              Row(
-                children: [
-                  Text(
-                    "Etapa ${flower.state} / 6",
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
-                ],
+              const SizedBox(height: AppSpacing.sm),
+              Text(
+                "Etapa ${flower.state} / 6",
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
-              const SizedBox(height: 5),
-              LinearProgressIndicator(
-                value: flower.state / 6,
-                backgroundColor: Colors.grey[300],
-                color: Colors.green,
+              const SizedBox(height: AppSpacing.xs),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(AppRadius.pill),
+                child: LinearProgressIndicator(
+                  value: flower.state / 6,
+                  backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                  color: Theme.of(context).colorScheme.primary,
+                  minHeight: 6,
+                ),
               ),
-              const SizedBox(height: 10),
-              Row(
-                children: [
-                  Text(
-                    "Conseguida el ${getDateFormatWithText(flower.createdAt ?? DateTime.now())}",
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
-                ],
+              const SizedBox(height: AppSpacing.sm),
+              Text(
+                "Conseguida el ${getDateFormatWithText(flower.createdAt ?? DateTime.now())}",
+                style: Theme.of(context).textTheme.bodySmall,
               ),
-              const SizedBox(height: 10),
-              if (flower.state == 6)
-                const Text("Flor activa",
-                    style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blue)),
+              if (flower.state == 6) ...[
+                const SizedBox(height: AppSpacing.xs),
+                Text("Flor activa",
+                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontWeight: FontWeight.w700,
+                        )),
+              ],
             ],
           ),
         ),

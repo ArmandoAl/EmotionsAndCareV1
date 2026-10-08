@@ -44,7 +44,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: AppBar(
         title: const Text('Información personal'),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
+          icon: const Icon(Icons.arrow_back_ios_rounded),
           onPressed: () async {
             if (widget.isPatient) {
               if (patientModel!.isEqual(widget.patientModel!)) {
@@ -81,24 +81,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
             if (res == "success" && context.mounted) {
               await showMessageDialog(context, "", "Datos actualizados",
                   actions: [
-                    TextButton(
+                    AppButton.text(
+                      label: "Aceptar",
                       onPressed: () {
                         Navigator.pop(context);
                         if (context.mounted) {
                           Navigator.pop(context);
                         }
                       },
-                      child: const Text("Aceptar"),
                     ),
                   ]);
             } else {
               if (context.mounted) {
                 await showMessageDialog(context, "Error", res, actions: [
-                  TextButton(
+                  AppButton.text(
+                    label: "Aceptar",
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: const Text("Aceptar"),
                   ),
                 ]);
               }
@@ -107,7 +107,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.info),
+            icon: const Icon(Icons.info_outline_rounded),
             onPressed: () {
               showDialog(
                 context: context,
@@ -117,8 +117,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     content: const Text(
                         "Para editar tu información, haz clic en el dato que deseas modificar, realiza los cambios y confirma para guardarlos."),
                     actions: <Widget>[
-                      TextButton(
-                        child: const Text('Ok'),
+                      AppButton.text(
+                        label: 'Ok',
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
@@ -134,79 +134,84 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: Container(
         height: double.infinity,
         width: double.infinity,
-        padding: const EdgeInsets.all(30),
+        padding: const EdgeInsets.all(AppSpacing.xl),
         child: ListView(
           children: [
-            SizedBox(
-              child: Column(
-                children: [
-                  IconButton(
-                      onPressed: () {},
-                      icon: const Icon(Icons.person, size: 100)),
-                  Text(
-                    "Nombre de usuario: ",
-                    style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.width * 0.04,
-                        color: Colors.black),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      showChangeDataDialog(
-                          context,
-                          widget.isPatient
-                              ? patientModel!.name!
-                              : specialistModel!.name!,
-                          "Nombre de usuario",
-                          widget.isPatient ? patientModel! : specialistModel!,
-                          controller, () {
-                        setState(() {
-                          if (widget.isPatient) {
-                            patientModel = patientModel!.copyWith(
-                              name: controller.text,
-                            );
-                          } else {
-                            specialistModel = specialistModel!.copyWith(
-                              name: controller.text,
-                            );
-                          }
-                        });
-
-                        return "success";
+            Column(
+              children: [
+                CircleAvatar(
+                  radius: 48,
+                  backgroundColor:
+                      Theme.of(context).colorScheme.primaryContainer,
+                  child: Icon(Icons.person_rounded,
+                      size: 48, color: Theme.of(context).colorScheme.primary),
+                ),
+                const SizedBox(height: AppSpacing.sm),
+                Text(
+                  "Nombre de usuario",
+                  style: Theme.of(context)
+                      .textTheme
+                      .labelLarge
+                      ?.copyWith(color: AppColors.shadowWarm.withOpacity(0.7)),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    showChangeDataDialog(
+                        context,
+                        widget.isPatient
+                            ? patientModel!.name!
+                            : specialistModel!.name!,
+                        "Nombre de usuario",
+                        widget.isPatient ? patientModel! : specialistModel!,
+                        controller, () {
+                      setState(() {
+                        if (widget.isPatient) {
+                          patientModel = patientModel!.copyWith(
+                            name: controller.text,
+                          );
+                        } else {
+                          specialistModel = specialistModel!.copyWith(
+                            name: controller.text,
+                          );
+                        }
                       });
-                    },
-                    child: Text(
-                      widget.isPatient
-                          ? textToUpperCateFirstLetter(patientModel!.name!)
-                          : textToUpperCateFirstLetter(specialistModel!.name!),
-                      style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.width * 0.05,
-                      ),
-                    ),
+
+                      return "success";
+                    });
+                  },
+                  child: Text(
+                    widget.isPatient
+                        ? textToUpperCateFirstLetter(patientModel!.name!)
+                        : textToUpperCateFirstLetter(specialistModel!.name!),
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleLarge
+                        ?.copyWith(color: AppColors.shadowWarm),
                   ),
-                  !widget.isPatient
-                      ? const Text("Código de vinculación: ")
-                      : Container(),
-                  !widget.isPatient
-                      ? Text(
-                          widget.specialistModel!.tokenForRelate!,
-                          style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.width * 0.05,
-                          ),
-                        )
-                      : Container(),
+                ),
+                if (!widget.isPatient) ...[
+                  const SizedBox(height: AppSpacing.sm),
+                  Text("Código de vinculación",
+                      style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                            color: AppColors.shadowWarm.withOpacity(0.7),
+                          )),
+                  Text(
+                    widget.specialistModel!.tokenForRelate!,
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium
+                        ?.copyWith(color: AppColors.shadowWarm),
+                  ),
                 ],
-              ),
+              ],
             ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+            const SizedBox(height: AppSpacing.xl),
             profileItem(
               context,
               widget.isPatient ? patientModel!.email! : specialistModel!.email!,
               "Correo electrónico",
-              Icon(
-                Icons.email,
-                color: const Color(0xff1C8AAD),
-                size: MediaQuery.of(context).size.width * 0.065,
-              ),
+              Icon(Icons.email_rounded,
+                  color: Theme.of(context).colorScheme.primary),
               () async {
                 await showChangeDataDialog(
                     context,
@@ -246,11 +251,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               context,
               widget.isPatient ? patientModel!.phone! : specialistModel!.phone!,
               "Teléfono",
-              Icon(
-                Icons.phone,
-                color: const Color(0xff1C8AAD),
-                size: MediaQuery.of(context).size.width * 0.065,
-              ),
+              Icon(Icons.phone_rounded,
+                  color: Theme.of(context).colorScheme.primary),
               () async {
                 await showChangeDataDialog(
                     context,
@@ -293,11 +295,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ? patientModel!.age.toString()
                   : specialistModel!.age.toString(),
               "Edad",
-              Icon(
-                Icons.person,
-                color: const Color(0xff1C8AAD),
-                size: MediaQuery.of(context).size.width * 0.065,
-              ),
+              Icon(Icons.cake_rounded,
+                  color: Theme.of(context).colorScheme.primary),
               () async {
                 await showChangeDataDialog(
                     context,
@@ -340,11 +339,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ? patientModel!.password!
                   : specialistModel!.password!,
               "Contraseña",
-              Icon(
-                Icons.lock,
-                color: const Color(0xff1C8AAD),
-                size: MediaQuery.of(context).size.width * 0.065,
-              ),
+              Icon(Icons.lock_rounded,
+                  color: Theme.of(context).colorScheme.primary),
               () async {
                 await showChangePasswordDialog(
                     context,
@@ -359,131 +355,109 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     controllerSecondPassword);
               },
             ),
-            !widget.isPatient
-                ? SizedBox(height: MediaQuery.of(context).size.height * 0.05)
-                : Container(),
-            !widget.isPatient
-                ? profileItem(
+            if (!widget.isPatient) ...[
+              const SizedBox(height: AppSpacing.xl),
+              profileItem(
+                  context,
+                  specialistModel!.ubication == ""
+                      ? "No especificado"
+                      : specialistModel!.ubication!,
+                  "Ubicación",
+                  Icon(Icons.location_on_rounded,
+                      color: Theme.of(context).colorScheme.primary), () async {
+                await showChangeDataDialog(
                     context,
-                    specialistModel!.ubication == ""
-                        ? "No especificado"
-                        : specialistModel!.ubication!,
+                    widget.specialistModel!.ubication!,
                     "Ubicación",
-                    Icon(
-                      Icons.lock,
-                      color: const Color(0xff1C8AAD),
-                      size: MediaQuery.of(context).size.width * 0.065,
-                    ), () async {
-                    await showChangeDataDialog(
-                        context,
-                        widget.specialistModel!.ubication!,
-                        "Ubicación",
-                        specialistModel!,
-                        controller, () {
-                      setState(() {
-                        specialistModel = specialistModel!.copyWith(
-                          ubication: controller.text,
-                        );
-                      });
+                    specialistModel!,
+                    controller, () {
+                  setState(() {
+                    specialistModel = specialistModel!.copyWith(
+                      ubication: controller.text,
+                    );
+                  });
 
-                      return "success";
+                  return "success";
+                });
+              }),
+              const SizedBox(height: AppSpacing.xl),
+              profileItem(
+                context,
+                specialistModel!.presentation == ""
+                    ? "No especificado"
+                    : specialistModel!.presentation!,
+                "Institución",
+                Icon(Icons.business_rounded,
+                    color: Theme.of(context).colorScheme.primary),
+                () async {
+                  await showChangeDataDialog(
+                      context,
+                      specialistModel!.presentation!,
+                      "Institución",
+                      specialistModel!,
+                      controller, () {
+                    setState(() {
+                      specialistModel = specialistModel!.copyWith(
+                        presentation: controller.text,
+                      );
                     });
-                  })
-                : Container(),
-            !widget.isPatient
-                ? SizedBox(height: MediaQuery.of(context).size.height * 0.05)
-                : Container(),
-            !widget.isPatient
-                ? profileItem(
-                    context,
-                    specialistModel!.presentation == ""
-                        ? "No especificado"
-                        : specialistModel!.presentation!,
-                    "Institución",
-                    Icon(
-                      Icons.lock,
-                      color: const Color(0xff1C8AAD),
-                      size: MediaQuery.of(context).size.width * 0.065,
-                    ),
-                    () async {
-                      await showChangeDataDialog(
-                          context,
-                          specialistModel!.presentation!,
-                          "Institución",
-                          specialistModel!,
-                          controller, () {
-                        setState(() {
-                          specialistModel = specialistModel!.copyWith(
-                            presentation: controller.text,
-                          );
-                        });
 
-                        return "success";
-                      });
-                    },
-                  )
-                : Container(),
-            !widget.isPatient
-                ? SizedBox(height: MediaQuery.of(context).size.height * 0.05)
-                : Container(),
-            !widget.isPatient
-                ? profileItem(
-                    context,
-                    specialistModel!.focus!,
-                    "Enfoque",
-                    Icon(
-                      Icons.lock,
-                      color: const Color(0xff1C8AAD),
-                      size: MediaQuery.of(context).size.width * 0.065,
-                    ),
-                    () async {
-                      await showChangeDataDialog(
-                          context,
-                          specialistModel!.focus!,
-                          "Enfoque",
-                          specialistModel!,
-                          controller, () {
-                        setState(() {
-                          specialistModel = specialistModel!.copyWith(
-                            focus: controller.text,
-                          );
-                        });
+                    return "success";
+                  });
+                },
+              ),
+              const SizedBox(height: AppSpacing.xl),
+              profileItem(
+                context,
+                specialistModel!.focus!,
+                "Enfoque",
+                Icon(Icons.psychology_rounded,
+                    color: Theme.of(context).colorScheme.primary),
+                () async {
+                  await showChangeDataDialog(
+                      context,
+                      specialistModel!.focus!,
+                      "Enfoque",
+                      specialistModel!,
+                      controller, () {
+                    setState(() {
+                      specialistModel = specialistModel!.copyWith(
+                        focus: controller.text,
+                      );
+                    });
 
-                        return "success";
-                      });
-                    },
-                  )
-                : Container(),
-            !widget.isPatient
-                ? SizedBox(height: MediaQuery.of(context).size.height * 0.05)
-                : Container(),
-            !widget.isPatient
-                ? profileItem(
-                    context,
-                    specialistModel!.institution == ""
-                        ? "No especificado"
-                        : specialistModel!.institution!,
-                    "Carta de presentación",
-                    null,
-                    () async {
-                      await showChangeDataDialog(
-                          context,
-                          specialistModel!.institution!,
-                          "Carta de presentación",
-                          specialistModel!,
-                          controller, () {
-                        setState(() {
-                          specialistModel = specialistModel!.copyWith(
-                            institution: controller.text,
-                          );
-                        });
+                    return "success";
+                  });
+                },
+              ),
+              const SizedBox(height: AppSpacing.xl),
+              profileItem(
+                context,
+                specialistModel!.institution == ""
+                    ? "No especificado"
+                    : specialistModel!.institution!,
+                "Carta de presentación",
+                Icon(Icons.description_rounded,
+                    color: Theme.of(context).colorScheme.primary),
+                () async {
+                  await showChangeDataDialog(
+                      context,
+                      specialistModel!.institution!,
+                      "Carta de presentación",
+                      specialistModel!,
+                      controller, () {
+                    setState(() {
+                      specialistModel = specialistModel!.copyWith(
+                        institution: controller.text,
+                      );
+                    });
 
-                        return "success";
-                      });
-                    },
-                  )
-                : Container(),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                    return "success";
+                  });
+                },
+              ),
+            ],
+            const SizedBox(height: AppSpacing.xl),
             Row(
               children: [
                 const Spacer(),
@@ -493,17 +467,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   },
                   child: Text(
                     "Eliminar cuenta",
-                    style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.width * 0.04,
-                        decoration: TextDecoration.underline,
-                        decorationColor: Colors.red,
-                        color: Colors.red),
+                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                          decoration: TextDecoration.underline,
+                          decorationColor: Theme.of(context).colorScheme.error,
+                          color: Theme.of(context).colorScheme.error,
+                        ),
                   ),
                 ),
-                SizedBox(width: MediaQuery.of(context).size.width * 0.03),
               ],
             ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+            const SizedBox(height: AppSpacing.xl),
           ],
         ),
       ),
@@ -513,37 +486,36 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
 Widget profileItem(BuildContext context, String text, String title, Icon? icon,
     Function onPress) {
-  return GestureDetector(
+  return AppCard(
     onTap: () {
       onPress();
     },
-    child: Column(
+    child: Row(
       children: [
-        Row(
-          children: [
-            icon ?? Container(),
-            SizedBox(width: MediaQuery.of(context).size.width * 0.05),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: MediaQuery.of(context).size.width * 0.05,
-                    ),
-                  ),
-                  Text(
-                    title == "Contraseña" ? "********" : text,
-                    style: TextStyle(
-                      fontSize: MediaQuery.of(context).size.width * 0.04,
-                    ),
-                  ),
-                ],
+        if (icon != null) ...[icon, const SizedBox(width: AppSpacing.md)],
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: Theme.of(context)
+                    .textTheme
+                    .labelLarge
+                    ?.copyWith(color: AppColors.shadowWarm.withOpacity(0.7)),
               ),
-            ),
-          ],
+              Text(
+                title == "Contraseña" ? "********" : text,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyLarge
+                    ?.copyWith(color: AppColors.shadowWarm),
+              ),
+            ],
+          ),
         ),
+        Icon(Icons.chevron_right_rounded,
+            color: AppColors.shadowWarm.withOpacity(0.4)),
       ],
     ),
   );
@@ -570,14 +542,14 @@ Future<void> showChangeDataDialog(
           decoration: InputDecoration(hintText: "Nuevo $title"),
         ),
         actions: <Widget>[
-          TextButton(
-            child: const Text('Cancelar'),
+          AppButton.text(
+            label: 'Cancelar',
             onPressed: () {
               Navigator.of(context).pop();
             },
           ),
-          TextButton(
-            child: const Text('Aceptar'),
+          AppButton(
+            label: 'Aceptar',
             onPressed: () async {
               if (controller.text.isEmpty) {
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -629,14 +601,14 @@ Future<void> showChangePasswordDialog(
           decoration: InputDecoration(hintText: "Nueva $title"),
         ),
         actions: <Widget>[
-          TextButton(
-            child: const Text('Cancelar'),
+          AppButton.text(
+            label: 'Cancelar',
             onPressed: () {
               Navigator.of(context).pop();
             },
           ),
-          TextButton(
-            child: const Text('Aceptar'),
+          AppButton(
+            label: 'Aceptar',
             onPressed: () {
               if (isPatient) {
                 // userProvider.updatePatientData(
@@ -669,14 +641,14 @@ Future<void> showDeleteUserDialog(
         title: const Text("Eliminar cuenta"),
         content: const Text("¿Estás seguro de que deseas eliminar tu cuenta?"),
         actions: <Widget>[
-          TextButton(
-            child: const Text('Cancelar'),
+          AppButton.text(
+            label: 'Cancelar',
             onPressed: () {
               Navigator.of(context).pop();
             },
           ),
-          TextButton(
-            child: const Text('Aceptar'),
+          AppButton.destructive(
+            label: 'Aceptar',
             onPressed: () async {
               await userProvider
                   .deletePatient(userProvider.state.patientModel!.id!);

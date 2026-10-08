@@ -37,100 +37,106 @@ class _SearchSpecialistScreenState extends State<SearchSpecialistScreen> {
       height: double.infinity,
       child: Column(
         children: [
-          SizedBox(
-            width: double.infinity,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
             child: Row(
               children: [
                 Expanded(
                   child: TextField(
                     controller: widget.searchController,
                     decoration: const InputDecoration(
-                      //sin bordes
-                      border: InputBorder.none,
                       hintText: "Buscar especialista",
-                      prefixIcon: Icon(Icons.search),
+                      prefixIcon: Icon(Icons.search_rounded),
                     ),
                     onChanged: (value) {
                       widget.searchFunction(value);
                     },
                   ),
                 ),
+                const SizedBox(width: AppSpacing.xs),
                 IconButton(
                   onPressed: () {
                     widget.onFilterTap();
                   },
-                  icon: const Icon(Icons.filter_list),
+                  icon: const Icon(Icons.filter_list_rounded),
                 ),
               ],
             ),
           ),
           Expanded(
-              child: ListView.builder(
-            itemCount: widget.specislist.length,
-            itemBuilder: (context, index) {
-              return GestureDetector(
-                onTap: () {
-                  widget.onTapSpecialist(widget.specislist[index]);
-                },
-                child: Container(
-                    decoration: BoxDecoration(
-                      color: widget.patientModel!.specialist != null &&
-                              widget.specislist[index].id ==
-                                  widget.patientModel!.specialist!.id
-                          ? Colors.grey
-                          : Theme.of(context).colorScheme.surface,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 1,
-                          blurRadius: 1,
-                          offset: const Offset(0, 1),
-                        ),
-                      ],
-                    ),
-                    padding: EdgeInsets.symmetric(
-                        horizontal: MediaQuery.of(context).size.width * 0.05,
-                        vertical: MediaQuery.of(context).size.height * 0.01),
-                    margin: EdgeInsets.symmetric(
-                        horizontal: MediaQuery.of(context).size.width * 0.05,
-                        vertical: MediaQuery.of(context).size.height * 0.01),
-                    child: Row(
-                      children: [
-                        CircleAvatar(
-                            radius: MediaQuery.of(context).size.width * 0.05,
-                            child: const Icon(Icons.person)),
-                        SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.05),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(widget.specislist[index].name!,
-                                  style: TextStyle(
-                                      fontSize:
-                                          MediaQuery.of(context).size.width *
-                                              0.05)),
-                              Text("Sexo: ${widget.specislist[index].sex}",
-                                  style: TextStyle(
-                                      fontSize:
-                                          MediaQuery.of(context).size.width *
-                                              0.035)),
-                              Text("Edad: ${widget.specislist[index].age} años",
-                                  style: TextStyle(
-                                      fontSize:
-                                          MediaQuery.of(context).size.width *
-                                              0.035)),
-                            ],
+              child: widget.specislist.isEmpty
+                  ? const AppEmptyState(
+                      icon: Icons.person_search_rounded,
+                      title: 'Sin resultados',
+                      message:
+                          'No encontramos especialistas con esos filtros. Intenta ajustar tu búsqueda.',
+                    )
+                  : ListView.builder(
+                      itemCount: widget.specislist.length,
+                      itemBuilder: (context, index) {
+                        final bool isLinked = widget.patientModel!.specialist !=
+                                null &&
+                            widget.specislist[index].id ==
+                                widget.patientModel!.specialist!.id;
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: AppSpacing.lg, vertical: AppSpacing.xs),
+                          child: AppCard(
+                            color: isLinked
+                                ? Theme.of(context).colorScheme.primaryContainer
+                                : null,
+                            onTap: () {
+                              widget.onTapSpecialist(widget.specislist[index]);
+                            },
+                            child: Row(
+                              children: [
+                                CircleAvatar(
+                                    radius: 24,
+                                    backgroundColor: Theme.of(context)
+                                        .colorScheme
+                                        .primaryContainer,
+                                    child: Icon(Icons.person_rounded,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary)),
+                                const SizedBox(width: AppSpacing.md),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(widget.specislist[index].name!,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleMedium
+                                              ?.copyWith(
+                                                  color: AppColors.shadowWarm)),
+                                      Text("Sexo: ${widget.specislist[index].sex}",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall
+                                              ?.copyWith(
+                                                  color: AppColors.shadowWarm
+                                                      .withOpacity(0.7))),
+                                      Text(
+                                          "Edad: ${widget.specislist[index].age} años",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall
+                                              ?.copyWith(
+                                                  color: AppColors.shadowWarm
+                                                      .withOpacity(0.7))),
+                                    ],
+                                  ),
+                                ),
+                                Icon(Icons.arrow_forward_ios_rounded,
+                                    size: 16,
+                                    color: AppColors.shadowWarm.withOpacity(0.5)),
+                              ],
+                            ),
                           ),
-                        ),
-                        Icon(Icons.arrow_forward_ios,
-                            size: MediaQuery.of(context).size.width * 0.05),
-                      ],
+                        );
+                      },
                     )),
-              );
-            },
-          )),
           const Divider(),
           requestByCodeWidget(
               context, widget.controller, widget.syncDirectByCode, isLoading,
@@ -157,24 +163,28 @@ Widget requestByCodeWidget(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+          const SizedBox(height: AppSpacing.xs),
           Text("Vincular con código",
-              style: TextStyle(
-                  fontSize: MediaQuery.of(context).size.width * 0.05)),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.013),
+              style: Theme.of(context)
+                  .textTheme
+                  .titleMedium
+                  ?.copyWith(color: AppColors.shadowWarm)),
+          const SizedBox(height: AppSpacing.sm),
           Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: MediaQuery.of(context).size.width * 0.1),
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
             child: TextField(
               controller: controller,
               maxLength: 6,
+              textAlign: TextAlign.center,
               decoration: const InputDecoration(
                 hintText: "Código",
               ),
             ),
           ),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.025),
-          ElevatedButton(
+          const SizedBox(height: AppSpacing.lg),
+          AppButton(
+            label: "Vincular",
+            isLoading: isLoading,
             onPressed: () async {
               changeLoadingState();
               bool result = await syncByCode(controller.text);
@@ -194,16 +204,8 @@ Widget requestByCodeWidget(
 
               controller.clear();
             },
-            child: isLoading
-                ? const CircularProgressIndicator(
-                    color: Colors.white,
-                  )
-                : Text("Vincular",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: MediaQuery.of(context).size.width * 0.045)),
           ),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+          const SizedBox(height: AppSpacing.lg),
         ],
       ));
 }
@@ -213,14 +215,22 @@ void showConfirmialog(BuildContext context, String message) {
     context: context,
     builder: (context) {
       return AlertDialog(
-        title: const Text("Vinculacion"),
-        content: Text(message),
+        title: Text("Vinculación",
+            style: Theme.of(context)
+                .textTheme
+                .titleLarge
+                ?.copyWith(color: AppColors.shadowWarm)),
+        content: Text(message,
+            style: Theme.of(context)
+                .textTheme
+                .bodyMedium
+                ?.copyWith(color: AppColors.shadowWarm)),
         actions: [
-          TextButton(
+          AppButton.text(
+            label: "Aceptar",
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: const Text("Aceptar"),
           ),
         ],
       );

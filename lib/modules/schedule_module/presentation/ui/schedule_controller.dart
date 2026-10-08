@@ -66,12 +66,18 @@ class _ScheduleControllerState extends State<ScheduleController> {
       },
       builder: (context, state) {
         if (state.status == ScheduleStatus.error) {
-          return const Scaffold(
-            body: Center(
-              child: Text(
-                  'Error al cargar las citas, intente de nuevo haciendo scroll hacia abajo',
-                  style: TextStyle(
-                      color: Colors.red, decoration: TextDecoration.none)),
+          return Scaffold(
+            body: AppErrorState(
+              message: 'No pudimos cargar tu agenda.',
+              onRetry: () {
+                if (widget.isPattient == false) {
+                  context
+                      .read<ScheduleCubit>()
+                      .getDatesForSpecialist(especialistaModel!.id!);
+                } else {
+                  context.read<ScheduleCubit>().getSchedule(patientModel!.id!);
+                }
+              },
             ),
           );
         }
@@ -120,21 +126,31 @@ class _ScheduleControllerState extends State<ScheduleController> {
                             }
                           },
                           icon: Icon(
-                            Icons.refresh,
+                            Icons.refresh_rounded,
                             color: Theme.of(context).colorScheme.primary,
                           )),
                       IconButton(
-                        icon: Icon(Icons.help,
+                        icon: Icon(Icons.help_outline_rounded,
                             color: Theme.of(context).colorScheme.secondary),
-                        color: Colors.black,
                         onPressed: () async {
                           await showDialog(
                             context: context,
                             builder: (context) {
-                              return const AlertDialog(
-                                title: Text('Ayuda'),
+                              return AlertDialog(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.circular(AppRadius.lg)),
+                                title: Text('Ayuda',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleLarge
+                                        ?.copyWith(color: AppColors.shadowWarm)),
                                 content: Text(
-                                    'En esta pantalla podrá ver las citas que tiene programadas, si desea ver más detalles de una cita, solo debe dar clic en la cita que desea ver.'),
+                                    'En esta pantalla podrá ver las citas que tiene programadas, si desea ver más detalles de una cita, solo debe dar clic en la cita que desea ver.',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(color: AppColors.shadowWarm)),
                               );
                             },
                           );

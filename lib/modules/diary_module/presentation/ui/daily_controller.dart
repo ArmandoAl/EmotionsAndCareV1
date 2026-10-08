@@ -1,4 +1,4 @@
-import 'package:flutter_svg/svg.dart';
+import '../../../../demo/widgets/demo_svg.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import '../../../../helpers/paths.dart';
@@ -43,10 +43,10 @@ class _DailyControllerState extends State<DailyController> {
         bloc: context.read<DailyCubit>(),
         builder: (context, state) {
           if (state.result == DailyResult.error) {
-            return const Center(
-              child: Text('Error',
-                  style: TextStyle(
-                      color: Colors.red, decoration: TextDecoration.none)),
+            return AppErrorState(
+              message: 'No pudimos cargar tu diario. Inténtalo de nuevo.',
+              onRetry: () =>
+                  context.read<DailyCubit>().getNotes(widget.patientModel.id!),
             );
           }
 
@@ -64,7 +64,11 @@ class _DailyControllerState extends State<DailyController> {
                     isForReturn: true,
                     actions: [
                       ElevatedButton(
-                          style: ElevatedButton.styleFrom(),
+                          style: ElevatedButton.styleFrom(
+                            minimumSize: const Size(0, 36),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: AppSpacing.md),
+                          ),
                           onPressed: () {
                             if (dailyCubit.state.result ==
                                 DailyResult.loading) {
@@ -94,9 +98,8 @@ class _DailyControllerState extends State<DailyController> {
                                     notes: dailyCubit.state.notes,
                                     patientModel: widget.patientModel)));
                           },
-                          child: const Text('Progreso',
-                              style: TextStyle(color: Colors.white))),
-                      const SizedBox(width: 5),
+                          child: const Text('Progreso')),
+                      const SizedBox(width: AppSpacing.xs),
                     ],
                   ),
             body: state.result == DailyResult.loading
@@ -104,24 +107,11 @@ class _DailyControllerState extends State<DailyController> {
                     child: Lottie.asset(Assets.brainLoading),
                   )
                 : notes.isEmpty
-                    ? Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              textAlign: TextAlign.center,
-                              'Este es tu diario personal, aquí podrás escribir tus pensamientos y emociones. \n\n ¡Comienza a escribir!',
-                              style: TextStyle(
-                                fontFamily:
-                                    'Gilroy', // Usa la fuente personalizada
-                                fontWeight: FontWeight.bold, // Gilroy-Medium
-                                color: Colors.black,
-                                fontSize:
-                                    MediaQuery.of(context).size.width * 0.05,
-                              ),
-                            ),
-                          ],
-                        ),
+                    ? const AppEmptyState(
+                        icon: Icons.auto_stories_rounded,
+                        title: 'Tu diario está vacío',
+                        message:
+                            'Este es tu diario personal, aquí podrás escribir tus pensamientos y emociones.\n\n¡Comienza a escribir!',
                       )
                     : DailyScreen(
                         notes: notes,
@@ -142,8 +132,8 @@ class _DailyControllerState extends State<DailyController> {
             floatingActionButton: widget.isPattient
                 ? FloatingActionButton(
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(50)),
-                    elevation: 10,
+                        borderRadius: BorderRadius.circular(AppRadius.pill)),
+                    elevation: 4,
                     onPressed: () {
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => NewNoteScreen(
@@ -176,9 +166,9 @@ class _DailyControllerState extends State<DailyController> {
                               } //onVisible
                               )));
                     },
-                    child: const Icon(
-                      Icons.border_color_outlined,
-                      color: Colors.white,
+                    child: Icon(
+                      Icons.edit_rounded,
+                      color: Theme.of(context).colorScheme.onPrimary,
                     ),
                   )
                 : null,
@@ -193,57 +183,55 @@ Future<void> showStickerDialog(
     context: context,
     barrierDismissible: false,
     builder: (context) {
+      final scheme = Theme.of(context).colorScheme;
       return AlertDialog(
         scrollable: true,
-        backgroundColor: Colors.grey.withOpacity(0.85),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppRadius.lg)),
         content: SizedBox(
           width: MediaQuery.of(context).size.width * 0.8,
           height: MediaQuery.of(context).size.height * 0.6,
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(AppSpacing.sm),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(achivement.name!,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontFamily: 'Gilroy',
-                        color: Colors.white,
-                        fontSize: MediaQuery.of(context).size.width * 0.05,
-                        fontWeight: FontWeight.bold)),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+                    style: Theme.of(context)
+                        .textTheme
+                        .headlineSmall
+                        ?.copyWith(color: AppColors.shadowWarm)),
+                const SizedBox(height: AppSpacing.sm),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
                   child: Text(achivement.description!,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: MediaQuery.of(context).size.width * 0.035,
-                          fontWeight: FontWeight.bold)),
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyLarge
+                          ?.copyWith(color: AppColors.shadowWarm)),
                 ),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+                const SizedBox(height: AppSpacing.lg),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
                   child: Text('¡Nuevo logro desbloqueado!',
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: MediaQuery.of(context).size.width * 0.028,
-                          fontWeight: FontWeight.bold)),
+                      style: Theme.of(context)
+                          .textTheme
+                          .labelLarge
+                          ?.copyWith(color: scheme.primary)),
                 ),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-                SvgPicture.network(
+                const SizedBox(height: AppSpacing.sm),
+                demoSvg(
                   achivement.imageUrl!,
                   width: MediaQuery.of(context).size.width * 0.3,
                   fit: BoxFit.cover,
-                  placeholderBuilder: (context) =>
-                      const CircularProgressIndicator(),
+                  placeholderBuilder: (context) => const AppLoadingIndicator(),
                 ),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.015),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xff1C8AAD),
-                  ),
+                const SizedBox(height: AppSpacing.md),
+                AppButton(
+                  label: 'Recoger logro',
                   onPressed: () async {
                     final UICubit uiProvider = getIt<UICubit>();
 
@@ -251,8 +239,6 @@ Future<void> showStickerDialog(
 
                     if (context.mounted) Navigator.of(context).pop();
                   },
-                  child: const Text('Recoger logro',
-                      style: TextStyle(color: Colors.white)),
                 ),
               ],
             ),

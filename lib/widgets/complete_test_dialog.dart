@@ -12,7 +12,7 @@ void showDialogForCompletedTest(BuildContext context, DateTime date) {
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: const Text('Close'),
+            child: const Text('Cerrar'),
           ),
         ],
       );

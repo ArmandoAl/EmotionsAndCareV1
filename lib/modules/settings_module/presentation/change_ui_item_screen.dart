@@ -45,7 +45,7 @@ class _ChangeUiItemScreenState extends State<ChangeUiItemScreen> {
         body: Container(
           height: double.infinity,
           width: double.infinity,
-          padding: const EdgeInsets.all(30),
+          padding: const EdgeInsets.all(AppSpacing.xl),
           child: Column(
             children: [
               Text(
@@ -56,10 +56,11 @@ class _ChangeUiItemScreenState extends State<ChangeUiItemScreen> {
                         : widget.itemType == ItemUiType.jardin
                             ? 'Jardín'
                             : 'Flores',
-                style: TextStyle(
-                  fontSize: MediaQuery.of(context).size.width * 0.05,
-                  fontWeight: FontWeight.bold,
-                ),
+                textAlign: TextAlign.center,
+                style: Theme.of(context)
+                    .textTheme
+                    .titleLarge
+                    ?.copyWith(color: AppColors.shadowWarm),
               ),
               Expanded(
                 child: widget.itemType == ItemUiType.colores
@@ -75,25 +76,19 @@ class _ChangeUiItemScreenState extends State<ChangeUiItemScreen> {
                             },
                             child: Container(
                                 width: MediaQuery.of(context).size.width * 0.3,
-                                margin: const EdgeInsets.all(10),
+                                margin: const EdgeInsets.all(AppSpacing.sm),
                                 decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.circular(AppRadius.md),
                                   border: Border.all(
                                     color: selectedTheme == index
-                                        ? const Color(0xFFD80DB6)
+                                        ? Theme.of(context).colorScheme.primary
                                         : Colors.transparent,
                                     width: 2,
                                   ),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: selectedTheme == index
-                                          ? const Color(0xFFD80DB6)
-                                              .withOpacity(0.5)
-                                          : Colors.transparent,
-                                      spreadRadius: 5,
-                                      blurRadius: 7,
-                                      offset: const Offset(0, 3),
-                                    ),
-                                  ],
+                                  boxShadow: selectedTheme == index
+                                      ? AppShadows.card
+                                      : AppShadows.none,
                                 ),
                                 child: Column(
                                   children: [
@@ -148,27 +143,21 @@ class _ChangeUiItemScreenState extends State<ChangeUiItemScreen> {
                             return Row(
                               children: [
                                 Expanded(
-                                  child: ElevatedButton(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(AppSpacing.sm),
+                                    child: AppButton(
+                                      variant: selectedItem == "null"
+                                          ? AppButtonVariant.primary
+                                          : AppButtonVariant.secondary,
+                                      label: 'Color por defecto',
                                       onPressed: () {
                                         setState(() {
                                           selectedItem = "null";
                                         });
                                       },
-                                      style: ButtonStyle(
-                                        backgroundColor: selectedItem == "null"
-                                            ? WidgetStateProperty.all(
-                                                const Color(0xFFD80DB6))
-                                            : WidgetStateProperty.all(
-                                                const Color.fromARGB(
-                                                    255, 27, 135, 198)),
-                                      ),
-                                      child: const Text('Color por defecto',
-                                          style:
-                                              TextStyle(color: Colors.white))),
+                                    ),
+                                  ),
                                 ),
-                                SizedBox(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.3),
                               ],
                             );
                           }
@@ -182,25 +171,18 @@ class _ChangeUiItemScreenState extends State<ChangeUiItemScreen> {
                             child: Container(
                               width: MediaQuery.of(context).size.width * 0.3,
                               height: MediaQuery.of(context).size.height * 0.65,
-                              margin: const EdgeInsets.all(10),
+                              margin: const EdgeInsets.all(AppSpacing.sm),
                               decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(AppRadius.md),
                                 border: Border.all(
                                   color: selectedItem == widget.items[index]
-                                      ? const Color(0xFFD80DB6)
+                                      ? Theme.of(context).colorScheme.primary
                                       : Colors.transparent,
                                   width: 2,
                                 ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: selectedItem == widget.items[index]
-                                        ? const Color(0xFFD80DB6)
-                                            .withOpacity(0.5)
-                                        : Colors.transparent,
-                                    spreadRadius: 5,
-                                    blurRadius: 7,
-                                    offset: const Offset(0, 3),
-                                  ),
-                                ],
+                                boxShadow: selectedItem == widget.items[index]
+                                    ? AppShadows.card
+                                    : AppShadows.none,
                               ),
                               child: Lottie.asset(
                                 widget.items[index],
@@ -238,7 +220,7 @@ class _ChangeUiItemScreenState extends State<ChangeUiItemScreen> {
                     // widget.uiProvider.changeFlower(selectedItem);
                   }
                 },
-                child: const Icon(Icons.check),
+                child: const Icon(Icons.check_rounded),
               )
             : null);
   }

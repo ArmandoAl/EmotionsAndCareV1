@@ -2,6 +2,9 @@
 
 import 'package:flutter/material.dart';
 
+import '../../../config/theme/app_colors.dart';
+import '../../../config/theme/app_spacing.dart';
+
 class TermsScreen extends StatefulWidget {
   final String terms;
   const TermsScreen({super.key, required this.terms});
@@ -20,16 +23,16 @@ class _TermsScreenState extends State<TermsScreen> {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        padding: const EdgeInsets.all(30),
+        padding: const EdgeInsets.all(AppSpacing.xl),
         child: ListView(
           children: [
             Text(
               widget.terms != null ? widget.terms.replaceAll('|', '\n') : '',
               textAlign: TextAlign.justify,
-              style: TextStyle(
-                fontSize: MediaQuery.of(context).size.width * 0.05,
-                decoration: TextDecoration.none,
-              ),
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyLarge
+                  ?.copyWith(color: AppColors.shadowWarm),
             ),
           ],
         ),

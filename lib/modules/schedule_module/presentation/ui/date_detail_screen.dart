@@ -107,7 +107,7 @@ class _DateDetailScreenState extends State<DateDetailScreen> {
                     hour = widget.dateModel!.hour!;
                   },
                   icon: const Icon(
-                    Icons.cancel,
+                    Icons.cancel_rounded,
                   )),
             IconButton(
                 onPressed: () async {
@@ -129,15 +129,15 @@ class _DateDetailScreenState extends State<DateDetailScreen> {
                   if (context.mounted) Navigator.of(context).pop();
                 },
                 icon: Icon(
-                  Icons.delete,
-                  color: Theme.of(context).colorScheme.primary,
+                  Icons.delete_outline_rounded,
+                  color: Theme.of(context).colorScheme.error,
                 )),
           ],
         ),
         body: Container(
           width: double.infinity,
           height: double.infinity,
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(AppSpacing.lg),
           child: SingleChildScrollView(
             child: Column(
               children: [
@@ -147,175 +147,53 @@ class _DateDetailScreenState extends State<DateDetailScreen> {
                         children: [
                           Text(
                             convertToName(widget.dateModel!.patient!.name!),
-                            style: TextStyle(
-                              fontSize:
-                                  MediaQuery.of(context).size.width * 0.05,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineSmall
+                                ?.copyWith(color: AppColors.shadowWarm),
                           ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.01,
-                          ),
+                          const SizedBox(height: AppSpacing.xs),
                           Text(
                             "Cita",
-                            style: TextStyle(
-                              fontSize:
-                                  MediaQuery.of(context).size.width * 0.04,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(color: AppColors.shadowWarm),
                           ),
-                          Row(
-                            children: [
-                              const Icon(
-                                Icons.calendar_month,
-                                color: Colors.black,
-                              ),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.02,
-                              ),
-                              Text(
-                                "${widget.dateModel!.date!.day}/${widget.dateModel!.date!.month}/${widget.dateModel!.date!.year}",
-                                style: TextStyle(
-                                  fontSize:
-                                      MediaQuery.of(context).size.width * 0.04,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              const Icon(
-                                Icons.access_time,
-                                color: Colors.black,
-                              ),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.02,
-                              ),
-                              Text(
-                                getTimeFormatWithText(widget.dateModel!.hour!),
-                                style: TextStyle(
-                                  fontSize:
-                                      MediaQuery.of(context).size.width * 0.04,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              const Icon(
-                                Icons.location_on,
-                                color: Colors.black,
-                              ),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.02,
-                              ),
-                              Text(
-                                widget.dateModel!.place!,
-                                style: TextStyle(
-                                  fontSize:
-                                      MediaQuery.of(context).size.width * 0.04,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          ),
+                          _detailRow(
+                              context,
+                              Icons.calendar_month_rounded,
+                              "${widget.dateModel!.date!.day}/${widget.dateModel!.date!.month}/${widget.dateModel!.date!.year}"),
+                          _detailRow(context, Icons.access_time_rounded,
+                              getTimeFormatWithText(widget.dateModel!.hour!)),
+                          _detailRow(context, Icons.location_on_rounded,
+                              widget.dateModel!.place!),
                         ],
                       )
                     : SizedBox(
                         width: double.infinity,
                         child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal:
-                                  MediaQuery.of(context).size.width * 0.05,
-                              vertical:
-                                  MediaQuery.of(context).size.height * 0.01),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: AppSpacing.lg, vertical: AppSpacing.sm),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text("Datos del especialista",
-                                  style: TextStyle(
-                                      fontSize:
-                                          MediaQuery.of(context).size.width *
-                                              0.065,
-                                      color: Colors.black,
-                                      decoration: TextDecoration.none)),
-                              Row(
-                                children: [
-                                  const Icon(
-                                    Icons.person,
-                                    color: Colors.black,
-                                  ),
-                                  SizedBox(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.02,
-                                  ),
-                                  Text(
-                                    widget.patientModel!.specialist!.name!,
-                                    style: TextStyle(
-                                      fontSize:
-                                          MediaQuery.of(context).size.width *
-                                              0.05,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  const Icon(
-                                    Icons.phone,
-                                    color: Colors.black,
-                                  ),
-                                  SizedBox(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.02,
-                                  ),
-                                  Text(
-                                    widget.patientModel!.specialist!.phone!,
-                                    style: TextStyle(
-                                      fontSize:
-                                          MediaQuery.of(context).size.width *
-                                              0.035,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  const Icon(
-                                    Icons.email,
-                                    color: Colors.black,
-                                  ),
-                                  SizedBox(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.02,
-                                  ),
-                                  Text(
-                                    widget.patientModel!.specialist!.email!,
-                                    style: TextStyle(
-                                      fontSize:
-                                          MediaQuery.of(context).size.width *
-                                              0.035,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ],
-                              ),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleLarge
+                                      ?.copyWith(color: AppColors.shadowWarm)),
+                              _detailRow(context, Icons.person_rounded,
+                                  widget.patientModel!.specialist!.name!),
+                              _detailRow(context, Icons.phone_rounded,
+                                  widget.patientModel!.specialist!.phone!),
+                              _detailRow(context, Icons.email_rounded,
+                                  widget.patientModel!.specialist!.email!),
                             ],
                           ),
                         ),
                       ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.025,
-                ),
+                const SizedBox(height: AppSpacing.lg),
                 GestureDetector(
                   onTap: () async {
                     if (isEditing) {
@@ -330,59 +208,26 @@ class _DateDetailScreenState extends State<DateDetailScreen> {
                       );
                     }
                   },
-                  child: Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: Colors.black,
-                      ),
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 3,
-                    ),
+                  child: _fieldContainer(
+                    context,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.calendar_month,
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.02,
-                            ),
-                            Text(
-                              "Fecha",
-                              style: TextStyle(
-                                fontSize:
-                                    MediaQuery.of(context).size.width * 0.05,
-                                color: Colors.black,
-                                decoration: TextDecoration.none,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.01,
-                        ),
+                        _fieldLabel(context, Icons.calendar_month_rounded, "Fecha"),
+                        const SizedBox(height: AppSpacing.xs),
                         Text(
                           getDateFormatWithText(date),
-                          style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.width * 0.05,
-                            color: isEditing ? Colors.black : Colors.grey,
-                            decoration: TextDecoration.none,
-                          ),
+                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                color: isEditing
+                                    ? AppColors.shadowWarm
+                                    : AppColors.shadowWarm.withOpacity(0.5),
+                              ),
                         ),
                       ],
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.015,
-                ),
+                const SizedBox(height: AppSpacing.sm),
                 GestureDetector(
                   onTap: () async {
                     if (isEditing) {
@@ -398,97 +243,39 @@ class _DateDetailScreenState extends State<DateDetailScreen> {
                       });
                     }
                   },
-                  child: Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: Colors.black,
-                      ),
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 3,
-                    ),
+                  child: _fieldContainer(
+                    context,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.schedule,
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.02,
-                            ),
-                            Text(
-                              "Hora",
-                              style: TextStyle(
-                                fontSize:
-                                    MediaQuery.of(context).size.width * 0.05,
-                                color: Colors.black,
-                                decoration: TextDecoration.none,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.01,
-                        ),
+                        _fieldLabel(context, Icons.schedule_rounded, "Hora"),
+                        const SizedBox(height: AppSpacing.xs),
                         Text(
                           getTimeFormatWithText(hour),
-                          style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.width * 0.05,
-                            color: isEditing ? Colors.black : Colors.grey,
-                            decoration: TextDecoration.none,
-                          ),
+                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                color: isEditing
+                                    ? AppColors.shadowWarm
+                                    : AppColors.shadowWarm.withOpacity(0.5),
+                              ),
                         ),
                       ],
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.015,
-                ),
-                Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: Colors.black,
-                    ),
-                  ),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 3,
-                  ),
+                const SizedBox(height: AppSpacing.sm),
+                _fieldContainer(
+                  context,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.location_on,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.02,
-                          ),
-                          Text(
-                            "Ubicación",
-                            style: TextStyle(
-                              fontSize:
-                                  MediaQuery.of(context).size.width * 0.05,
-                              color: Colors.black,
-                              decoration: TextDecoration.none,
-                            ),
-                          ),
-                        ],
-                      ),
+                      _fieldLabel(context, Icons.location_on_rounded, "Ubicación"),
                       TextField(
                         controller: placeController,
                         enabled: isEditing,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyLarge
+                            ?.copyWith(color: AppColors.shadowWarm),
                         decoration: const InputDecoration(
                           hintText: "Ej: Calle 123, CDMX",
                           border: InputBorder.none,
@@ -497,168 +284,101 @@ class _DateDetailScreenState extends State<DateDetailScreen> {
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.05,
-                ),
-                Row(
-                  children: [
-                    Text("Descripción",
-                        style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.width * 0.05,
-                            color: Colors.black,
-                            decoration: TextDecoration.none)),
-                  ],
-                ),
-                Container(
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    border: Border.fromBorderSide(
-                      BorderSide(
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                  padding: const EdgeInsets.all(20),
+                const SizedBox(height: AppSpacing.xl),
+                Text("Descripción",
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium
+                        ?.copyWith(color: AppColors.shadowWarm)),
+                const SizedBox(height: AppSpacing.xs),
+                _fieldContainer(
+                  context,
+                  padding: const EdgeInsets.all(AppSpacing.lg),
                   child: TextField(
                     controller: descriptionController,
                     enabled: isEditing,
                     maxLines: null,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyLarge
+                        ?.copyWith(color: AppColors.shadowWarm),
                     decoration: const InputDecoration(
                       hintText: "Descripción",
                       border: InputBorder.none,
                     ),
                   ),
                 ),
-                widget.isPattient == false
-                    ? SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.05,
-                      )
-                    : const SizedBox.shrink(),
-                widget.isPattient == false
-                    ? Row(
-                        children: [
-                          Text(
-                            "Notas del especialista:",
-                            style: TextStyle(
-                              fontSize:
-                                  MediaQuery.of(context).size.width * 0.05,
-                              color: Colors.black,
-                              decoration: TextDecoration.none,
-                            ),
-                          ),
-                        ],
-                      )
-                    : const SizedBox.shrink(),
-                widget.isPattient == false
-                    ? Container(
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                          border: Border.fromBorderSide(
-                            BorderSide(
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                        padding: const EdgeInsets.all(20),
-                        child: SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              TextField(
-                                controller: specialistNotesController,
-                                enabled: isEditing,
-                                maxLines: null,
-                                decoration: const InputDecoration(
-                                  hintText: "Notas",
-                                  border: InputBorder.none,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      )
-                    : const SizedBox.shrink(),
-                widget.isPattient == false
-                    ? SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.05,
-                      )
-                    : const SizedBox.shrink(),
-                widget.isPattient == false
-                    ? Row(
-                        children: [
-                          Text(
-                            "Estado de la cita:",
-                            style: TextStyle(
-                              fontSize:
-                                  MediaQuery.of(context).size.width * 0.05,
-                              color: Colors.black,
-                              decoration: TextDecoration.none,
-                            ),
-                          ),
-                        ],
-                      )
-                    : const SizedBox.shrink(),
-                widget.isPattient == false
-                    ? Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            color: Colors.black,
-                          ),
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 3,
-                        ),
-                        child: DropdownButton(
-                            // enable: isEditing,
-                            underline: const SizedBox.shrink(),
-                            elevation: 1,
-                            isExpanded: true,
-                            items: items,
-                            onChanged: (value) {
-                              setState(() {
-                                statusValue = value.toString();
-                              });
-                            },
-                            value: statusValue),
-                      )
-                    : const SizedBox.shrink(),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.05,
-                ),
+                if (widget.isPattient == false) ...[
+                  const SizedBox(height: AppSpacing.xl),
+                  Text(
+                    "Notas del especialista:",
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium
+                        ?.copyWith(color: AppColors.shadowWarm),
+                  ),
+                  const SizedBox(height: AppSpacing.xs),
+                  _fieldContainer(
+                    context,
+                    padding: const EdgeInsets.all(AppSpacing.lg),
+                    child: TextField(
+                      controller: specialistNotesController,
+                      enabled: isEditing,
+                      maxLines: null,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyLarge
+                          ?.copyWith(color: AppColors.shadowWarm),
+                      decoration: const InputDecoration(
+                        hintText: "Notas",
+                        border: InputBorder.none,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: AppSpacing.xl),
+                  Text(
+                    "Estado de la cita:",
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium
+                        ?.copyWith(color: AppColors.shadowWarm),
+                  ),
+                  const SizedBox(height: AppSpacing.xs),
+                  _fieldContainer(
+                    context,
+                    child: DropdownButton(
+                        // enable: isEditing,
+                        underline: const SizedBox.shrink(),
+                        elevation: 1,
+                        isExpanded: true,
+                        items: items,
+                        onChanged: (value) {
+                          setState(() {
+                            statusValue = value.toString();
+                          });
+                        },
+                        value: statusValue),
+                  ),
+                ],
+                const SizedBox(height: AppSpacing.xl),
                 if (widget.isPattient == true &&
                     widget.dateModel!.status == DateStatus.pendingToMatch &&
                     isEditing == false &&
                     widget.dateModel!.confirmByPatient == false &&
                     widget.dateModel!.confirmByEspetialist == true)
-                  Column(
-                    children: [
-                      Text(
-                          "El especialista ha hecho cambios en la cita, por favor acepta la cita o da click en editar para proponer una nueva fecha",
-                          style: TextStyle(
-                              fontSize:
-                                  MediaQuery.of(context).size.width * 0.035,
-                              color: Colors.black,
-                              decoration: TextDecoration.none)),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.02,
-                      ),
-                    ],
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: AppSpacing.lg),
+                    child: Text(
+                        "El especialista ha hecho cambios en la cita, por favor acepta la cita o da click en editar para proponer una nueva fecha",
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: AppColors.shadowWarm,
+                            )),
                   ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 50,
-                            vertical: 10,
-                          ),
-                        ),
+                    AppButton.secondary(
+                        label: isEditing ? "Guardar" : "Editar",
                         onPressed: () async {
                           if (isEditing) {
                             await showLoadingdialog("Guardando cita", context,
@@ -761,31 +481,14 @@ class _DateDetailScreenState extends State<DateDetailScreen> {
                               isEditing = !isEditing;
                             });
                           }
-                        },
-                        child: Text(
-                          isEditing ? "Guardar" : "Editar",
-                          style: const TextStyle(
-                            fontSize: 16,
-                            color: Colors.white,
-                          ),
-                        )),
+                        }),
                     if (widget.isPattient == true &&
                         widget.dateModel!.status == DateStatus.pendingToMatch &&
                         isEditing == false &&
                         widget.dateModel!.confirmByPatient == false &&
                         widget.dateModel!.confirmByEspetialist == true)
-                      ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                Theme.of(context).colorScheme.primary,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 50,
-                              vertical: 10,
-                            ),
-                          ),
+                      AppButton(
+                          label: "Aceptar",
                           onPressed: () async {
                             await showLoadingdialog("Guardando cita", context,
                                 () async {
@@ -801,19 +504,10 @@ class _DateDetailScreenState extends State<DateDetailScreen> {
                               if (context.mounted) Navigator.of(context).pop();
                               if (context.mounted) Navigator.of(context).pop();
                             });
-                          },
-                          child: const Text(
-                            "Aceptar",
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.white,
-                            ),
-                          )),
+                          }),
                   ],
                 ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.05,
-                ),
+                const SizedBox(height: AppSpacing.xl),
               ],
             ),
           ),
@@ -827,24 +521,84 @@ Future<void> showDeleteMassageDialog(
     context: context,
     builder: (context) {
       return AlertDialog(
-        title: const Text("¿Estás seguro de que quieres eliminar esta cita?"),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppRadius.lg)),
+        title: Text("¿Estás seguro de que quieres eliminar esta cita?",
+            style: Theme.of(context)
+                .textTheme
+                .titleLarge
+                ?.copyWith(color: AppColors.shadowWarm)),
         actions: [
-          TextButton(
+          AppButton.text(
+            label: "Cancelar",
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: const Text("Cancelar"),
           ),
-          TextButton(
+          AppButton.destructive(
+            label: "Eliminar",
             onPressed: () async {
               await deleteFunction();
               if (context.mounted) Navigator.of(context).pop();
               if (context.mounted) Navigator.of(context).pop();
             },
-            child: const Text("Eliminar"),
           ),
         ],
       );
     },
+  );
+}
+
+Widget _detailRow(BuildContext context, IconData icon, String text) {
+  return Padding(
+    padding: const EdgeInsets.only(top: AppSpacing.xs),
+    child: Row(
+      children: [
+        Icon(icon, color: AppColors.shadowWarm.withOpacity(0.6), size: 20),
+        const SizedBox(width: AppSpacing.sm),
+        Expanded(
+          child: Text(
+            text,
+            style: Theme.of(context)
+                .textTheme
+                .bodyMedium
+                ?.copyWith(color: AppColors.shadowWarm),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget _fieldLabel(BuildContext context, IconData icon, String text) {
+  return Row(
+    children: [
+      Icon(icon, color: Theme.of(context).colorScheme.primary, size: 20),
+      const SizedBox(width: AppSpacing.sm),
+      Text(
+        text,
+        style: Theme.of(context)
+            .textTheme
+            .labelLarge
+            ?.copyWith(color: AppColors.shadowWarm),
+      ),
+    ],
+  );
+}
+
+Widget _fieldContainer(
+  BuildContext context, {
+  required Widget child,
+  EdgeInsetsGeometry padding =
+      const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.xs),
+}) {
+  return Container(
+    width: double.infinity,
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(AppRadius.md),
+      border: Border.all(color: AppColors.shadowWarm.withOpacity(0.2)),
+    ),
+    padding: padding,
+    child: child,
   );
 }

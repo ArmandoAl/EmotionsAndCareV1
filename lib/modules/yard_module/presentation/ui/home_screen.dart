@@ -245,7 +245,7 @@ class _StaticHomeScreenState extends State<StaticHomeScreen>
                           animation: _buttonController!,
                           builder: (context, child) {
                             return IconButton(
-                              icon: Icon(Icons.menu,
+                              icon: Icon(Icons.menu_rounded,
                                   color:
                                       _buttonAnimation!.value ?? Colors.black,
                                   size:
@@ -258,7 +258,7 @@ class _StaticHomeScreenState extends State<StaticHomeScreen>
                         )
                       : Builder(builder: (context) {
                           return IconButton(
-                            icon: Icon(Icons.menu,
+                            icon: Icon(Icons.menu_rounded,
                                 color: Colors.white,
                                 size: MediaQuery.of(context).size.width * 0.12),
                             onPressed: () {
@@ -275,7 +275,7 @@ class _StaticHomeScreenState extends State<StaticHomeScreen>
                       ? Container()
                       : Builder(builder: (context) {
                           return IconButton(
-                            icon: Icon(Icons.edit,
+                            icon: Icon(Icons.edit_rounded,
                                 color: Colors.white,
                                 size:
                                     MediaQuery.of(context).size.width * 0.075),

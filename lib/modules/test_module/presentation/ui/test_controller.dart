@@ -31,12 +31,11 @@ class _TestControllerState extends State<TestController> {
       bloc: context.read<TestCubit>(),
       builder: (context, state) {
         if (state.status == TestStatus.error) {
-          return const Scaffold(
-            body: Center(
-              child: Text(
-                  'Error al cargar las pruebas, intente de nuevo haciendo scroll hacia abajo',
-                  style: TextStyle(
-                      color: Colors.red, decoration: TextDecoration.none)),
+          return Scaffold(
+            body: AppErrorState(
+              message: 'No pudimos cargar tus cuestionarios.',
+              onRetry: () =>
+                  context.read<TestCubit>().getTest(widget.patientModel.id!),
             ),
           );
         }

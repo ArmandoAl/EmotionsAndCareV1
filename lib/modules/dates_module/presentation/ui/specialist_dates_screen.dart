@@ -45,17 +45,23 @@ class _SpecialistDatesScreenState extends State<SpecialistDatesScreen> {
                 .read<PattientsDatesCubit>()
                 .getPattientsDates(widget.userId);
           },
-          child: Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-            child: ListView(
-              children: itemsList(
-                context,
-                dates,
-                widget.onItemTap,
-              ),
-            ),
-          ),
+          child: dates.isEmpty
+              ? const AppEmptyState(
+                  icon: Icons.event_available_rounded,
+                  title: 'Sin citas programadas',
+                  message: 'Cuando tus pacientes agenden citas, aparecerán aquí.',
+                )
+              : Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: AppSpacing.sm, vertical: AppSpacing.xs),
+                  child: ListView(
+                    children: itemsList(
+                      context,
+                      dates,
+                      widget.onItemTap,
+                    ),
+                  ),
+                ),
         ),
       ),
     );
@@ -66,9 +72,7 @@ List<Widget> itemsList(
     BuildContext context, List<DateModel> dates, Function onTap) {
   final List<Widget> list = [];
 
-  list.add(SizedBox(
-    height: MediaQuery.of(context).size.height * 0.02,
-  ));
+  list.add(const SizedBox(height: AppSpacing.sm));
   for (final DateModel date in dates) {
     list.add(GestureDetector(
       onTap: () {
@@ -76,30 +80,23 @@ List<Widget> itemsList(
       },
       child: Container(
         decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.3),
-              spreadRadius: 1,
-              blurRadius: 5,
-              offset: const Offset(0, 3), // changes position of shadow
-            ),
-          ],
+          borderRadius: BorderRadius.circular(AppRadius.md),
+          boxShadow: AppShadows.card,
         ),
         child: Column(
           children: [
             Container(
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(10),
-                  topRight: Radius.circular(10),
+                  topLeft: Radius.circular(AppRadius.md),
+                  topRight: Radius.circular(AppRadius.md),
                 ),
                 color: Theme.of(context).colorScheme.primary,
               ),
               width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-              margin: EdgeInsets.symmetric(
-                horizontal: MediaQuery.of(context).size.height * 0.015,
-              ),
+              padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.sm, vertical: AppSpacing.sm),
+              margin: const EdgeInsets.symmetric(horizontal: AppSpacing.xs),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -107,18 +104,14 @@ List<Widget> itemsList(
                   Expanded(
                       child: Row(
                     children: [
-                      const Icon(
-                        Icons.calendar_month,
-                        color: Colors.white,
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
+                      Icon(Icons.calendar_month_rounded,
+                          color: Theme.of(context).colorScheme.onPrimary),
+                      const SizedBox(width: AppSpacing.sm),
                       Text(
                           date != null ? getDateFormatWithText(date.date!) : "",
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold)),
+                          style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                                color: Theme.of(context).colorScheme.onPrimary,
+                              )),
                     ],
                   )),
                   Expanded(
@@ -126,15 +119,14 @@ List<Widget> itemsList(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      const Icon(Icons.schedule, color: Colors.white),
-                      const SizedBox(
-                        width: 10,
-                      ),
+                      Icon(Icons.schedule_rounded,
+                          color: Theme.of(context).colorScheme.onPrimary),
+                      const SizedBox(width: AppSpacing.sm),
                       Text(
                           date != null ? getTimeFormatWithText(date.hour!) : "",
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold)),
+                          style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                                color: Theme.of(context).colorScheme.onPrimary,
+                              )),
                     ],
                   )),
                 ],
@@ -153,9 +145,7 @@ List<Widget> itemsList(
       ),
     ));
 
-    list.add(SizedBox(
-      height: MediaQuery.of(context).size.height * 0.02,
-    ));
+    list.add(const SizedBox(height: AppSpacing.sm));
   }
   return list;
 }

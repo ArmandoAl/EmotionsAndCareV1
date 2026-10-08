@@ -76,12 +76,19 @@ class _SettingsScreenState extends State<SettingsScreen>
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 800),
-    )..repeat(reverse: true);
+    );
 
     _animation = ColorTween(
-      begin: const Color.fromARGB(255, 224, 10, 10),
-      end: const Color.fromARGB(255, 56, 5, 159),
+      begin: AppColors.daySecondary,
+      end: AppColors.dayTertiary,
     ).animate(_animationController!);
+
+    if (WidgetsBinding
+        .instance.platformDispatcher.accessibilityFeatures.disableAnimations) {
+      _animationController!.value = 1;
+    } else {
+      _animationController!.repeat(reverse: true);
+    }
   }
 
   void _disposeAnimationController() {
@@ -100,10 +107,11 @@ class _SettingsScreenState extends State<SettingsScreen>
 
   @override
   Widget build(BuildContext context) {
+    final ColorScheme scheme = Theme.of(context).colorScheme;
     return Container(
       width: double.infinity,
       height: double.infinity,
-      padding: const EdgeInsets.all(30),
+      padding: const EdgeInsets.all(AppSpacing.xl),
       child: ListView(
         children: [
           headerItem(
@@ -116,62 +124,46 @@ class _SettingsScreenState extends State<SettingsScreen>
             widget.isPattient,
             widget.userProvider,
           ),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-          widget.isPattient
-              ? listItem(
-                  context,
-                  "Personalización",
-                  Icon(
-                    Icons.color_lens,
-                    color: const Color.fromARGB(255, 216, 13, 182),
-                    size: MediaQuery.of(context).size.width * 0.1,
-                  ), () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => CustomMenuScreen(
-                        userProvider: widget.userProvider,
-                        uiProvider: widget.uiProvider,
-                      ),
-                    ),
-                  );
-                }, false, animatedMenu, _animationController, _animation)
-              : Container(),
-          widget.isPattient
-              ? SizedBox(height: MediaQuery.of(context).size.height * 0.05)
-              : Container(),
-          widget.isPattient
-              ? listItem(
-                  context,
-                  "Privacidad",
-                  Icon(
-                    Icons.privacy_tip,
-                    color: const Color.fromARGB(255, 7, 110, 38),
-                    size: MediaQuery.of(context).size.width * 0.1,
-                  ), () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => PrivacyScreen(
-                        settings: widget.isPattient
-                            ? widget.userProvider.state.patientModel!.settings
-                            : widget.userProvider.state.patientModel!.settings,
-                      ),
-                    ),
-                  );
-                }, animatedMenu, false, _animationController, _animation)
-              : Container(),
-          widget.isPattient
-              ? SizedBox(height: MediaQuery.of(context).size.height * 0.05)
-              : Container(),
+          const SizedBox(height: AppSpacing.xl),
+          if (widget.isPattient)
+            listItem(
+                context,
+                "Personalización",
+                Icon(Icons.palette_rounded, color: scheme.tertiary),
+                () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CustomMenuScreen(
+                    userProvider: widget.userProvider,
+                    uiProvider: widget.uiProvider,
+                  ),
+                ),
+              );
+            }, false, animatedMenu, _animationController, _animation),
+          if (widget.isPattient) const SizedBox(height: AppSpacing.lg),
+          if (widget.isPattient)
+            listItem(
+                context,
+                "Privacidad",
+                Icon(Icons.privacy_tip_rounded, color: scheme.primary),
+                () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PrivacyScreen(
+                    settings: widget.isPattient
+                        ? widget.userProvider.state.patientModel!.settings
+                        : widget.userProvider.state.patientModel!.settings,
+                  ),
+                ),
+              );
+            }, animatedMenu, false, _animationController, _animation),
+          if (widget.isPattient) const SizedBox(height: AppSpacing.lg),
           listItem(
               context,
               "Términos y Condiciones",
-              Icon(
-                Icons.description,
-                color: const Color.fromARGB(255, 75, 11, 160),
-                size: MediaQuery.of(context).size.width * 0.1,
-              ), () {
+              Icon(Icons.description_rounded, color: scheme.secondary), () {
             Navigator.push(
               context,
               MaterialPageRoute(
@@ -185,15 +177,10 @@ class _SettingsScreenState extends State<SettingsScreen>
               ),
             );
           }, animatedMenu, false, _animationController, _animation),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+          const SizedBox(height: AppSpacing.lg),
           listItem(
-              context,
-              "Acerca de",
-              Icon(
-                Icons.info,
-                color: const Color.fromARGB(255, 231, 150, 19),
-                size: MediaQuery.of(context).size.width * 0.1,
-              ), () {
+              context, "Acerca de", Icon(Icons.info_rounded, color: scheme.secondary),
+              () {
             Navigator.push(
               context,
               MaterialPageRoute(
@@ -201,16 +188,20 @@ class _SettingsScreenState extends State<SettingsScreen>
               ),
             );
           }, animatedMenu, false, _animationController, _animation),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+          const SizedBox(height: AppSpacing.lg),
           listItem(
               context,
               "Cerrar Sesión",
-              Icon(
-                Icons.exit_to_app,
-                color: const Color.fromARGB(255, 0, 0, 0),
-                size: MediaQuery.of(context).size.width * 0.1,
-              ), () {
-            // print("cerrar sesion");
+              Icon(Icons.exit_to_app_rounded, color: scheme.error), () async {
+            final bool confirmed = await showAppConfirmDialog(
+              context,
+              title: 'Cerrar sesión',
+              message: '¿Estás seguro de que quieres cerrar tu sesión?',
+              confirmLabel: 'Cerrar sesión',
+              isDestructive: true,
+            );
+            if (!confirmed || !context.mounted) return;
+
             if (widget.isPattient == false) {
               Navigator.pop(context);
             }
@@ -232,49 +223,41 @@ Widget listItem(
   AnimationController? animationController,
   Animation<Color?>? animation,
 ) {
-  return InkWell(
-    onTap: () {
-      if (!disable) {
-        onTap();
-      }
-    },
-    child: Container(
-      padding: const EdgeInsets.all(10),
-      child: Row(
-        children: [
-          icon,
-          SizedBox(width: MediaQuery.of(context).size.width * 0.05),
-          Expanded(
-            child: disable == false && animate == true
-                ? AnimatedBuilder(
-                    animation: animationController!,
-                    builder: (context, child) => Text(
-                      title,
-                      style: TextStyle(
-                          color: animation!.value ??
-                              Theme.of(context).colorScheme.onSurface,
-                          fontSize: MediaQuery.of(context).size.width * 0.06),
-                    ),
-                  )
-                : Text(
+  return AppCard(
+    onTap: disable ? null : () => onTap(),
+    child: Row(
+      children: [
+        icon,
+        const SizedBox(width: AppSpacing.md),
+        Expanded(
+          child: disable == false && animate == true
+              ? AnimatedBuilder(
+                  animation: animationController!,
+                  builder: (context, child) => Text(
                     title,
-                    style: TextStyle(
-                        color: disable == false && animate == true
-                            ? animation!.value ?? Theme.of(context).primaryColor
-                            : disable == false
-                                ? Theme.of(context).colorScheme.onSurface
-                                : Theme.of(context).colorScheme.secondary,
-                        fontSize: MediaQuery.of(context).size.width * 0.05),
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          color: animation!.value ?? AppColors.shadowWarm,
+                        ),
                   ),
-          ),
-          SizedBox(width: MediaQuery.of(context).size.width * 0.05),
-          Icon(
-            Icons.arrow_forward_ios_rounded,
-            size: MediaQuery.of(context).size.width * 0.05,
-            color: disable ? Colors.grey : Colors.black,
-          )
-        ],
-      ),
+                )
+              : Text(
+                  title,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        color: disable
+                            ? AppColors.shadowWarm.withOpacity(0.4)
+                            : AppColors.shadowWarm,
+                      ),
+                ),
+        ),
+        const SizedBox(width: AppSpacing.sm),
+        Icon(
+          Icons.arrow_forward_ios_rounded,
+          size: 18,
+          color: disable
+              ? AppColors.shadowWarm.withOpacity(0.3)
+              : AppColors.shadowWarm.withOpacity(0.5),
+        )
+      ],
     ),
   );
 }
@@ -286,7 +269,8 @@ Widget headerItem(
   bool isPattient,
   BegginCubit userProvider,
 ) {
-  return InkWell(
+  final ColorScheme scheme = Theme.of(context).colorScheme;
+  return AppCard(
     onTap: () {
       Navigator.push(
         context,
@@ -300,43 +284,45 @@ Widget headerItem(
         ),
       );
     },
-    child: Container(
-      padding: const EdgeInsets.all(5),
-      child: Row(
-        children: [
-          Icon(
-            Icons.person,
-            size: MediaQuery.of(context).size.width * 0.12,
+    child: Row(
+      children: [
+        CircleAvatar(
+          radius: 28,
+          backgroundColor: scheme.primaryContainer,
+          child: Icon(Icons.person_rounded, color: scheme.primary, size: 28),
+        ),
+        const SizedBox(width: AppSpacing.md),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                textToUpperCateFirstLetter(isPattient
+                    ? patientModel!.name ?? ""
+                    : specialistModel!.name ?? ""),
+                style: Theme.of(context)
+                    .textTheme
+                    .titleLarge
+                    ?.copyWith(color: AppColors.shadowWarm),
+              ),
+              Text(
+                isPattient
+                    ? patientModel!.email ?? ''
+                    : specialistModel!.email ?? '',
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: AppColors.shadowWarm.withOpacity(0.7),
+                    ),
+              ),
+            ],
           ),
-          SizedBox(width: MediaQuery.of(context).size.width * 0.05),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  textToUpperCateFirstLetter(isPattient
-                      ? patientModel!.name ?? ""
-                      : specialistModel!.name ?? ""),
-                  style: TextStyle(
-                      fontSize: MediaQuery.of(context).size.width * 0.05),
-                ),
-                Text(
-                  isPattient
-                      ? patientModel!.email ?? ''
-                      : specialistModel!.email ?? '',
-                  style: TextStyle(
-                      fontSize: MediaQuery.of(context).size.width * 0.03),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(width: MediaQuery.of(context).size.width * 0.05),
-          const Icon(
-            Icons.arrow_forward_ios_rounded,
-            size: 30,
-          )
-        ],
-      ),
+        ),
+        const SizedBox(width: AppSpacing.sm),
+        Icon(
+          Icons.arrow_forward_ios_rounded,
+          size: 18,
+          color: AppColors.shadowWarm.withOpacity(0.5),
+        )
+      ],
     ),
   );
 }

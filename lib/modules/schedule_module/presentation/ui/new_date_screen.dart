@@ -24,7 +24,6 @@ class _NewDateScreenState extends State<NewDateScreen> {
   DateTime _selectedDate = DateTime.now();
   DateTime _time = DateTime.now();
   PatientModel? pattient;
-  late UICubit uiProvider;
   SpecialistModel? specialistModel;
   PatientModel? patientModel;
   DateTime actualDate = DateTime.now();
@@ -32,7 +31,6 @@ class _NewDateScreenState extends State<NewDateScreen> {
   @override
   void initState() {
     super.initState();
-    uiProvider = getIt<UICubit>();
     if (widget.isPatient == false) {
       specialistModel = getIt<BegginCubit>().state.specialistModel;
     } else {
@@ -54,7 +52,7 @@ class _NewDateScreenState extends State<NewDateScreen> {
         title: const Text('Nueva cita'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.info),
+            icon: const Icon(Icons.info_outline_rounded),
             onPressed: () async {
               await showMessageDialog(context, "Agendar cita",
                   "Para agendar una cita con un especialista selecciona al de tu preferencia y rellena los campos con la información necesaria. |Recibirás una confirmación por parte del especialista");
@@ -65,12 +63,11 @@ class _NewDateScreenState extends State<NewDateScreen> {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        padding: EdgeInsets.symmetric(
-            horizontal: MediaQuery.of(context).size.width * 0.05),
+        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
         child: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+              const SizedBox(height: AppSpacing.lg),
               widget.isPatient
                   ? specialistWidget(
                       context: context,
@@ -86,128 +83,73 @@ class _NewDateScreenState extends State<NewDateScreen> {
                           pattient = patient;
                         });
                       }),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+              const SizedBox(height: AppSpacing.xl),
               Row(
                 children: [
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).primaryColor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    onPressed: () async {
-                      await showTableCaledarBottomSheet(
-                        context: context,
-                        initialDate: _selectedDate,
-                        onDaySelected: (DateTime selectedDay) {
-                          setState(() {
-                            _selectedDate = selectedDay;
-                          });
-                        },
-                      );
-                    },
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.calendar_today,
-                        ),
-                        const SizedBox(width: 5),
-                        Text(
+                  Expanded(
+                    child: AppButton(
+                      icon: Icons.calendar_today_rounded,
+                      label:
                           '${_selectedDate.day} de ${Utils.getMonthName(_selectedDate.month)} de ${_selectedDate.year}',
-                          style: TextStyle(
-                            color: uiProvider.state.themes[
-                                        uiProvider.state.selectedTheme] ==
-                                    uiProvider.state.themes[1]
-                                ? Colors.white
-                                : Colors.black,
-                            fontSize: MediaQuery.of(context).size.width * 0.03,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
+                      onPressed: () async {
+                        await showTableCaledarBottomSheet(
+                          context: context,
+                          initialDate: _selectedDate,
+                          onDaySelected: (DateTime selectedDay) {
+                            setState(() {
+                              _selectedDate = selectedDay;
+                            });
+                          },
+                        );
+                      },
                     ),
                   ),
-                  const Spacer(),
-                  ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context).primaryColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      onPressed: () async {
-                        await showTimePicker(
-                          barrierColor: Colors.black.withOpacity(0.5),
-                          helpText: 'Selecciona la hora',
-                          context: context,
-                          initialTime: TimeOfDay.fromDateTime(_time),
-                        ).then((value) {
-                          if (value != null) {
-                            setState(() {
-                              _time = DateTime(
-                                _time.year,
-                                _time.month,
-                                _time.day,
-                                value.hour,
-                                value.minute,
-                              );
-                              //formato de 12 horas y agrega el AM o PM
-                            });
-                          }
-                        });
-                      },
-                      child: Row(
-                        children: [
-                          const Icon(
-                            Icons.access_time,
-                          ),
-                          const SizedBox(width: 5),
-                          Text(
-                            _time.hour > 12
-                                ? '${_time.hour - 12}:${_time.minute.toString().padLeft(2, '0')} PM'
-                                : '${_time.hour}:${_time.minute.toString().padLeft(2, '0')} AM',
-                            style: TextStyle(
-                              color: uiProvider.state.themes[
-                                          uiProvider.state.selectedTheme] ==
-                                      uiProvider.state.themes[1]
-                                  ? Colors.white
-                                  : Colors.black,
-                              fontSize:
-                                  MediaQuery.of(context).size.width * 0.03,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ))
+                  const SizedBox(width: AppSpacing.sm),
+                  AppButton(
+                    icon: Icons.access_time_rounded,
+                    label: _time.hour > 12
+                        ? '${_time.hour - 12}:${_time.minute.toString().padLeft(2, '0')} PM'
+                        : '${_time.hour}:${_time.minute.toString().padLeft(2, '0')} AM',
+                    onPressed: () async {
+                      await showTimePicker(
+                        barrierColor: Colors.black.withOpacity(0.5),
+                        helpText: 'Selecciona la hora',
+                        context: context,
+                        initialTime: TimeOfDay.fromDateTime(_time),
+                      ).then((value) {
+                        if (value != null) {
+                          setState(() {
+                            _time = DateTime(
+                              _time.year,
+                              _time.month,
+                              _time.day,
+                              value.hour,
+                              value.minute,
+                            );
+                            //formato de 12 horas y agrega el AM o PM
+                          });
+                        }
+                      });
+                    },
+                  ),
                 ],
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-              Container(
+              const SizedBox(height: AppSpacing.xl),
+              SizedBox(
                 height: MediaQuery.of(context).size.height * 0.1,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                ),
                 child: TextField(
                   //cuando el texto llega al final del campo de texto, el texto se desplaza hacia arriba
                   maxLines: null,
                   controller: _placeController,
-                  decoration: InputDecoration(
-                    //sin bordes
+                  decoration: const InputDecoration(
                     hintText: 'Lugar',
-                    prefixIcon: const Icon(Icons.place),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
+                    prefixIcon: Icon(Icons.place_rounded),
                   ),
                 ),
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-              Container(
+              const SizedBox(height: AppSpacing.sm),
+              SizedBox(
                   height: MediaQuery.of(context).size.height * 0.3,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
                   child: TextField(
                     //cuando el texto llega al final del campo de texto, el texto se desplaza hacia arriba
                     maxLines: null,
@@ -215,17 +157,15 @@ class _NewDateScreenState extends State<NewDateScreen> {
                     textAlign: TextAlign.start,
                     textAlignVertical: TextAlignVertical.top,
                     controller: _descriptionController,
-                    decoration: InputDecoration(
-                      //sin bordes
+                    decoration: const InputDecoration(
                       hintText: 'Descripción (Opcional)',
-
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
                     ),
                   )),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-              ElevatedButton(
+              const SizedBox(height: AppSpacing.xl),
+              AppButton(
+                  expand: true,
+                  isLoading: isLoading,
+                  label: 'Guardar',
                   onPressed: () async {
                     if (widget.isPatient == true &&
                         patientModel!.specialist == null) {
@@ -332,24 +272,8 @@ class _NewDateScreenState extends State<NewDateScreen> {
                     });
 
                     if (context.mounted) Navigator.pop(context);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 100, vertical: 5),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-                  child: isLoading
-                      ? const CircularProgressIndicator(color: Colors.white)
-                      : const Text(
-                          'Guardar',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                          ),
-                        )),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                  }),
+              const SizedBox(height: AppSpacing.xl),
             ],
           ),
         ),
@@ -373,16 +297,12 @@ Widget pattientPicker(
   final pattients = context.watch<PattientsCubit>().state.patients;
 
   if (pattients.isEmpty) {
-    return const SizedBox(
-        child: Center(
-      child: Padding(
-        padding: EdgeInsets.all(20.0),
-        child: Text(
-          'Aún no tienes pacientes asignados, puedes dirigirte a la sección de configuración para ver tu código de vinculación y compartirlo con tus pacientes.',
-          textAlign: TextAlign.center,
-        ),
-      ),
-    ));
+    return const AppEmptyState(
+      icon: Icons.people_outline_rounded,
+      title: 'Aún no tienes pacientes',
+      message:
+          'Puedes dirigirte a la sección de configuración para ver tu código de vinculación y compartirlo con tus pacientes.',
+    );
   }
 
   return SizedBox(
@@ -391,25 +311,22 @@ Widget pattientPicker(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Cita para: ",
-          style: TextStyle(
-            fontSize: MediaQuery.of(context).size.width * 0.04,
-            fontWeight: FontWeight.bold,
-          ),
+          "Cita para:",
+          style: Theme.of(context)
+              .textTheme
+              .titleMedium
+              ?.copyWith(color: AppColors.shadowWarm),
         ),
-        SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+        const SizedBox(height: AppSpacing.xs),
         Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(
-              color: const Color.fromARGB(255, 0, 0, 0),
-              width: 1,
-            ),
+            borderRadius: BorderRadius.circular(AppRadius.md),
+            border: Border.all(color: AppColors.shadowWarm.withOpacity(0.2)),
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
           child: DropdownButton<int>(
             hint: Text(patient?.name ?? 'Selecciona un paciente'),
-            underline: Container(),
+            underline: const SizedBox.shrink(),
             isExpanded: true,
             items: pattients
                 .map((e) => DropdownMenuItem<int>(

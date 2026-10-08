@@ -21,7 +21,7 @@ class _TestHistoryItemsScreenState extends State<TestHistoryItemsScreen> {
       body: Container(
           width: double.infinity,
           height: double.infinity,
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(AppSpacing.lg),
           child: ListView.builder(
             itemCount: widget.test.testInfoList.length,
             itemBuilder: (context, index) {
@@ -32,7 +32,7 @@ class _TestHistoryItemsScreenState extends State<TestHistoryItemsScreen> {
                     widget.test.testInfoList[index],
                     widget.onTap,
                   ),
-                  const SizedBox(height: 15),
+                  const SizedBox(height: AppSpacing.sm),
                 ],
               );
             },
@@ -46,52 +46,48 @@ Widget testHistoryItem(
   TestInfoModel testInfo,
   Function(TestInfoModel) onTap,
 ) {
-  return GestureDetector(
-    onTap: () {
-      onTap(testInfo);
-    },
-    child: Container(
-      decoration: BoxDecoration(
-        color: testHistoryColors[testInfo.resultado],
-        borderRadius: BorderRadius.circular(15),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 5,
-            offset: Offset(0, 5),
+  final Color background = testHistoryColors[testInfo.resultado]!;
+  return AppCard(
+    onTap: () => onTap(testInfo),
+    color: background.withOpacity(0.18),
+    padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.lg, vertical: AppSpacing.md),
+    child: Row(
+      children: [
+        Container(
+          width: 10,
+          height: 40,
+          decoration: BoxDecoration(
+            color: background,
+            borderRadius: BorderRadius.circular(AppRadius.sm),
           ),
-        ],
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-      margin: const EdgeInsets.all(5),
-      child: Row(
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(testInfo.resultado,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: MediaQuery.of(context).size.width * 0.025,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  )),
-              const SizedBox(
-                height: 10,
-              ),
-              Text(
-                "${testInfo.date.day}/${testInfo.date.month}/${testInfo.date.year}",
-              ),
-            ],
-          ),
-          const Spacer(),
-          Icon(
-            Icons.arrow_forward_ios,
-            color: Colors.black,
-            size: MediaQuery.of(context).size.width * 0.03,
-          )
-        ],
-      ),
+        ),
+        const SizedBox(width: AppSpacing.md),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(testInfo.resultado,
+                style: Theme.of(context)
+                    .textTheme
+                    .titleMedium
+                    ?.copyWith(color: AppColors.shadowWarm)),
+            const SizedBox(height: AppSpacing.xs),
+            Text(
+              "${testInfo.date.day}/${testInfo.date.month}/${testInfo.date.year}",
+              style: Theme.of(context)
+                  .textTheme
+                  .bodySmall
+                  ?.copyWith(color: AppColors.shadowWarm.withOpacity(0.7)),
+            ),
+          ],
+        ),
+        const Spacer(),
+        Icon(
+          Icons.arrow_forward_ios_rounded,
+          color: AppColors.shadowWarm.withOpacity(0.5),
+          size: 16,
+        )
+      ],
     ),
   );
 }

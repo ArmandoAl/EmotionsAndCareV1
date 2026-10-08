@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../config/theme/app_colors.dart';
+import '../config/theme/app_shadows.dart';
+import '../config/theme/app_spacing.dart';
+
 Widget communityMenuItem(
   BuildContext context,
   String title,
@@ -10,18 +14,11 @@ Widget communityMenuItem(
     onTap: onTap,
     child: Container(
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(30),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 5,
-            offset: Offset(0, 5),
-          ),
-        ],
+        color: Theme.of(context).colorScheme.surface,
+        borderRadius: BorderRadius.circular(AppRadius.xl),
+        boxShadow: AppShadows.card,
       ),
-      padding: EdgeInsets.symmetric(
-          vertical: MediaQuery.of(context).size.height * 0.01),
+      padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -30,13 +27,13 @@ Widget communityMenuItem(
             title,
             textAlign: TextAlign.center,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-                fontSize: MediaQuery.of(context).size.height * 0.025,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-                decoration: TextDecoration.none),
+            style: Theme.of(context)
+                .textTheme
+                .titleMedium
+                ?.copyWith(color: AppColors.shadowWarm),
           ),
-          const Icon(Icons.arrow_forward_ios)
+          Icon(Icons.arrow_forward_ios_rounded,
+              color: AppColors.shadowWarm.withOpacity(0.5)),
         ],
       ),
     ),

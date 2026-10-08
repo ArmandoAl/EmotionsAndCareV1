@@ -1,5 +1,6 @@
 import 'package:lottie/lottie.dart';
 import '../../../../helpers/paths.dart';
+import '../../../../widgets/header_specialist_widget.dart';
 
 class PatientDetail extends StatefulWidget {
   final PatientModel patient;
@@ -16,19 +17,17 @@ class _PatientDetailState extends State<PatientDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const HeaderWidget(
+      appBar: HeaderSpecialistWidget(
         title: '',
         isForReturn: true,
+        context: context,
       ),
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: const BoxDecoration(
-          color: Color(0xFFE3EDF3),
-        ),
-        padding: EdgeInsets.symmetric(
-            horizontal: MediaQuery.of(context).size.width * 0.05,
-            vertical: MediaQuery.of(context).size.height * 0.02),
+        color: Theme.of(context).colorScheme.surface,
+        padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.lg, vertical: AppSpacing.md),
         child: Column(
           children: [
             Expanded(
@@ -39,90 +38,50 @@ class _PatientDetailState extends State<PatientDetail> {
                   children: [
                     Text(
                       widget.patient.name!,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: MediaQuery.of(context).size.width * 0.06,
-                        fontWeight: FontWeight.bold,
-                        decoration: TextDecoration.none,
-                      ),
+                      style: Theme.of(context)
+                          .textTheme
+                          .headlineSmall
+                          ?.copyWith(color: AppColors.shadowWarm),
                     ),
                     Text(
                       "Vinculado desde: ***",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: MediaQuery.of(context).size.width * 0.04,
-                        fontWeight: FontWeight.bold,
-                        decoration: TextDecoration.none,
-                      ),
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(color: AppColors.shadowWarm.withOpacity(0.7)),
                     ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.01,
-                    ),
+                    const SizedBox(height: AppSpacing.sm),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.1,
+                        Icon(Icons.cake_rounded,
+                            color: Theme.of(context).colorScheme.primary,
+                            size: 20),
+                        const SizedBox(width: AppSpacing.xs),
+                        Text(
+                          "${widget.patient.age} años",
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleSmall
+                              ?.copyWith(color: AppColors.shadowWarm),
                         ),
-                        Expanded(
-                          child: Row(
-                            children: [
-                              const Icon(
-                                Icons.person,
-                                color: Colors.black,
-                              ),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.05,
-                              ),
-                              Text(
-                                widget.patient.age.toString(),
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize:
-                                      MediaQuery.of(context).size.width * 0.04,
-                                  fontWeight: FontWeight.bold,
-                                  decoration: TextDecoration.none,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.015,
-                        ),
-                        Expanded(
-                          child: Row(
-                            children: [
-                              //genero
-                              const Icon(
-                                Icons.person,
-                                color: Colors.black,
-                              ),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.05,
-                              ),
-                              Text(
-                                widget.patient.sex!,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize:
-                                      MediaQuery.of(context).size.width * 0.04,
-                                  fontWeight: FontWeight.bold,
-                                  decoration: TextDecoration.none,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.1,
+                        const SizedBox(width: AppSpacing.lg),
+                        Icon(Icons.wc_rounded,
+                            color: Theme.of(context).colorScheme.primary,
+                            size: 20),
+                        const SizedBox(width: AppSpacing.xs),
+                        Text(
+                          widget.patient.sex!,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleSmall
+                              ?.copyWith(color: AppColors.shadowWarm),
                         ),
                       ],
                     ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.05,
-                    ),
+                    const SizedBox(height: AppSpacing.xl),
                     SizedBox(
                       width: double.infinity,
                       child: Column(
@@ -130,82 +89,60 @@ class _PatientDetailState extends State<PatientDetail> {
                         children: [
                           Row(
                             children: [
-                              const Icon(
-                                Icons.mail_rounded,
-                                color: Colors.black,
-                              ),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.05,
-                              ),
+                              Icon(Icons.mail_rounded,
+                                  color: Theme.of(context).colorScheme.primary),
+                              const SizedBox(width: AppSpacing.sm),
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
                                       "Correo electrónico",
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize:
-                                            MediaQuery.of(context).size.width *
-                                                0.04,
-                                        fontWeight: FontWeight.bold,
-                                        decoration: TextDecoration.none,
-                                      ),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelLarge
+                                          ?.copyWith(
+                                              color: AppColors.shadowWarm
+                                                  .withOpacity(0.7)),
                                     ),
                                     Text(
                                       widget.patient.email!,
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize:
-                                            MediaQuery.of(context).size.width *
-                                                0.04,
-                                        fontWeight: FontWeight.w600,
-                                        decoration: TextDecoration.none,
-                                      ),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge
+                                          ?.copyWith(color: AppColors.shadowWarm),
                                     ),
                                   ],
                                 ),
                               ),
                             ],
                           ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.01,
-                          ),
+                          const SizedBox(height: AppSpacing.sm),
                           Row(
                             children: [
-                              const Icon(
-                                Icons.phone,
-                                color: Colors.black,
-                              ),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.05,
-                              ),
+                              Icon(Icons.phone_rounded,
+                                  color: Theme.of(context).colorScheme.primary),
+                              const SizedBox(width: AppSpacing.sm),
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
                                       "Teléfono",
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize:
-                                            MediaQuery.of(context).size.width *
-                                                0.04,
-                                        fontWeight: FontWeight.bold,
-                                        decoration: TextDecoration.none,
-                                      ),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelLarge
+                                          ?.copyWith(
+                                              color: AppColors.shadowWarm
+                                                  .withOpacity(0.7)),
                                     ),
                                     Text(
                                       widget.patient.phone!,
                                       overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize:
-                                            MediaQuery.of(context).size.width *
-                                                0.04,
-                                        fontWeight: FontWeight.w600,
-                                        decoration: TextDecoration.none,
-                                      ),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge
+                                          ?.copyWith(color: AppColors.shadowWarm),
                                     ),
                                   ],
                                 ),
@@ -215,9 +152,7 @@ class _PatientDetailState extends State<PatientDetail> {
                         ],
                       ),
                     ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.05,
-                    ),
+                    const SizedBox(height: AppSpacing.xl),
                     //     Column(
                     //       crossAxisAlignment: CrossAxisAlignment.start,
                     //       children: [
@@ -333,7 +268,9 @@ class _PatientDetailState extends State<PatientDetail> {
               children: [
                 SizedBox(
                   width: double.infinity,
-                  child: ElevatedButton(
+                  child: AppButton.secondary(
+                    isLoading: isloading,
+                    label: 'Diario',
                     onPressed: () async {
                       Navigator.push(
                           context,
@@ -343,45 +280,14 @@ class _PatientDetailState extends State<PatientDetail> {
                                   changeIndex: null,
                                   isPattient: false)));
                     },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context)
-                          .scaffoldBackgroundColor
-                          .withOpacity(0.9),
-
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          side: BorderSide(
-                            color: Theme.of(context).colorScheme.primary,
-                          )),
-                      elevation: 1,
-                      padding: EdgeInsets.symmetric(
-                        vertical: MediaQuery.of(context).size.height * 0.01,
-                      ),
-                      //add a border here with color black
-                    ),
-                    child: isloading
-                        ? const CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              Colors.black,
-                            ),
-                          )
-                        : Text(
-                            'Diario',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize:
-                                  MediaQuery.of(context).size.width * 0.04,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
                   ),
                 ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.01,
-                ),
+                const SizedBox(height: AppSpacing.sm),
                 SizedBox(
                   width: double.infinity,
-                  child: ElevatedButton(
+                  child: AppButton(
+                    isLoading: aceptedLoading,
+                    label: 'Cuestionarios',
                     onPressed: () async {
                       context.read<TestCubit>().getTest(widget.patient.id!);
 
@@ -391,13 +297,12 @@ class _PatientDetailState extends State<PatientDetail> {
                           bloc: context.read<TestCubit>(),
                           builder: (context, state) {
                             if (state.status == TestStatus.error) {
-                              return const Scaffold(
-                                body: Center(
-                                  child: Text(
-                                      'Error al cargar las pruebas, intente de nuevo haciendo scroll hacia abajo',
-                                      style: TextStyle(
-                                          color: Colors.red,
-                                          decoration: TextDecoration.none)),
+                              return Scaffold(
+                                body: AppErrorState(
+                                  message: 'No pudimos cargar los cuestionarios.',
+                                  onRetry: () => context
+                                      .read<TestCubit>()
+                                      .getTest(widget.patient.id!),
                                 ),
                               );
                             }
@@ -443,36 +348,9 @@ class _PatientDetailState extends State<PatientDetail> {
                         );
                       }));
                     },
-                    style: ElevatedButton.styleFrom(
-                      elevation: 1,
-                      backgroundColor: Theme.of(context).colorScheme.primary,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      padding: EdgeInsets.symmetric(
-                        vertical: MediaQuery.of(context).size.height * 0.01,
-                      ),
-                    ),
-                    child: aceptedLoading
-                        ? const CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              Colors.white,
-                            ),
-                          )
-                        : Text(
-                            'Cuestionarios',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize:
-                                  MediaQuery.of(context).size.width * 0.04,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
                   ),
                 ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.03,
-                ),
+                const SizedBox(height: AppSpacing.lg),
               ],
             ),
           ],

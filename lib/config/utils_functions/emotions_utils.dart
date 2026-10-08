@@ -9,11 +9,12 @@ const emotionIcons = {
   "Disgusto": "🤢",
 };
 
+// Paleta armonizada con lib/config/theme/app_colors.dart ("Jardín editorial").
 const emotionColors = {
-  "Alegría": Color(0xffFFFF80),
-  "Tristeza": Color(0xffC0D6E8),
-  "Enojo": Color(0xffFF6B6B),
-  "Miedo": Color(0xffD895DA),
-  "Sorpresa": Color(0xffFF9B50),
-  "Disgusto": Color(0xffBACD92),
+  "Alegría": Color(0xffE8B23D),
+  "Tristeza": Color(0xff6C87A8),
+  "Enojo": Color(0xffC1543A),
+  "Miedo": Color(0xff7B6A9C),
+  "Sorpresa": Color(0xffD98C4A),
+  "Disgusto": Color(0xff7A8F5C),
 };

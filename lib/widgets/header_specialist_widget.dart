@@ -18,59 +18,50 @@ class HeaderSpecialistWidget extends StatefulWidget
   State<HeaderSpecialistWidget> createState() => _HeaderSpecialistWidgetState();
 
   @override
-  Size get preferredSize => Size.fromHeight(
-        MediaQuery.of(context).size.height * 0.1,
-      );
+  Size get preferredSize => const Size.fromHeight(84);
 }
 
 class _HeaderSpecialistWidgetState extends State<HeaderSpecialistWidget>
     with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).scaffoldBackgroundColor,
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.grey,
-            blurRadius: 5.0,
-          ),
-        ],
+        boxShadow: AppShadows.soft,
+        borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(AppRadius.sm),
+          bottomRight: Radius.circular(AppRadius.sm),
+        ),
       ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Row(
-            children: [
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.02,
-              ),
-              widget.isForReturn
-                  ? IconButton(
-                      icon: const Icon(Icons.arrow_back_rounded),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    )
-                  : const SizedBox(),
-              const Spacer(),
-              widget.actions != null
-                  ? Row(
-                      children: widget.actions!,
-                    )
-                  : const SizedBox(),
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.02,
-              ),
-            ],
-          ),
-          Text(widget.title,
-              style:
-                  const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.01,
-          ),
-        ],
+      child: SafeArea(
+        bottom: false,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Row(
+              children: [
+                const SizedBox(width: AppSpacing.sm),
+                widget.isForReturn
+                    ? IconButton(
+                        icon: Icon(Icons.arrow_back_rounded, color: scheme.onSurface),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      )
+                    : const SizedBox(width: AppSpacing.xl),
+                const Spacer(),
+                if (widget.actions != null) Row(children: widget.actions!),
+                const SizedBox(width: AppSpacing.sm),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: AppSpacing.md),
+              child: Text(widget.title, style: Theme.of(context).textTheme.titleLarge),
+            ),
+          ],
+        ),
       ),
     );
   }

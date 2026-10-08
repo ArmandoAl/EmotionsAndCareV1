@@ -39,12 +39,20 @@ class _UserCartsControllerState extends State<UserCartsController> {
       builder: (context, state) {
         if (state.status == CommunityStatus.loading) {
           return const Scaffold(
-            body: SizedBox(
-              width: double.infinity,
-              height: double.infinity,
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
+            body: Center(child: AppLoadingIndicator()),
+          );
+        }
+
+        if (state.status == CommunityStatus.error) {
+          return Scaffold(
+            appBar: const HeaderWidget(title: "", isForReturn: true),
+            body: AppErrorState(
+              message: 'No pudimos cargar tu buzón.',
+              onRetry: () => context.read<CommunityCubit>().getCartFromUser(
+                  widget.isPatient
+                      ? widget.patientModel!.id!
+                      : widget.specialistModel!.id!,
+                  widget.isPatient),
             ),
           );
         }
