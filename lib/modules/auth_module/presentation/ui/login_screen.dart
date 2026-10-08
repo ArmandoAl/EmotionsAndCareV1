@@ -1,6 +1,9 @@
 import 'package:emotions_and_care_v1/modules/auth_module/presentation/ui/forgot_password_screen.dart';
 import 'package:flutter/material.dart';
 import '../../../../config/assets/assets.dart';
+import '../../../../config/theme/app_colors.dart';
+import '../../../../config/theme/app_spacing.dart';
+import '../../../../widgets/design_system/app_button.dart';
 
 class LoginScreen extends StatefulWidget {
   final Future<void> Function(
@@ -44,7 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
           width: double.infinity,
           height: double.infinity,
           decoration: const BoxDecoration(
-            color: Color(0xff1C8AAD),
+            color: AppColors.dayPrimary,
           ),
           child: Column(
             children: [
@@ -60,7 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Container(
                   width: double.infinity,
                   decoration: const BoxDecoration(
-                    color: Color(0xffE3EDF3),
+                    color: AppColors.daySurface,
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(60),
                       topRight: Radius.circular(60),
@@ -68,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   padding: EdgeInsets.symmetric(
                       horizontal: MediaQuery.of(context).size.width * 0.1,
-                      vertical: 10),
+                      vertical: AppSpacing.sm),
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
@@ -78,7 +81,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             context,
                             emailController,
                             'Correo electrónico',
-                            const Icon(Icons.email, color: Colors.black),
+                            const Icon(Icons.email_rounded,
+                                color: AppColors.shadowWarm),
                             null, () {
                           setState(() {
                             isPasswordVisible = !isPasswordVisible;
@@ -90,14 +94,14 @@ class _LoginScreenState extends State<LoginScreen> {
                             context,
                             passwordController,
                             'Contraseña',
-                            const Icon(Icons.lock, color: Colors.black),
+                            const Icon(Icons.lock_rounded,
+                                color: AppColors.shadowWarm),
                             isPasswordVisible, () {
                           setState(() {
                             isPasswordVisible = !isPasswordVisible;
                           });
                         }, TextInputType.visiblePassword),
-                        SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.01),
+                        const SizedBox(height: AppSpacing.xs),
                         Row(
                           children: [
                             const Spacer(),
@@ -127,14 +131,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                 );
                               },
                               child: Text('¿Olvidaste tu contraseña?',
-                                  style: TextStyle(
-                                      fontFamily:
-                                          'Gilroy', // Usa la fuente personalizada
-                                      fontWeight: FontWeight.w600,
-                                      fontSize:
-                                          MediaQuery.of(context).size.width *
-                                              0.03,
-                                      color: Colors.black)),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelLarge
+                                      ?.copyWith(color: AppColors.shadowWarm)),
                             ),
                           ],
                         ),
@@ -148,19 +148,20 @@ class _LoginScreenState extends State<LoginScreen> {
                                   });
                                 }),
                             Text('Recordar contraseña',
-                                style: TextStyle(
-                                    fontSize:
-                                        MediaQuery.of(context).size.width *
-                                            0.03,
-                                    color: Colors.black)),
+                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                      color: AppColors.shadowWarm,
+                                    )),
                           ],
                         ),
                         SizedBox(
                           width: double.infinity,
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 20.0, vertical: 10),
-                            child: ElevatedButton(
+                                horizontal: AppSpacing.lg, vertical: AppSpacing.sm),
+                            child: AppButton(
+                              expand: true,
+                              isLoading: isLoading,
+                              label: 'Iniciar sesión',
                               onPressed: () async {
                                 setState(() {
                                   isLoading = true;
@@ -173,56 +174,43 @@ class _LoginScreenState extends State<LoginScreen> {
                                   isLoading = false;
                                 });
                               },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xff1C8AAD),
-                              ),
-                              child: isLoading
-                                  ? const CircularProgressIndicator(
-                                      color: Colors.white,
-                                    )
-                                  : const Text(
-                                      'Iniciar sesión',
-                                      style: TextStyle(
-                                        fontFamily:
-                                            'Gilroy', // Usa la fuente personalizada
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                        fontSize: 20,
-                                      ),
-                                    ),
                             ),
                           ),
                         ),
-                        const Row(children: [
-                          Expanded(child: Divider()),
+                        Row(children: [
+                          const Expanded(child: Divider()),
                           Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 10),
-                            child: Text('O'),
+                            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
+                            child: Text('O',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(color: AppColors.shadowWarm)),
                           ),
-                          Expanded(child: Divider()),
+                          const Expanded(child: Divider()),
                         ]),
-                        SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.01),
+                        const SizedBox(height: AppSpacing.xs),
                         Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               const Spacer(),
                               Text('¿Eres nuevo? ',
-                                  style: TextStyle(
-                                      fontSize:
-                                          MediaQuery.of(context).size.width *
-                                              0.045,
-                                      color: Colors.black)),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleSmall
+                                      ?.copyWith(color: AppColors.shadowWarm)),
                               GestureDetector(
                                 onTap: () {
                                   widget.onRegister();
                                 },
                                 child: Text('Regístrate',
-                                    style: TextStyle(
-                                        fontSize:
-                                            MediaQuery.of(context).size.width *
-                                                0.045,
-                                        color: const Color(0xff1C8AAD))),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleSmall
+                                        ?.copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary)),
                               ),
                               const Spacer(),
                             ]),
@@ -251,15 +239,14 @@ Widget _customTextFieldWidget(
         Row(
           children: [
             Text(hintText,
-                style: TextStyle(
-                    fontFamily: 'Gilroy', // Usa la fuente personalizada
-                    fontWeight: FontWeight.w600, // Gilroy-Regular
-                    fontSize: MediaQuery.of(context).size.width * 0.04,
-                    color: Colors.black)),
+                style: Theme.of(context)
+                    .textTheme
+                    .labelLarge
+                    ?.copyWith(color: AppColors.shadowWarm)),
             const Spacer()
           ],
         ),
-        SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+        const SizedBox(height: AppSpacing.xs),
         Row(
           children: [
             Expanded(
@@ -267,12 +254,16 @@ Widget _customTextFieldWidget(
                 keyboardType: type,
                 obscureText: oscureText ?? false,
                 controller: controller,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyLarge
+                    ?.copyWith(color: AppColors.shadowWarm),
                 decoration: InputDecoration(
                   fillColor: Colors.transparent,
                   filled: true,
                   //just border in the bottom of the textfield
-                  border: const UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black),
+                  border: UnderlineInputBorder(
+                    borderSide: BorderSide(color: AppColors.shadowWarm.withOpacity(0.3)),
                   ),
                   icon: icon,
                 ),
@@ -284,8 +275,10 @@ Widget _customTextFieldWidget(
                       onTap();
                     },
                     icon: Icon(
-                      oscureText ? Icons.visibility_off : Icons.visibility,
-                      color: Colors.black,
+                      oscureText
+                          ? Icons.visibility_off_rounded
+                          : Icons.visibility_rounded,
+                      color: AppColors.shadowWarm,
                     ),
                   )
                 : const SizedBox(

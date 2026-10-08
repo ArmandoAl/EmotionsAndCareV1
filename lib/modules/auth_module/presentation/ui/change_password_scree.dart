@@ -28,42 +28,40 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Text(
-                'Agrega tu nueva contraseña',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 20),
-              Container(
-                width: MediaQuery.of(context).size.width * 0.9,
-                height: MediaQuery.of(context).size.height * 0.1,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+                child: Text(
+                  'Agrega tu nueva contraseña',
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleLarge
+                      ?.copyWith(color: AppColors.shadowWarm),
                 ),
+              ),
+              const SizedBox(height: AppSpacing.lg),
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.9,
                 child: TextField(
                   controller: controller,
                   decoration: const InputDecoration(
                     labelText: 'Nueva contraseña',
-                    border: OutlineInputBorder(),
                   ),
                 ),
               ),
-              const SizedBox(height: 10),
-              Container(
+              const SizedBox(height: AppSpacing.sm),
+              SizedBox(
                 width: MediaQuery.of(context).size.width * 0.9,
-                height: MediaQuery.of(context).size.height * 0.1,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                ),
                 child: TextField(
                   controller: controller2,
                   decoration: const InputDecoration(
                     labelText: 'Repite la nueva contraseña',
-                    border: OutlineInputBorder(),
                   ),
                 ),
               ),
-              const SizedBox(height: 10),
-              ElevatedButton(
+              const SizedBox(height: AppSpacing.sm),
+              AppButton(
+                label: 'Cambiar contraseña',
                 onPressed: () async {
                   if (controller.text.isEmpty || controller2.text.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -108,11 +106,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     }
                   }
                 },
-                child: const Text('Cambiar contraseña',
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white)),
               )
             ],
           ),

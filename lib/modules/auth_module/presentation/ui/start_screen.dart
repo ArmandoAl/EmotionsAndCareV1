@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../../config/assets/assets.dart';
+import '../../../../config/theme/app_colors.dart';
+import '../../../../config/theme/app_spacing.dart';
 
 class StartScreen extends StatefulWidget {
   final void Function() onTap;
@@ -17,7 +19,7 @@ class _StartScreenState extends State<StartScreen> {
       height: double.infinity,
       width: double.infinity,
       decoration: const BoxDecoration(
-        color: Color(0xff1C8AAD),
+        color: AppColors.dayPrimary,
       ),
       child: Stack(
         children: [
@@ -29,14 +31,14 @@ class _StartScreenState extends State<StartScreen> {
                 width: MediaQuery.of(context).size.width * 0.3,
                 height: MediaQuery.of(context).size.height * 0.15,
                 decoration: BoxDecoration(
-                    color: const Color(0xffFF7987).withOpacity(0.5),
+                    color: AppColors.daySecondary.withOpacity(0.5),
                     borderRadius: const BorderRadius.only(
                       bottomLeft: Radius.circular(20),
                       bottomRight: Radius.circular(100),
                     ),
                     boxShadow: const [
                       BoxShadow(
-                        color: Color(0xffFF7987),
+                        color: AppColors.daySecondary,
                         blurRadius: 15,
                         spreadRadius: 10,
                       )
@@ -49,14 +51,14 @@ class _StartScreenState extends State<StartScreen> {
                 width: MediaQuery.of(context).size.width * 0.3,
                 height: MediaQuery.of(context).size.height * 0.1,
                 decoration: BoxDecoration(
-                    color: const Color(0xffFF7987).withOpacity(0.5),
+                    color: AppColors.dayTertiary.withOpacity(0.5),
                     borderRadius: const BorderRadius.only(
                       bottomLeft: Radius.circular(30),
                       topLeft: Radius.circular(50),
                     ),
                     boxShadow: const [
                       BoxShadow(
-                        color: Color(0xffFF7987),
+                        color: AppColors.dayTertiary,
                         blurRadius: 15,
                         spreadRadius: 10,
                       )
@@ -64,7 +66,7 @@ class _StartScreenState extends State<StartScreen> {
               )),
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(AppSpacing.lg),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -73,10 +75,10 @@ class _StartScreenState extends State<StartScreen> {
                     const Spacer(),
                     Container(
                         width: MediaQuery.of(context).size.width * 0.4,
-                        padding: const EdgeInsets.all(10),
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.only(
+                        padding: const EdgeInsets.all(AppSpacing.sm),
+                        decoration: BoxDecoration(
+                          color: AppColors.daySurface,
+                          borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(50),
                             bottomLeft: Radius.zero,
                             bottomRight: Radius.circular(50),
@@ -84,7 +86,7 @@ class _StartScreenState extends State<StartScreen> {
                           ),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black12,
+                              color: AppColors.shadowWarm.withOpacity(0.1),
                               blurRadius: 10,
                               spreadRadius: 5,
                             )
@@ -93,19 +95,15 @@ class _StartScreenState extends State<StartScreen> {
                         child: Text(
                           '¡Te damos la bienvenida a Emotions&Care!',
                           textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.width * 0.04,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                            decoration: TextDecoration.none,
-                          ),
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium
+                              ?.copyWith(color: AppColors.shadowWarm),
                         )),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.05,
-                    ),
+                    const SizedBox(width: AppSpacing.lg),
                   ],
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: AppSpacing.xl),
                 Container(
                   width: MediaQuery.of(context).size.width * 0.5,
                   height: MediaQuery.of(context).size.height * 0.2,
@@ -119,26 +117,25 @@ class _StartScreenState extends State<StartScreen> {
                 SizedBox(height: MediaQuery.of(context).size.height * 0.05),
                 Text("¡Estamos aquí para apoyarte en cada paso del camino!",
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: MediaQuery.of(context).size.width * 0.05,
-                      color: Colors.white,
-                      decoration: TextDecoration.none,
-                    )),
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          color: Colors.white,
+                        )),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.05),
                 ElevatedButton(
                   onPressed: widget.onTap,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    elevation: 10,
+                    backgroundColor: AppColors.daySurface,
+                    foregroundColor: AppColors.dayPrimary,
+                    elevation: 6,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: AppSpacing.xxl, vertical: AppSpacing.md),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 50),
-                    child: Text('Iniciar',
-                        style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.width * 0.06,
-                            color: const Color(0xff2CB5E0))),
-                  ),
-                )
+                  child: Text('Iniciar',
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleMedium
+                          ?.copyWith(color: AppColors.dayPrimary)),
+                ),
               ],
             ),
           ),
