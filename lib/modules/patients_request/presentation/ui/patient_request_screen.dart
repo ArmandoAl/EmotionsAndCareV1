@@ -33,17 +33,24 @@ class _PatientRequestScreenState extends State<PatientRequestScreen> {
                 .read<PatientsRequestCubit>()
                 .getPatientsRequestList(widget.userId);
           },
-          child: Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-            child: ListView(
-              children: itemsRequestList(
-                context,
-                widget.patientsRequest,
-                widget.onItemTap,
-              ),
-            ),
-          ),
+          child: widget.patientsRequest.isEmpty
+              ? const AppEmptyState(
+                  icon: Icons.group_add_rounded,
+                  title: 'Sin solicitudes pendientes',
+                  message:
+                      'Cuando un paciente solicite vincularse, aparecerá aquí.',
+                )
+              : Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: AppSpacing.sm, vertical: AppSpacing.xs),
+                  child: ListView(
+                    children: itemsRequestList(
+                      context,
+                      widget.patientsRequest,
+                      widget.onItemTap,
+                    ),
+                  ),
+                ),
         ),
       ),
     );
@@ -54,9 +61,7 @@ List<Widget> itemsRequestList(BuildContext context,
     List<PatientRequest> patientsRequest, Function onTap) {
   final List<Widget> items = [];
 
-  items.add(SizedBox(
-    height: MediaQuery.of(context).size.height * 0.02,
-  ));
+  items.add(const SizedBox(height: AppSpacing.sm));
   for (final PatientRequest patientRequest in patientsRequest) {
     items.add(containerItem(
       context,
@@ -69,9 +74,7 @@ List<Widget> itemsRequestList(BuildContext context,
       },
     ));
 
-    items.add(SizedBox(
-      height: MediaQuery.of(context).size.height * 0.02,
-    ));
+    items.add(const SizedBox(height: AppSpacing.sm));
   }
   return items;
 }

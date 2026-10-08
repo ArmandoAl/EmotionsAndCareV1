@@ -31,9 +31,22 @@ class _SpecialisPattientsScreenState extends State<SpecialisPattientsScreen> {
           onRefresh: () async {
             context.read<PattientsCubit>().getPattients(widget.userId);
           },
-          child: ListView(
-            children: itemsList(context, widget.pattients, widget.onItemTap),
-          ),
+          child: widget.pattients.isEmpty
+              ? ListView(
+                  children: const [
+                    SizedBox(height: 80),
+                    AppEmptyState(
+                      icon: Icons.people_outline_rounded,
+                      title: 'Aún no tienes pacientes',
+                      message:
+                          'Comparte tu código de vinculación desde configuración para empezar.',
+                    ),
+                  ],
+                )
+              : ListView(
+                  children:
+                      itemsList(context, widget.pattients, widget.onItemTap),
+                ),
         ),
       ),
     );
@@ -44,9 +57,7 @@ List<Widget> itemsList(
     BuildContext context, List<PatientModel> pattients, Function onTap) {
   final List<Widget> list = [];
 
-  list.add(SizedBox(
-    height: MediaQuery.of(context).size.height * 0.02,
-  ));
+  list.add(const SizedBox(height: AppSpacing.sm));
   for (final PatientModel pattient in pattients) {
     list.add(containerItem(
       context,
@@ -59,9 +70,7 @@ List<Widget> itemsList(
       },
     ));
 
-    list.add(SizedBox(
-      height: MediaQuery.of(context).size.height * 0.02,
-    ));
+    list.add(const SizedBox(height: AppSpacing.sm));
   }
   return list;
 }

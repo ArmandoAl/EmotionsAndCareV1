@@ -1,4 +1,5 @@
 import '../../../../helpers/paths.dart';
+import '../../../../widgets/header_specialist_widget.dart';
 import '../logic/patient_request_cubit.dart';
 
 class PatientRequestDetail extends StatefulWidget {
@@ -18,17 +19,16 @@ class _PatientRequestDetailState extends State<PatientRequestDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const HeaderWidget(
+      appBar: HeaderSpecialistWidget(
         title: "",
         isForReturn: true,
+        context: context,
       ),
       body: Container(
-        decoration: const BoxDecoration(
-          color: Color(0xFFE3EDF3),
-        ),
+        color: Theme.of(context).colorScheme.surface,
         width: double.infinity,
         height: double.infinity,
-        padding: const EdgeInsets.all(30),
+        padding: const EdgeInsets.all(AppSpacing.xxl),
         child: Column(
           children: [
             Expanded(
@@ -39,87 +39,50 @@ class _PatientRequestDetailState extends State<PatientRequestDetail> {
                   children: [
                     Text(
                       widget.patientRequest.patient.name!,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: MediaQuery.of(context).size.width * 0.06,
-                        fontWeight: FontWeight.w400,
-                        decoration: TextDecoration.none,
-                      ),
+                      style: Theme.of(context)
+                          .textTheme
+                          .headlineSmall
+                          ?.copyWith(color: AppColors.shadowWarm),
                     ),
                     Text(
                       "Fecha de solicitud: ${widget.patientRequest.date.day}/${widget.patientRequest.date.month}/${widget.patientRequest.date.year}",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: MediaQuery.of(context).size.width * 0.04,
-                        decoration: TextDecoration.none,
-                      ),
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(color: AppColors.shadowWarm.withOpacity(0.7)),
                     ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.01,
-                    ),
+                    const SizedBox(height: AppSpacing.sm),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.1,
+                        Icon(Icons.cake_rounded,
+                            color: Theme.of(context).colorScheme.primary,
+                            size: 20),
+                        const SizedBox(width: AppSpacing.xs),
+                        Text(
+                          "${widget.patientRequest.patient.age} años",
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleSmall
+                              ?.copyWith(color: AppColors.shadowWarm),
                         ),
-                        Expanded(
-                          child: Row(
-                            children: [
-                              const Icon(
-                                Icons.person,
-                                color: Colors.black,
-                              ),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.05,
-                              ),
-                              Text(
-                                widget.patientRequest.patient.age.toString(),
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize:
-                                      MediaQuery.of(context).size.width * 0.04,
-                                  decoration: TextDecoration.none,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.015,
-                        ),
-                        Expanded(
-                          child: Row(
-                            children: [
-                              //genero
-                              const Icon(
-                                Icons.person,
-                                color: Colors.black,
-                              ),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.05,
-                              ),
-                              Text(
-                                widget.patientRequest.patient.sex!,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize:
-                                      MediaQuery.of(context).size.width * 0.04,
-                                  decoration: TextDecoration.none,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.1,
+                        const SizedBox(width: AppSpacing.lg),
+                        Icon(Icons.wc_rounded,
+                            color: Theme.of(context).colorScheme.primary,
+                            size: 20),
+                        const SizedBox(width: AppSpacing.xs),
+                        Text(
+                          widget.patientRequest.patient.sex!,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleSmall
+                              ?.copyWith(color: AppColors.shadowWarm),
                         ),
                       ],
                     ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.05,
-                    ),
+                    const SizedBox(height: AppSpacing.xl),
                     SizedBox(
                       width: double.infinity,
                       child: Column(
@@ -127,80 +90,60 @@ class _PatientRequestDetailState extends State<PatientRequestDetail> {
                         children: [
                           Row(
                             children: [
-                              const Icon(
-                                Icons.mail_rounded,
-                                color: Colors.black,
-                              ),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.05,
-                              ),
+                              Icon(Icons.mail_rounded,
+                                  color: Theme.of(context).colorScheme.primary),
+                              const SizedBox(width: AppSpacing.sm),
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
                                       "Correo electrónico",
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize:
-                                            MediaQuery.of(context).size.width *
-                                                0.04,
-                                        fontWeight: FontWeight.w400,
-                                        decoration: TextDecoration.none,
-                                      ),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelLarge
+                                          ?.copyWith(
+                                              color: AppColors.shadowWarm
+                                                  .withOpacity(0.7)),
                                     ),
                                     Text(
                                       widget.patientRequest.patient.email!,
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize:
-                                            MediaQuery.of(context).size.width *
-                                                0.04,
-                                        decoration: TextDecoration.none,
-                                      ),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge
+                                          ?.copyWith(color: AppColors.shadowWarm),
                                     ),
                                   ],
                                 ),
                               ),
                             ],
                           ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.01,
-                          ),
+                          const SizedBox(height: AppSpacing.sm),
                           Row(
                             children: [
-                              const Icon(
-                                Icons.phone,
-                                color: Colors.black,
-                              ),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.05,
-                              ),
+                              Icon(Icons.phone_rounded,
+                                  color: Theme.of(context).colorScheme.primary),
+                              const SizedBox(width: AppSpacing.sm),
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
                                       "Teléfono",
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize:
-                                            MediaQuery.of(context).size.width *
-                                                0.04,
-                                        fontWeight: FontWeight.w400,
-                                        decoration: TextDecoration.none,
-                                      ),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelLarge
+                                          ?.copyWith(
+                                              color: AppColors.shadowWarm
+                                                  .withOpacity(0.7)),
                                     ),
                                     Text(
                                       widget.patientRequest.patient.phone!,
                                       overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize:
-                                            MediaQuery.of(context).size.width *
-                                                0.04,
-                                        decoration: TextDecoration.none,
-                                      ),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge
+                                          ?.copyWith(color: AppColors.shadowWarm),
                                     ),
                                   ],
                                 ),
@@ -217,8 +160,20 @@ class _PatientRequestDetailState extends State<PatientRequestDetail> {
             Row(
               children: [
                 Expanded(
-                  child: ElevatedButton(
+                  child: AppButton.destructive(
+                    label: 'Rechazar',
+                    isLoading: isloading,
                     onPressed: () async {
+                      final bool confirmed = await showAppConfirmDialog(
+                        context,
+                        title: 'Rechazar solicitud',
+                        message:
+                            '¿Estás seguro de que quieres rechazar la solicitud de ${widget.patientRequest.patient.name}?',
+                        confirmLabel: 'Rechazar',
+                        isDestructive: true,
+                      );
+                      if (!confirmed || !context.mounted) return;
+
                       setState(() {
                         isloading = true;
                       });
@@ -237,37 +192,13 @@ class _PatientRequestDetailState extends State<PatientRequestDetail> {
 
                       if (context.mounted) Navigator.of(context).pop();
                     },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context)
-                          .scaffoldBackgroundColor
-                          .withOpacity(0.9),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      elevation: 3,
-                    ),
-                    child: isloading
-                        ? const CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              Colors.black,
-                            ),
-                          )
-                        : Text(
-                            'Rechazar',
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.primary,
-                              fontSize:
-                                  MediaQuery.of(context).size.width * 0.04,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
                   ),
                 ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.05,
-                ),
+                const SizedBox(width: AppSpacing.lg),
                 Expanded(
-                  child: ElevatedButton(
+                  child: AppButton(
+                    label: 'Aceptar',
+                    isLoading: aceptedLoading,
                     onPressed: () async {
                       setState(() {
                         aceptedLoading = true;
@@ -296,28 +227,6 @@ class _PatientRequestDetailState extends State<PatientRequestDetail> {
 
                       if (context.mounted) Navigator.of(context).pop();
                     },
-                    style: ElevatedButton.styleFrom(
-                      elevation: 3,
-                      backgroundColor: Theme.of(context).colorScheme.primary,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                    ),
-                    child: aceptedLoading
-                        ? const CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              Colors.white,
-                            ),
-                          )
-                        : Text(
-                            'Aceptar',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize:
-                                  MediaQuery.of(context).size.width * 0.04,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
                   ),
                 ),
               ],
