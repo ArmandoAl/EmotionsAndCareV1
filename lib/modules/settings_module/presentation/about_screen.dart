@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../../config/theme/app_colors.dart';
+import '../../../config/theme/app_spacing.dart';
+
 class AboutScreen extends StatefulWidget {
   const AboutScreen({super.key});
 
@@ -17,14 +20,14 @@ class _AboutScreenState extends State<AboutScreen> {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        padding: const EdgeInsets.all(30),
+        padding: const EdgeInsets.all(AppSpacing.xl),
         child: ListView(
           children: [
             Text(aboutText,
-                style: TextStyle(
-                  fontSize: MediaQuery.of(context).size.width * 0.045,
-                  decoration: TextDecoration.none,
-                )),
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyLarge
+                    ?.copyWith(color: AppColors.shadowWarm)),
           ],
         ),
       ),

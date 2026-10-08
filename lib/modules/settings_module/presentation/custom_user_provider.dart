@@ -55,12 +55,19 @@ class _CustomMenuScreenState extends State<CustomMenuScreen>
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 800),
-    )..repeat(reverse: true);
+    );
 
     _animation = ColorTween(
-      begin: const Color.fromARGB(255, 224, 10, 10),
-      end: const Color.fromARGB(255, 56, 5, 159),
+      begin: AppColors.daySecondary,
+      end: AppColors.dayTertiary,
     ).animate(_animationController!);
+
+    if (WidgetsBinding
+        .instance.platformDispatcher.accessibilityFeatures.disableAnimations) {
+      _animationController!.value = 1;
+    } else {
+      _animationController!.repeat(reverse: true);
+    }
   }
 
   void _disposeAnimationController() {
@@ -86,7 +93,7 @@ class _CustomMenuScreenState extends State<CustomMenuScreen>
       body: Container(
         height: double.infinity,
         width: double.infinity,
-        padding: const EdgeInsets.all(30),
+        padding: const EdgeInsets.all(AppSpacing.xl),
         child: ListView(
           children: [
             listItemCustom(
@@ -111,7 +118,7 @@ class _CustomMenuScreenState extends State<CustomMenuScreen>
                 ),
               );
             }, animatedMenu, false, _animationController, _animation),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+            const SizedBox(height: AppSpacing.lg),
             listItemCustom(context, "Fondo de pantalla",
                 const AssetImage(Assets.backPickerIcon), () {
               Navigator.push(
@@ -130,10 +137,10 @@ class _CustomMenuScreenState extends State<CustomMenuScreen>
                 ),
               );
             }, animatedMenu, false, _animationController, _animation),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+            const SizedBox(height: AppSpacing.lg),
             listItemCustom(
                 context,
-                "Perzonalizar jardín",
+                "Personalizar jardín",
                 const AssetImage(
                   Assets.patioIcon,
                 ), () {
@@ -172,42 +179,35 @@ Widget listItemCustom(
   AnimationController? animationController,
   Animation<Color?>? animation,
 ) {
-  return InkWell(
-    onTap: () {
-      if (!disable) {
-        onTap();
-      }
-    },
-    child: Container(
-      padding: const EdgeInsets.all(15),
-      child: Row(
-        children: [
-          disable == false && animate == true
+  return AppCard(
+    onTap: disable ? null : () => onTap(),
+    child: Row(
+      children: [
+        Expanded(
+          child: disable == false && animate == true
               ? AnimatedBuilder(
                   animation: animationController!,
                   builder: (context, child) => Text(
                     title,
-                    style: TextStyle(
-                        color: animation!.value ??
-                            Theme.of(context).colorScheme.onSurface,
-                        fontSize: 22),
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          color: animation!.value ?? AppColors.shadowWarm,
+                        ),
                   ),
                 )
               : Text(
                   title,
-                  style: TextStyle(
-                      fontSize: 20,
-                      color: disable
-                          ? Theme.of(context).colorScheme.secondary
-                          : Theme.of(context).colorScheme.onSurface),
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        color: disable
+                            ? AppColors.shadowWarm.withOpacity(0.4)
+                            : AppColors.shadowWarm,
+                      ),
                 ),
-          const Spacer(),
-          Image(
-            image: icon,
-            width: MediaQuery.of(context).size.width * 0.1,
-          ),
-        ],
-      ),
+        ),
+        Image(
+          image: icon,
+          width: 40,
+        ),
+      ],
     ),
   );
 }
