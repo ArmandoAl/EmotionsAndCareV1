@@ -26,11 +26,23 @@ class _PattientsDatesControllerState extends State<PattientsDatesController> {
         builder: (context, state) {
           if (state.status == PattientsDatesStatus.loading) {
             return const Scaffold(
-              body: Center(
-                child: CircularProgressIndicator(),
+              body: Center(child: AppLoadingIndicator()),
+            );
+          }
+
+          if (state.status == PattientsDatesStatus.error) {
+            return Scaffold(
+              appBar: const HeaderWidget(
+                  title: "Solicitudes de citas", isForReturn: true),
+              body: AppErrorState(
+                message: 'No pudimos cargar las solicitudes de citas.',
+                onRetry: () => context
+                    .read<PattientsDatesCubit>()
+                    .getPattientsDates(widget.idUser),
               ),
             );
           }
+
           final dates = state.dates;
 
           if (dates.isEmpty) {
@@ -40,7 +52,7 @@ class _PattientsDatesControllerState extends State<PattientsDatesController> {
                   isForReturn: true,
                   actions: [
                     IconButton(
-                      icon: Icon(Icons.replay,
+                      icon: Icon(Icons.replay_rounded,
                           color: Theme.of(context).colorScheme.primary),
                       onPressed: () {
                         context
@@ -50,14 +62,11 @@ class _PattientsDatesControllerState extends State<PattientsDatesController> {
                     )
                   ],
                 ),
-                body: const Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(20.0),
-                    child: Text(
-                      'No tienes solicitudes de citas pendientes, puedes dirigirte a la sección de configuración para ver tu código de vinculación y compartirlo con tus pacientes',
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
+                body: const AppEmptyState(
+                  icon: Icons.event_available_rounded,
+                  title: 'Sin solicitudes pendientes',
+                  message:
+                      'No tienes solicitudes de citas pendientes. Puedes dirigirte a la sección de configuración para ver tu código de vinculación y compartirlo con tus pacientes.',
                 ));
           }
 

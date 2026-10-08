@@ -1,4 +1,5 @@
 import '../../../../helpers/paths.dart';
+import '../../../../widgets/header_specialist_widget.dart';
 
 class DateDetail extends StatefulWidget {
   final int speciaistId;
@@ -21,18 +22,17 @@ class _DateDetailState extends State<DateDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const HeaderWidget(
+      appBar: HeaderSpecialistWidget(
         title: '',
         isForReturn: true,
+        context: context,
       ),
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: const BoxDecoration(
-          color: Color(0xFFE3EDF3),
-        ),
+        color: Theme.of(context).colorScheme.surface,
         child: Container(
-          padding: const EdgeInsets.all(30),
+          padding: const EdgeInsets.all(AppSpacing.xxl),
           child: Column(
             children: [
               Expanded(
@@ -41,163 +41,42 @@ class _DateDetailState extends State<DateDetail> {
                   children: [
                     Text(
                       convertToName(widget.date.patient!.name!),
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: MediaQuery.of(context).size.width * 0.08,
-                        fontWeight: FontWeight.w400,
-                        decoration: TextDecoration.none,
-                      ),
+                      style: Theme.of(context)
+                          .textTheme
+                          .headlineSmall
+                          ?.copyWith(color: AppColors.shadowWarm),
                     ),
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.mail_rounded,
-                          color: Colors.black,
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.015,
-                        ),
-                        Expanded(
-                          child: Text(
-                            widget.date.patient!.email!,
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize:
-                                  MediaQuery.of(context).size.width * 0.04,
-                              decoration: TextDecoration.none,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.01,
-                    ),
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.phone,
-                          color: Colors.black,
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.015,
-                        ),
-                        Expanded(
-                          child: Text(
-                            widget.date.patient!.phone!,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize:
-                                  MediaQuery.of(context).size.width * 0.04,
-                              decoration: TextDecoration.none,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.05,
-                    ),
+                    const SizedBox(height: AppSpacing.xs),
+                    _infoRow(context, Icons.mail_rounded,
+                        widget.date.patient!.email!),
+                    const SizedBox(height: AppSpacing.xs),
+                    _infoRow(context, Icons.phone_rounded,
+                        widget.date.patient!.phone!,
+                        overflow: TextOverflow.ellipsis),
+                    const SizedBox(height: AppSpacing.xl),
                     Text("Información de la cita",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: MediaQuery.of(context).size.width * 0.065,
-                          fontWeight: FontWeight.w400,
-                          decoration: TextDecoration.none,
-                        )),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.01,
-                    ),
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.calendar_today,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.01,
-                        ),
-                        widget.date.date != null
-                            ? Expanded(
-                                child: Text(
-                                  getDateFormatWithText(widget.date.date!),
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize:
-                                        MediaQuery.of(context).size.width *
-                                            0.04,
-                                    decoration: TextDecoration.none,
-                                  ),
-                                ),
-                              )
-                            : const SizedBox(),
-                      ],
-                    ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.01,
-                    ),
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.access_time_outlined,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.01,
-                        ),
-                        Expanded(
-                          child: Text(
-                            getTimeFormatWithText(widget.date.hour!),
-                            textAlign: TextAlign.justify,
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize:
-                                  MediaQuery.of(context).size.width * 0.04,
-                              decoration: TextDecoration.none,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.01,
-                    ),
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.location_on_outlined,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.01,
-                        ),
-                        Expanded(
-                          child: Text(
-                            widget.date.place!,
-                            textAlign: TextAlign.justify,
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize:
-                                  MediaQuery.of(context).size.width * 0.04,
-                              decoration: TextDecoration.none,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleLarge
+                            ?.copyWith(color: AppColors.shadowWarm)),
+                    const SizedBox(height: AppSpacing.sm),
+                    if (widget.date.date != null)
+                      _infoRow(context, Icons.calendar_today_rounded,
+                          getDateFormatWithText(widget.date.date!),
+                          iconColor: Theme.of(context).colorScheme.primary),
+                    const SizedBox(height: AppSpacing.sm),
+                    _infoRow(context, Icons.access_time_rounded,
+                        getTimeFormatWithText(widget.date.hour!),
+                        iconColor: Theme.of(context).colorScheme.primary),
+                    const SizedBox(height: AppSpacing.sm),
+                    _infoRow(context, Icons.location_on_rounded,
+                        widget.date.place!,
+                        iconColor: Theme.of(context).colorScheme.primary),
                     Row(
                       children: [
                         const Spacer(),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Theme.of(context)
-                                .scaffoldBackgroundColor
-                                .withOpacity(0.9),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                          ),
+                        AppButton.secondary(
+                          label: "Editar",
                           onPressed: () {
                             Navigator.push(
                                 context,
@@ -209,36 +88,24 @@ class _DateDetailState extends State<DateDetail> {
                                         patientModel: widget.date.patient!,
                                         edit: true)));
                           },
-                          child: Text(
-                            "Editar",
-                            style: TextStyle(
-                                fontSize:
-                                    MediaQuery.of(context).size.width * 0.04,
-                                fontWeight: FontWeight.bold),
-                          ),
                         ),
                       ],
                     ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.03,
-                    ),
+                    const SizedBox(height: AppSpacing.lg),
                     Text("Descripción",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: MediaQuery.of(context).size.width * 0.065,
-                          fontWeight: FontWeight.w400,
-                          decoration: TextDecoration.none,
-                        )),
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleLarge
+                            ?.copyWith(color: AppColors.shadowWarm)),
                     Expanded(
                       child: SingleChildScrollView(
                         child: Text(
                           widget.date.description!,
                           textAlign: TextAlign.justify,
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: MediaQuery.of(context).size.width * 0.04,
-                            decoration: TextDecoration.none,
-                          ),
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyLarge
+                              ?.copyWith(color: AppColors.shadowWarm),
                         ),
                       ),
                     ),
@@ -248,8 +115,20 @@ class _DateDetailState extends State<DateDetail> {
               Row(
                 children: [
                   Expanded(
-                    child: ElevatedButton(
+                    child: AppButton.destructive(
+                      label: 'Rechazar',
+                      isLoading: isloading,
                       onPressed: () async {
+                        final bool confirmed = await showAppConfirmDialog(
+                          context,
+                          title: 'Rechazar cita',
+                          message:
+                              '¿Estás seguro de que quieres rechazar esta cita? El paciente será notificado.',
+                          confirmLabel: 'Rechazar',
+                          isDestructive: true,
+                        );
+                        if (!confirmed || !context.mounted) return;
+
                         setState(() {
                           isloading = true;
                         });
@@ -265,33 +144,13 @@ class _DateDetailState extends State<DateDetail> {
 
                         if (context.mounted) Navigator.of(context).pop();
                       },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context)
-                            .scaffoldBackgroundColor
-                            .withOpacity(0.9),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        elevation: 3,
-                      ),
-                      child: isloading
-                          ? const CircularProgressIndicator()
-                          : Text(
-                              'Rechazar',
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.primary,
-                                fontSize:
-                                    MediaQuery.of(context).size.width * 0.04,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
                     ),
                   ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.05,
-                  ),
+                  const SizedBox(width: AppSpacing.lg),
                   Expanded(
-                    child: ElevatedButton(
+                    child: AppButton(
+                      label: 'Aceptar',
+                      isLoading: aceptedLoading,
                       onPressed: () async {
                         setState(() {
                           aceptedLoading = true;
@@ -314,24 +173,6 @@ class _DateDetailState extends State<DateDetail> {
 
                         if (context.mounted) Navigator.of(context).pop();
                       },
-                      style: ElevatedButton.styleFrom(
-                        elevation: 3,
-                        backgroundColor: Theme.of(context).colorScheme.primary,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                      ),
-                      child: aceptedLoading
-                          ? const CircularProgressIndicator()
-                          : Text(
-                              'Aceptar',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize:
-                                    MediaQuery.of(context).size.width * 0.04,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
                     ),
                   ),
                 ],
@@ -404,4 +245,24 @@ String convertToName(String name) {
   }
 
   return nameString;
+}
+
+Widget _infoRow(BuildContext context, IconData icon, String text,
+    {Color? iconColor, TextOverflow? overflow}) {
+  return Row(
+    children: [
+      Icon(icon, color: iconColor ?? AppColors.shadowWarm),
+      const SizedBox(width: AppSpacing.sm),
+      Expanded(
+        child: Text(
+          text,
+          overflow: overflow,
+          style: Theme.of(context)
+              .textTheme
+              .bodyLarge
+              ?.copyWith(color: AppColors.shadowWarm),
+        ),
+      ),
+    ],
+  );
 }

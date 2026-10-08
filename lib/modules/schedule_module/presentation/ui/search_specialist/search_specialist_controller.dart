@@ -39,7 +39,7 @@ class _SearchSpecialistControllerState
             title: const Text("Buscar especialista"),
             actions: [
               IconButton(
-                icon: const Icon(Icons.info),
+                icon: const Icon(Icons.info_outline_rounded),
                 onPressed: () {
                   showMessageDialog(context, "Informacion",
                       "En este apartado se encuentra el catálogo de especialistas con los que te puedes vincular. |También puedes pedirle el código de vinculación a cualquier especialista de tu preferencia para agregarlo manualmente.");
@@ -235,26 +235,26 @@ Future<void> showFilterialog(BuildContext context) async {
               ],
             ),
             actions: [
-              TextButton(
+              AppButton.text(
+                label: "Salir",
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: const Text("Salir"),
               ),
-              TextButton(
+              AppButton.text(
+                label: "Limpiar",
                 onPressed: () {
                   context.read<ScheduleCubit>().clearFilters();
                   Navigator.of(context).pop();
                 },
-                child: const Text("Limpiar"),
               ),
-              TextButton(
+              AppButton(
+                label: "Filtrar",
                 onPressed: () {
                   context.read<ScheduleCubit>().filterSpecialist(state.filters);
 
                   Navigator.of(context).pop();
                 },
-                child: const Text("Filtrar"),
               ),
             ],
           );

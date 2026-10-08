@@ -27,198 +27,69 @@ class _SpecialistDetailScreenState extends State<SpecialistDetailScreen> {
         width: double.infinity,
         height: double.infinity,
         child: ListView(
+          padding: const EdgeInsets.all(AppSpacing.lg),
           children: [
-            Container(
-              width: double.infinity,
-              margin: const EdgeInsets.all(10),
-              padding: const EdgeInsets.all(10),
+            AppCard(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    children: [
-                      const Spacer(),
-                      Column(
-                        children: [
-                          Icon(Icons.person,
-                              size: MediaQuery.of(context).size.height * 0.1),
-                          SizedBox(
-                              height:
-                                  MediaQuery.of(context).size.height * 0.01),
-                          Text(widget.specialistModel!.name!),
-                        ],
-                      ),
-                      const Spacer(),
-                    ],
+                  Center(
+                    child: Column(
+                      children: [
+                        CircleAvatar(
+                          radius: 40,
+                          backgroundColor:
+                              Theme.of(context).colorScheme.primaryContainer,
+                          child: Icon(Icons.person_rounded,
+                              size: 40,
+                              color: Theme.of(context).colorScheme.primary),
+                        ),
+                        const SizedBox(height: AppSpacing.sm),
+                        Text(widget.specialistModel!.name!,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge
+                                ?.copyWith(color: AppColors.shadowWarm)),
+                      ],
+                    ),
                   ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                  Row(
-                    children: [
-                      Icon(Icons.email,
-                          size: MediaQuery.of(context).size.height * 0.03),
-                      SizedBox(width: MediaQuery.of(context).size.width * 0.03),
-                      Text("Correo ",
-                          style: TextStyle(
-                              fontSize:
-                                  MediaQuery.of(context).size.height * 0.02)),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Text(widget.specialistModel!.email!),
-                      const Spacer(),
-                    ],
-                  ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                  Row(
-                    children: [
-                      Icon(Icons.phone,
-                          size: MediaQuery.of(context).size.height * 0.03),
-                      SizedBox(width: MediaQuery.of(context).size.width * 0.01),
-                      Text("Teléfono ",
-                          style: TextStyle(
-                              fontSize:
-                                  MediaQuery.of(context).size.height * 0.02)),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Text(widget.specialistModel!.phone!),
-                      const Spacer(),
-                    ],
-                  ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                  Row(
-                    children: [
-                      Icon(Icons.person,
-                          size: MediaQuery.of(context).size.height * 0.03),
-                      SizedBox(width: MediaQuery.of(context).size.width * 0.03),
-                      Text("Sexo ",
-                          style: TextStyle(
-                              fontSize:
-                                  MediaQuery.of(context).size.height * 0.02)),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Text(widget.specialistModel!.sex!,
-                          style: TextStyle(
-                              fontSize:
-                                  MediaQuery.of(context).size.height * 0.02)),
-                      const Spacer(),
-                    ],
-                  ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                  Row(
-                    children: [
-                      Icon(Icons.person,
-                          size: MediaQuery.of(context).size.height * 0.03),
-                      SizedBox(width: MediaQuery.of(context).size.width * 0.03),
-                      Text("Edad ",
-                          style: TextStyle(
-                              fontSize:
-                                  MediaQuery.of(context).size.height * 0.02)),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Text("${widget.specialistModel!.age} años",
-                          style: TextStyle(
-                              fontSize:
-                                  MediaQuery.of(context).size.height * 0.02)),
-                      const Spacer(),
-                    ],
-                  ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                  Row(
-                    children: [
-                      Icon(Icons.person,
-                          size: MediaQuery.of(context).size.height * 0.03),
-                      SizedBox(width: MediaQuery.of(context).size.width * 0.03),
-                      Text("Enfoque",
-                          style: TextStyle(
-                              fontSize:
-                                  MediaQuery.of(context).size.height * 0.02)),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Text(widget.specialistModel!.focus!,
-                          style: TextStyle(
-                              fontSize:
-                                  MediaQuery.of(context).size.height * 0.02)),
-                      const Spacer(),
-                    ],
-                  ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                  Row(
-                    children: [
-                      Icon(Icons.person,
-                          size: MediaQuery.of(context).size.height * 0.03),
-                      SizedBox(width: MediaQuery.of(context).size.width * 0.03),
-                      Text("Institución",
-                          style: TextStyle(
-                              fontSize:
-                                  MediaQuery.of(context).size.height * 0.02)),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                          widget.specialistModel!.presentation != ""
-                              ? widget.specialistModel!.presentation!
-                              : "Sin institución",
-                          style: TextStyle(
-                              fontSize:
-                                  MediaQuery.of(context).size.height * 0.02)),
-                      const Spacer(),
-                    ],
-                  ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                  Row(
-                    children: [
-                      Icon(Icons.person,
-                          size: MediaQuery.of(context).size.height * 0.03),
-                      SizedBox(width: MediaQuery.of(context).size.width * 0.03),
-                      Text("Ubicacion",
-                          style: TextStyle(
-                              fontSize:
-                                  MediaQuery.of(context).size.height * 0.02)),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                          widget.specialistModel!.ubication != ""
-                              ? widget.specialistModel!.ubication!
-                              : "Sin ubicación definida",
-                          style: TextStyle(
-                              fontSize:
-                                  MediaQuery.of(context).size.height * 0.02)),
-                      const Spacer(),
-                    ],
-                  ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                  Row(
-                    children: [
-                      Icon(Icons.person,
-                          size: MediaQuery.of(context).size.height * 0.03),
-                      SizedBox(width: MediaQuery.of(context).size.width * 0.03),
-                      Text("Carta de presentación",
-                          style: TextStyle(
-                              fontSize:
-                                  MediaQuery.of(context).size.height * 0.02)),
-                    ],
-                  ),
-                  Text(
+                  const SizedBox(height: AppSpacing.xl),
+                  _infoRow(context, Icons.email_rounded, "Correo",
+                      widget.specialistModel!.email!),
+                  _infoRow(context, Icons.phone_rounded, "Teléfono",
+                      widget.specialistModel!.phone!),
+                  _infoRow(context, Icons.wc_rounded, "Sexo",
+                      widget.specialistModel!.sex!),
+                  _infoRow(context, Icons.cake_rounded, "Edad",
+                      "${widget.specialistModel!.age} años"),
+                  _infoRow(context, Icons.psychology_rounded, "Enfoque",
+                      widget.specialistModel!.focus!),
+                  _infoRow(
+                      context,
+                      Icons.business_rounded,
+                      "Institución",
+                      widget.specialistModel!.presentation != ""
+                          ? widget.specialistModel!.presentation!
+                          : "Sin institución"),
+                  _infoRow(
+                      context,
+                      Icons.location_on_rounded,
+                      "Ubicación",
+                      widget.specialistModel!.ubication != ""
+                          ? widget.specialistModel!.ubication!
+                          : "Sin ubicación definida"),
+                  _infoRow(
+                      context,
+                      Icons.description_rounded,
+                      "Carta de presentación",
                       widget.specialistModel!.institution != ""
                           ? widget.specialistModel!.institution!
-                          : "Sin carta de presentación",
-                      textAlign: TextAlign.justify,
-                      style: TextStyle(
-                          fontSize: MediaQuery.of(context).size.height * 0.02)),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                  ElevatedButton(
+                          : "Sin carta de presentación"),
+                  const SizedBox(height: AppSpacing.lg),
+                  AppButton(
+                      expand: true,
+                      isLoading: isloading,
+                      label: "Solicitar vinculación",
                       onPressed: () async {
                         setState(() {
                           isloading = !isloading;
@@ -237,16 +108,7 @@ class _SpecialistDetailScreenState extends State<SpecialistDetailScreen> {
                                   : "Error al enviar la solicitud, por favor intenta de nuevo más tarde");
                         }
                         if (context.mounted) Navigator.pop(context);
-                      },
-                      child: isloading
-                          ? const CircularProgressIndicator(
-                              color: Colors.white,
-                            )
-                          : Text("Solictar vinculación",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: MediaQuery.of(context).size.height *
-                                      0.025))),
+                      }),
                 ],
               ),
             ),
@@ -257,19 +119,56 @@ class _SpecialistDetailScreenState extends State<SpecialistDetailScreen> {
   }
 }
 
+Widget _infoRow(BuildContext context, IconData icon, String label, String value) {
+  return Padding(
+    padding: const EdgeInsets.only(bottom: AppSpacing.lg),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Icon(icon, size: 20, color: Theme.of(context).colorScheme.primary),
+            const SizedBox(width: AppSpacing.sm),
+            Text(label,
+                style: Theme.of(context)
+                    .textTheme
+                    .labelLarge
+                    ?.copyWith(color: AppColors.shadowWarm.withOpacity(0.7))),
+          ],
+        ),
+        const SizedBox(height: AppSpacing.xs),
+        Text(value,
+            textAlign: TextAlign.justify,
+            style: Theme.of(context)
+                .textTheme
+                .bodyLarge
+                ?.copyWith(color: AppColors.shadowWarm)),
+      ],
+    ),
+  );
+}
+
 Future<void> showConfirmTextDialog(BuildContext context, String text) async {
   return showDialog<void>(
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: const Text("Confirmación"),
-        content: Text(text),
+        title: Text("Confirmación",
+            style: Theme.of(context)
+                .textTheme
+                .titleLarge
+                ?.copyWith(color: AppColors.shadowWarm)),
+        content: Text(text,
+            style: Theme.of(context)
+                .textTheme
+                .bodyMedium
+                ?.copyWith(color: AppColors.shadowWarm)),
         actions: <Widget>[
-          TextButton(
+          AppButton.text(
+            label: 'Aceptar',
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: const Text('Aceptar'),
           ),
         ],
       );

@@ -8,14 +8,12 @@ Widget containerContentWidget(
   SpecialistModel? especialistaModel,
   List<DateModel> dates,
 ) {
+  final ColorScheme scheme = Theme.of(context).colorScheme;
   return Padding(
-    padding: EdgeInsets.symmetric(
-        horizontal: MediaQuery.of(context).size.width * 0.03),
+    padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
     child: ListView(
       children: [
-        SizedBox(
-          height: MediaQuery.of(context).size.height * 0.03,
-        ),
+        const SizedBox(height: AppSpacing.sm),
         GestureDetector(
           onTap: () {
             Navigator.push(
@@ -52,45 +50,21 @@ Widget containerContentWidget(
           },
           child: Row(
             children: [
-              const Icon(Icons.add_circle_sharp, color: Colors.white),
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.02,
-              ),
+              Icon(Icons.add_circle_rounded, color: scheme.onPrimary),
+              const SizedBox(width: AppSpacing.sm),
               Expanded(
                 child: Text(
-                  "Agendar cita ",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: MediaQuery.of(context).size.height * 0.025,
-                      fontWeight: FontWeight.bold),
+                  "Agendar cita",
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium
+                      ?.copyWith(color: scheme.onPrimary),
                 ),
               ),
             ],
           ),
         ),
-        // SizedBox(
-        //   height: MediaQuery.of(context).size.height * 0.05,
-        // ),
-        // Row(
-        //   children: [
-        //     const Icon(Icons.calendar_today, color: Colors.white),
-        //     SizedBox(
-        //       width: MediaQuery.of(context).size.width * 0.02,
-        //     ),
-        //     Expanded(
-        //       child: Text(
-        //         "Historial de citas",
-        //         style: TextStyle(
-        //             color: Colors.white,
-        //             fontSize: MediaQuery.of(context).size.height * 0.025,
-        //             fontWeight: FontWeight.bold),
-        //       ),
-        //     ),
-        //   ],
-        // ),
-        SizedBox(
-          height: MediaQuery.of(context).size.height * 0.05,
-        ),
+        const SizedBox(height: AppSpacing.xl),
         isPatient
             ? GestureDetector(
                 onTap: () {
@@ -105,25 +79,21 @@ Widget containerContentWidget(
                 },
                 child: Row(
                   children: [
-                    const Icon(Icons.person_search_rounded,
-                        color: Colors.white),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.02,
-                    ),
+                    Icon(Icons.person_search_rounded, color: scheme.onPrimary),
+                    const SizedBox(width: AppSpacing.sm),
                     Expanded(
                       child: Text(
-                        "Buscar especialista ",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize:
-                                MediaQuery.of(context).size.height * 0.025,
-                            fontWeight: FontWeight.bold),
+                        "Buscar especialista",
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium
+                            ?.copyWith(color: scheme.onPrimary),
                       ),
                     ),
                   ],
                 ),
               )
-            : Container(),
+            : const SizedBox.shrink(),
       ],
     ),
   );

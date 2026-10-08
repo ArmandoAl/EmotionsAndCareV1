@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 
+import '../config/theme/app_colors.dart';
+import '../config/theme/app_shadows.dart';
+import '../config/theme/app_spacing.dart';
+
 Widget containerItem(BuildContext context, Color color, String text,
     String subText, String trailingText, Function onTap,
-    {bool hasHeader = false, IconData icon = Icons.arrow_forward_ios}) {
+    {bool hasHeader = false, IconData icon = Icons.arrow_forward_ios_rounded}) {
   return GestureDetector(
     onTap: () {
       onTap();
@@ -10,28 +14,18 @@ Widget containerItem(BuildContext context, Color color, String text,
     child: Container(
       decoration: BoxDecoration(
         borderRadius: hasHeader == false
-            ? const BorderRadius.all(Radius.circular(10))
+            ? BorderRadius.circular(AppRadius.md)
             : const BorderRadius.only(
-                bottomLeft: Radius.circular(10),
-                bottomRight: Radius.circular(10),
+                bottomLeft: Radius.circular(AppRadius.md),
+                bottomRight: Radius.circular(AppRadius.md),
               ),
-        color: Theme.of(context).scaffoldBackgroundColor,
-        boxShadow: hasHeader == true
-            ? []
-            : [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.3),
-                  spreadRadius: 1,
-                  blurRadius: 5,
-                  offset: const Offset(0, 3), // changes position of shadow
-                ),
-              ],
+        color: Theme.of(context).colorScheme.surface,
+        boxShadow: hasHeader == true ? AppShadows.none : AppShadows.card,
       ),
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-      margin: EdgeInsets.symmetric(
-        horizontal: MediaQuery.of(context).size.height * 0.015,
-      ),
+      padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.lg, vertical: AppSpacing.md),
+      margin: const EdgeInsets.symmetric(horizontal: AppSpacing.xs),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -45,42 +39,35 @@ Widget containerItem(BuildContext context, Color color, String text,
                     Text(
                       text,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: MediaQuery.of(context).size.width * 0.05,
-                        fontWeight: FontWeight.bold,
-                        decoration: TextDecoration.none,
-                      ),
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleMedium
+                          ?.copyWith(color: AppColors.shadowWarm),
                     ),
-                    const SizedBox(
-                      width: 5,
-                    ),
+                    const SizedBox(width: AppSpacing.xs),
                     Text(
                       trailingText,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: MediaQuery.of(context).size.width * 0.05,
-                        fontWeight: FontWeight.bold,
-                        decoration: TextDecoration.none,
-                      ),
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleMedium
+                          ?.copyWith(color: AppColors.shadowWarm),
                     ),
                   ],
                 ),
                 Text(subText,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: MediaQuery.of(context).size.width * 0.04,
-                      decoration: TextDecoration.none,
-                    )),
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(color: AppColors.shadowWarm.withOpacity(0.7))),
               ],
             ),
           ),
           Icon(
             icon,
-            color: Colors.black,
-            size: MediaQuery.of(context).size.width * 0.06,
+            color: AppColors.shadowWarm.withOpacity(0.5),
+            size: 20,
           ),
         ],
       ),
