@@ -6,44 +6,40 @@ Future<void> showStikerDialog(BuildContext context, BegginCubit userCubit) {
     barrierDismissible: false,
     builder: (context) {
       return AlertDialog(
-        backgroundColor: Colors.transparent,
-        content: Container(
-          decoration: BoxDecoration(
-              color: Colors.grey.withOpacity(0.9),
-              borderRadius: BorderRadius.circular(20)),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppRadius.lg)),
+        content: SizedBox(
           width: MediaQuery.of(context).size.width * 0.8,
           height: MediaQuery.of(context).size.height * 0.5,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
                 child: Text(
                     'Gracias por contestar nuestro cuestionario. Tenemos un pequeño regalo para ti.',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold)),
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyLarge
+                        ?.copyWith(color: AppColors.shadowWarm)),
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.03),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
+              const SizedBox(height: AppSpacing.lg),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
                 child: Text('¡Nuevo sticker desbloqueado!',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold)),
+                    style: Theme.of(context)
+                        .textTheme
+                        .headlineSmall
+                        ?.copyWith(color: AppColors.shadowWarm)),
               ),
               const Image(
                 image: AssetImage(Assets.cat),
                 fit: BoxFit.cover,
               ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xff1C8AAD),
-                ),
+              AppButton(
+                label: 'Recoger sticker',
                 onPressed: () async {
                   if (userCubit.state.registerPatientFlow == "register") {
                     userCubit.setRegisterFlow(userCubit.state.patientModel!.id!,
@@ -58,8 +54,6 @@ Future<void> showStikerDialog(BuildContext context, BegginCubit userCubit) {
 
                   if (context.mounted) Navigator.of(context).pop();
                 },
-                child: const Text('Recoger sticker',
-                    style: TextStyle(color: Colors.white)),
               ),
             ],
           ),
